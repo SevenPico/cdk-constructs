@@ -1,0 +1,25 @@
+import { ContextProps } from './context-types';
+
+export const CONTEXT_DEFAULTS: Required<ContextProps> = {
+  namespace: '',
+  tenant: '',
+  environment: '',
+  stage: '',
+  name: '',
+  region: '',
+  project: '',
+  enabled: true,
+  delimiter: '-',
+  attributes: [],
+  labelOrder: ['namespace', 'environment', 'stage', 'name', 'attributes'],
+  labelKeyCase: 'title',
+  labelValueCase: 'lower',
+  regexReplaceChars: '[^-a-zA-Z0-9]',
+  idLengthLimit: 0,
+  tags: {},
+  additionalTagMap: {},
+  labelsAsTags: ['namespace', 'environment', 'stage', 'name', 'tenant', 'attributes'],
+  descriptorFormats: {},
+  domainName: '',
+  dnsNameFormat: '${name}.${domainName}',
+};
