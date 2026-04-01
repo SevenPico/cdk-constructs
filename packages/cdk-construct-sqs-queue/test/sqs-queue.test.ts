@@ -1,119 +1,185 @@
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext, Context } from '@sevenpico/cdk-context';
-import { loadFeature, defineFeature } from 'jest-cucumber';
-import path from 'path';
+import { makeContext } from '@sevenpico/cdk-context';
 import { SqsQueue } from '../src/sqs-queue';
-import { SqsQueueProps } from '../src/sqs-queue-types';
-
-const feature = loadFeature(path.join(__dirname, 'sqs-queue.feature'));
 
 const makeStack = (): Stack => {
   const app = new App();
   return new Stack(app, 'TestStack');
 };
 
-defineFeature(feature, (test: any) => {
-  let context: Context;
-  let stack: Stack;
-  let template: Template;
-  let extraProps: Partial<SqsQueueProps>;
-
-  test('Queue name uses context ID', ({ given, when, then }: any) => {
-    given(/^a context with namespace "(.+)", stage "(.+)", name "(.+)"$/, (ns: string, stage: string, name: string) => {
-      context = makeContext({ namespace: ns, stage, name });
-      extraProps = {};
-    });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
-    });
-    then(/^an SQS Queue exists with QueueName "(.+)"$/, (queueName: string) => {
+describe('SqsQueue construct', () => {
+  describe('Feature: Queue Naming', () => {
+    test('Queue name uses context ID', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context });
+      const template = Template.fromStack(stack);
       template.hasResourceProperties('AWS::SQS::Queue', {
-        QueueName: queueName,
+        QueueName: '7p-prod-orders',
+      });
+    });
+
+    test('FIFO queue name appends .fifo suffix', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, fifo: true });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        QueueName: '7p-prod-orders.fifo',
+        FifoQueue: true,
       });
     });
   });
 
-  test('FIFO queue name appends .fifo suffix', ({ given, when, then }: any) => {
-    given(/^a context with namespace "(.+)", stage "(.+)", name "(.+)" and fifo true$/, (ns: string, stage: string, name: string) => {
-      context = makeContext({ namespace: ns, stage, name });
-      extraProps = { fifo: true };
-    });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
-    });
-    then(/^an SQS Queue exists with QueueName "(.+)"$/, (queueName: string) => {
-      template.hasResourceProperties('AWS::SQS::Queue', {
-        QueueName: queueName,
-      });
-    });
-  });
-
-  test('DLQ created when dlqEnabled is true', ({ given, when, then }: any) => {
-    given('a context with dlqEnabled true', () => {
-      context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
-      extraProps = { dlqEnabled: true };
-    });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
-    });
-    then('two SQS Queue resources exist in the stack', () => {
+  describe('Feature: Dead Letter Queue', () => {
+    test('DLQ created with context-derived name', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, dlqEnabled: true });
+      const template = Template.fromStack(stack);
       template.resourceCountIs('AWS::SQS::Queue', 2);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        QueueName: '7p-prod-orders-dlq',
+      });
     });
-  });
 
-  test('No DLQ when dlqEnabled is false', ({ given, when, then }: any) => {
-    given('a context with dlqEnabled false', () => {
-      context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
-      extraProps = { dlqEnabled: false };
+    test('Main queue has redrive policy pointing to DLQ', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, dlqEnabled: true });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        QueueName: '7p-prod-orders',
+        RedrivePolicy: Match.objectLike({
+          maxReceiveCount: 5,
+        }),
+      });
     });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
-    });
-    then('only one SQS Queue resource exists', () => {
+
+    test('No DLQ when dlqEnabled is false', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, dlqEnabled: false });
+      const template = Template.fromStack(stack);
       template.resourceCountIs('AWS::SQS::Queue', 1);
     });
+
+    test('Custom DLQ max receive count', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, dlqEnabled: true, dlqMaxReceiveCount: 10 });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        QueueName: '7p-prod-orders',
+        RedrivePolicy: Match.objectLike({
+          maxReceiveCount: 10,
+        }),
+      });
+    });
   });
 
-  test('Context tags applied to queue', ({ given, when, then }: any) => {
-    given(/^a context with tags Env "(.+)"$/, (envTag: string) => {
-      context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders', tags: { Env: envTag } });
-      extraProps = {};
+  describe('Feature: Encryption', () => {
+    test('SQS-managed encryption by default', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        SqsManagedSseEnabled: true,
+      });
     });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
+
+    test('KMS encryption when kmsMasterKeyId provided', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', {
+        context,
+        kmsMasterKeyId: 'arn:aws:kms:us-east-1:123456789:key/test-key-id',
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        KmsMasterKeyId: Match.anyValue(),
+      });
     });
-    then(/^the SQS queue has the tag Env "(.+)"$/, (envTag: string) => {
+  });
+
+  describe('Feature: Visibility Timeout', () => {
+    test('Visibility timeout defaults to 30 seconds', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        VisibilityTimeout: 30,
+      });
+    });
+
+    test('Custom visibility timeout', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, visibilityTimeoutSeconds: 120 });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        VisibilityTimeout: 120,
+      });
+    });
+  });
+
+  describe('Feature: Tagging', () => {
+    test('Context tags applied to queue', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders', tags: { Env: 'production' } });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context });
+      const template = Template.fromStack(stack);
       template.hasResourceProperties('AWS::SQS::Queue', {
         Tags: Match.arrayWith([
-          Match.objectLike({ Key: 'Env', Value: envTag }),
+          Match.objectLike({ Key: 'Env', Value: 'production' }),
         ]),
       });
     });
   });
 
-  test('No resources created when context is disabled', ({ given, when, then }: any) => {
-    given('a context with enabled false', () => {
-      context = makeContext({ namespace: '7p', stage: 'test', name: 'test', enabled: false });
-      extraProps = {};
-    });
-    when('an SqsQueue construct is created', () => {
-      stack = makeStack();
-      new SqsQueue(stack, 'SUT', { context, ...extraProps } as SqsQueueProps);
-      template = Template.fromStack(stack);
-    });
-    then('no SQS Queue resources exist in the stack', () => {
+  describe('Feature: Disabled Construct', () => {
+    test('No resources created when context is disabled', () => {
+      const context = makeContext({ namespace: '7p', stage: 'test', name: 'test', enabled: false });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context });
+      const template = Template.fromStack(stack);
       template.resourceCountIs('AWS::SQS::Queue', 0);
+    });
+  });
+
+  describe('Feature: Queue Configuration', () => {
+    test('Message retention period is set', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, messageRetentionSeconds: 86400 });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        MessageRetentionPeriod: 86400,
+      });
+    });
+
+    test('Content-based deduplication for FIFO', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, fifo: true, contentBasedDeduplication: true });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        FifoQueue: true,
+        ContentBasedDeduplication: true,
+      });
+    });
+
+    test('Delay seconds is set', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'orders' });
+      const stack = makeStack();
+      new SqsQueue(stack, 'SUT', { context, delaySeconds: 60 });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        DelaySeconds: 60,
+      });
     });
   });
 });

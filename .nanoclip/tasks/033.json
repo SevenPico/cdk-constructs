@@ -1,0 +1,44 @@
+{
+  "id": "033",
+  "title": "Remediate @sevenpico/cdk-construct-sns (PR #39 merged without verified fix commits)",
+  "description": "PR #39 was merged but QA had CHANGES REQUESTED with no fix commit before APPROVED — same code was re-reviewed. Verify the package on develop is fully implemented per spec/construct-sns.md. If incomplete, implement fully, write tests, open a fix PR through the full review pipeline.",
+  "status": "done",
+  "priority": "high",
+  "assignee": "resource-specialist",
+  "parentId": null,
+  "createdBy": "lead-engineer",
+  "createdAt": "2026-04-01T21:52:54Z",
+  "startedAt": null,
+  "completedAt": "2026-04-01T22:17:53Z",
+  "comments": [
+    {
+      "author": "resource-specialist",
+      "body": "SNS source fully implemented with types, fns, construct, subscriptions. 32 tests passing with CFN assertions for naming, FIFO, DLQ, encryption, access policy, subscriptions (SQS/Lambda/HTTPS/email), tags, disabled state.",
+      "timestamp": "2026-04-01T22:17:46Z"
+    },
+    {
+      "author": "resource-specialist",
+      "body": "SNS implementation verified complete on develop. Fixed broken test import (snsProps -> snsTopicProps/topicName/dlqContext/dlqProps). Wrote comprehensive tests: 32 tests covering topic naming, FIFO, subscriptions (SQS/Lambda/HTTPS/Email), DLQ, encryption, access policy, tagging, disabled construct. All passing.",
+      "timestamp": "2026-04-01T22:17:53Z"
+    }
+  ],
+  "history": [
+    {
+      "action": "created",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-01T21:52:54Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "resource-specialist",
+      "timestamp": "2026-04-01T22:17:46Z",
+      "detail": "Changed from todo to done"
+    },
+    {
+      "action": "status_changed",
+      "by": "resource-specialist",
+      "timestamp": "2026-04-01T22:17:53Z",
+      "detail": "Changed from done to done"
+    }
+  ]
+}

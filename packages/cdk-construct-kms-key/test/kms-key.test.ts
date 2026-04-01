@@ -134,3 +134,81 @@ defineFeature(feature, test => {
     });
   });
 });
+
+// Additional CDK template assertions for overrideable props
+describe('KmsKey CloudFormation assertions for overrideable props', () => {
+  const makeStack = (): Stack => {
+    const app = new App();
+    return new Stack(app, 'TestStack');
+  };
+
+  test('enableKeyRotation: false produces EnableKeyRotation: false in CFN', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'norotate' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx, enableKeyRotation: false });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Key', {
+      EnableKeyRotation: false,
+    });
+  });
+
+  test('pendingWindowInDays: 14 produces PendingWindowInDays: 14 in CFN', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'custom-window' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx, pendingWindowInDays: 14 });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Key', {
+      PendingWindowInDays: 14,
+    });
+  });
+
+  test('custom description appears in CFN template', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'desckey' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx, description: 'Custom KMS Key Description' });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Key', {
+      Description: 'Custom KMS Key Description',
+    });
+  });
+
+  test('default description is context id in CFN', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'autoname' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Key', {
+      Description: '7p-prod-autoname',
+    });
+  });
+
+  test('multiRegion: true produces MultiRegion: true in CFN', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'multi' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx, multiRegion: true });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Key', {
+      MultiRegion: true,
+    });
+  });
+
+  test('exactly 1 KMS Key and 1 KMS Alias created when enabled', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'count' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::KMS::Key', 1);
+    template.resourceCountIs('AWS::KMS::Alias', 1);
+  });
+
+  test('alias target key references the created key', () => {
+    const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'aliasref' });
+    const stack = makeStack();
+    new KmsKey(stack, 'SUT', { context: ctx });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::KMS::Alias', {
+      AliasName: 'alias/7p-prod-aliasref',
+      TargetKeyId: Match.anyValue(),
+    });
+  });
+});

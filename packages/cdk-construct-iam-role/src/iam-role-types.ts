@@ -1,12 +1,5 @@
 import { Context } from '@sevenpico/cdk-context';
 
-export interface IamPrincipalConfig {
-  /** Principal type: 'Service' | 'AWS' | 'Federated' */
-  readonly type: string;
-  /** List of ARNs or service identifiers */
-  readonly identifiers: string[];
-}
-
 export interface IamAssumeRoleCondition {
   readonly test: string;
   readonly variable: string;
@@ -23,6 +16,7 @@ export interface IamRoleProps {
    * Map of principal type to list of identifiers for the trust policy.
    * Key: principal type ('Service', 'AWS', 'Federated')
    * Value: list of identifiers
+   * Example: { Service: ['lambda.amazonaws.com'] }
    */
   readonly principals?: Record<string, string[]>;
 
@@ -31,10 +25,6 @@ export interface IamRoleProps {
 
   /** List of IAM policy document JSON strings to merge into the role policy */
   readonly policyDocuments?: string[];
-
-  /** Description of the inline policy created from policyDocuments */
-  readonly policyDescription?: string;
-
   /** Set of managed policy ARNs to attach to the role */
   readonly managedPolicyArns?: string[];
 
@@ -59,7 +49,10 @@ export interface IamRoleProps {
   /** Create an EC2 instance profile for this role. Default: false */
   readonly instanceProfileEnabled?: boolean;
 
-  /** Map of inline policy name to JSON policy document string */
+  /**
+   * Map of inline policy name to JSON policy document string.
+   * Allows multiple named inline policies.
+   */
   readonly inlinePolicies?: Record<string, string>;
 
   /** Whether to include tags on IAM roles and policies. Default: true */
