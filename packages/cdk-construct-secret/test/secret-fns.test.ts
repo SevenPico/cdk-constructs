@@ -4,7 +4,6 @@ import {
   kmsKeyContext,
   secretKmsKeyProps,
   smSecretProps,
-  mapPrincipal,
   secretReadPolicyStatements,
 } from '../src/secret-fns';
 import { SecretProps } from '../src/secret-types';
@@ -95,18 +94,6 @@ describe('Secret pure functions', () => {
       const sCtx = secretContext(ctx, baseProps);
       const result = smSecretProps(sCtx, baseProps);
       expect(result.secretStringValue).toBeUndefined();
-    });
-  });
-
-  describe('mapPrincipal', () => {
-    test('maps AWS type to ArnPrincipal', () => {
-      const principal = mapPrincipal({ type: 'AWS', identifiers: ['arn:aws:iam::123456789012:root'] });
-      expect(principal).toBeDefined();
-    });
-
-    test('maps Service type to ServicePrincipal', () => {
-      const principal = mapPrincipal({ type: 'Service', identifiers: ['lambda.amazonaws.com'] });
-      expect(principal).toBeDefined();
     });
   });
 

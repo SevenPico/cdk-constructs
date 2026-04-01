@@ -3,13 +3,6 @@ import { Context } from '@sevenpico/cdk-context';
 export interface SecretReadPrincipal {
   readonly type: string;
   readonly identifiers: string[];
-  readonly conditions?: SecretPrincipalCondition[];
-}
-
-export interface SecretPrincipalCondition {
-  readonly test: string;
-  readonly variable: string;
-  readonly values: string[];
 }
 
 export interface SecretProps {
@@ -36,20 +29,11 @@ export interface SecretProps {
   /** If true, use multi-region KMS key. Default: false */
   readonly kmsKeyMultiRegion?: boolean;
 
-  /** Ignore changes to the secret value after initial creation. Default: false */
-  readonly secretIgnoreChanges?: boolean;
-
   /** Create an SNS topic for secret update notifications. Default: false */
   readonly createSns?: boolean;
 
   /** IAM principals allowed to read the secret */
   readonly secretReadPrincipals?: SecretReadPrincipal[];
-
-  /** IAM principals allowed to publish to the SNS topic */
-  readonly snsPubPrincipals?: SecretReadPrincipal[];
-
-  /** IAM principals allowed to subscribe to the SNS topic */
-  readonly snsSubPrincipals?: SecretReadPrincipal[];
 
   /** Regions to replicate the secret to */
   readonly replicaRegions?: string[];

@@ -39,8 +39,8 @@ export const smSecretProps = (
     : undefined,
 });
 
-/** Map a SecretReadPrincipal to an IAM principal. */
-export const mapPrincipal = (p: SecretReadPrincipal): iam.IPrincipal => {
+/** Map a SecretReadPrincipal to an IAM principal. Internal use only. */
+const mapPrincipal = (p: SecretReadPrincipal): iam.IPrincipal => {
   switch (p.type) {
     case 'Service':
       return new iam.ServicePrincipal(p.identifiers[0]);
