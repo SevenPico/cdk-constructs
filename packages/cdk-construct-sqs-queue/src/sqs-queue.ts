@@ -33,6 +33,12 @@ export class SqsQueue extends Construct {
       encryptionMasterKey: encKey,
     });
 
+    // FIFO throughput limit via CfnQueue escape hatch (not exposed on L2)
+    if (props.fifo && props.fifoThroughputLimit) {
+      const cfnQueue = this.queue.node.defaultChild as sqs.CfnQueue;
+      cfnQueue.addPropertyOverride('FifoThroughputLimit', props.fifoThroughputLimit);
+    }
+
     (props.iamPolicyStatements ?? []).forEach(stmt => {
       this.queue!.addToResourcePolicy(buildPolicyStatement(stmt));
     });
