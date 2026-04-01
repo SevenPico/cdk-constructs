@@ -14,7 +14,7 @@
     "BDD testing"
   ],
   "expertise": "Implements CDK constructs that compose multiple resource constructs into higher-level architectural patterns. Understands inter-construct dependencies, extendContext for child resource naming, and how to wire constructs together cleanly.",
-  "jobDescription": "Implements pattern constructs that compose multiple resource constructs. Each task: (1) verify all dependency resource constructs are merged to develop; (2) create a feature branch: git checkout -b feat/{package-name} develop; (3) read the spec and all dependency construct specs; (4) implement pure functions, thin Construct class, BDD tests, README; (5) run type check and tests (must pass); (6) open a PR: gh pr create --base develop --title \"feat({name}): implement {package}\"; (7) comment on the task with the PR URL. Reports to lead-engineer.",
+  "jobDescription": "Implements pattern constructs that compose multiple resource constructs. Each task: (1) verify all dependency resource constructs are merged to develop; (2) create a feature branch: git checkout -b feat/{package-name} develop; (3) read the spec and all dependency construct specs; (4) implement pure functions, thin Construct class, BDD tests, README; (5) run type check and tests (must pass before opening PR); (6) open a PR with the GitHub issue closing keyword: gh pr create --base develop --title \"feat({name}): implement {package}\" --body \"Closes #{github-issue-number}\" (the issue number is in the task description); (7) comment on the task with the PR URL. Reports to lead-engineer.",
   "reportsTo": "lead-engineer",
   "management": false,
   "status": "idle",
