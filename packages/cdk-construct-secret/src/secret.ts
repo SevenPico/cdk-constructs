@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
+import { CfnResource, Tags } from 'aws-cdk-lib';
 import {
   aws_kms as kms,
   aws_secretsmanager as sm,
@@ -12,6 +12,8 @@ import {
   secretKmsKeyProps,
   smSecretProps,
   secretReadPolicyStatements,
+  snsPublishPolicyStatement,
+  snsSubscribePolicyStatement,
 } from './secret-fns';
 import { SecretProps } from './secret-types';
 
@@ -51,6 +53,15 @@ export class Secret extends Construct {
     // Secret
     this.secret = new sm.Secret(this, 'Secret', smSecretProps(sCtx, props, encryptionKey));
 
+    // Ignore changes to secret value after initial creation
+    if (props.secretIgnoreChanges) {
+      const cfnSecret = this.secret.node.defaultChild as CfnResource;
+      cfnSecret.cfnOptions.metadata = {
+        ...cfnSecret.cfnOptions.metadata,
+        'aws:cdk:ignore-secret-value': true,
+      };
+    }
+
     // Resource policy: read principals
     if (props.secretReadPrincipals?.length) {
       secretReadPolicyStatements(
@@ -66,6 +77,22 @@ export class Secret extends Construct {
         topicName: `${contextId(sCtx)}-updates`,
         masterKey: encryptionKey,
       });
+
+      // SNS publish principals
+      if (props.snsPubPrincipals?.length) {
+        const pubStmt = snsPublishPolicyStatement(this.snsTopic.topicArn, props.snsPubPrincipals);
+        if (pubStmt) {
+          this.snsTopic.addToResourcePolicy(pubStmt);
+        }
+      }
+
+      // SNS subscribe principals
+      if (props.snsSubPrincipals?.length) {
+        const subStmt = snsSubscribePolicyStatement(this.snsTopic.topicArn, props.snsSubPrincipals);
+        if (subStmt) {
+          this.snsTopic.addToResourcePolicy(subStmt);
+        }
+      }
     }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));

@@ -63,8 +63,11 @@ new Secret(this, 'DbSecret', {
 | `kmsKeyDeletionWindowInDays` | KMS key deletion window in days | `number` | `30` | |
 | `kmsKeyEnableKeyRotation` | Enable KMS key rotation | `boolean` | `true` | |
 | `kmsKeyMultiRegion` | Use multi-region KMS key | `boolean` | `false` | |
+| `secretIgnoreChanges` | Ignore changes to secret value after creation | `boolean` | `false` | |
 | `createSns` | Create SNS topic for notifications | `boolean` | `false` | |
 | `secretReadPrincipals` | IAM principals allowed to read the secret | `SecretReadPrincipal[]` | `[]` | |
+| `snsPubPrincipals` | IAM principals allowed to publish to the SNS topic | `SecretReadPrincipal[]` | `[]` | |
+| `snsSubPrincipals` | IAM principals allowed to subscribe to the SNS topic | `SecretReadPrincipal[]` | `[]` | |
 | `replicaRegions` | Regions to replicate the secret to | `string[]` | `[]` | |
 | `secretAttributesOverride` | Context attributes override for the secret | `string[]` | `['secret']` | |
 | `kmsKeyAttributesOverride` | Context attributes override for the KMS key | `string[]` | `['key']` | |
@@ -85,6 +88,9 @@ new Secret(this, 'DbSecret', {
 - Read principals receive `secretsmanager:GetSecretValue` and `secretsmanager:DescribeSecret` on the secret, plus `kms:Decrypt` and `kms:DescribeKey` on the KMS key (if created).
 - The SNS topic is encrypted with the same KMS key used for the secret.
 - Context attributes are appended to the base context ID: secret gets `-secret` suffix, KMS key gets `-key` suffix by default.
+- `SecretReadPrincipal` supports an optional `conditions` array of `SecretPrincipalCondition` objects (`{ test, variable, values }`). Conditions are applied only to the `secretsmanager:GetSecretValue`/`DescribeSecret` policy statement, not to the KMS statement.
+- `secretIgnoreChanges` sets CloudFormation metadata (`aws:cdk:ignore-secret-value`) as a best-effort hint; it does not use `CfnResource.cfnOptions.updatePolicy` or a custom resource to enforce immutability.
+- `snsPubPrincipals` and `snsSubPrincipals` add resource policy statements to the SNS topic granting `sns:Publish` and `sns:Subscribe` respectively.
 
 ## Roadmap
 
@@ -102,7 +108,7 @@ new Secret(this, 'DbSecret', {
 
 - [ ] Secret rotation configuration
 - [ ] Secret version stages
-- [ ] SNS pub/sub principal policies
+- [x] SNS pub/sub principal policies
 
 ## License
 
