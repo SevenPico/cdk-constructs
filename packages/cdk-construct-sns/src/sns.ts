@@ -12,10 +12,11 @@ export class Sns extends Construct {
     super(scope, id);
     if (!isEnabled(props.context)) return;
 
-    // Encryption key
+    // Encryption key (default: true per spec)
     let masterKey: kms.IKey | undefined;
-    if (props.encryptionEnabled && props.kmsMasterKeyId) {
-      masterKey = kms.Key.fromKeyArn(this, 'Key', props.kmsMasterKeyId);
+    if (props.encryptionEnabled !== false) {
+      const keyId = props.kmsMasterKeyId ?? 'alias/aws/sns';
+      masterKey = kms.Alias.fromAliasName(this, 'Key', keyId.replace(/^alias\//, ''));
     }
 
     // Topic
@@ -47,6 +48,12 @@ export class Sns extends Construct {
       subIndex++;
     });
 
+    // Delivery policy via CfnTopic escape hatch
+    if (props.deliveryPolicy) {
+      const cfnTopic = this.topic.node.defaultChild as sns.CfnTopic;
+      cfnTopic.addPropertyOverride('DeliveryPolicy', JSON.parse(props.deliveryPolicy));
+    }
+
     // DLQ for failed deliveries
     if (props.sqsDlqEnabled) {
       const dlqEncKey = props.sqsQueueKmsMasterKeyId
@@ -56,6 +63,17 @@ export class Sns extends Construct {
         ...dlqProps(props.context, props),
         encryptionMasterKey: dlqEncKey,
       });
+
+      // Redrive policy: route failed messages to DLQ
+      if (props.redrivePolicy) {
+        const cfnDlq = this.deadLetterQueue.node.defaultChild as sqs.CfnQueue;
+        cfnDlq.addPropertyOverride('RedrivePolicy', JSON.parse(props.redrivePolicy));
+      } else if (props.redriveMaxReceiverCount !== undefined) {
+        const cfnDlq = this.deadLetterQueue.node.defaultChild as sqs.CfnQueue;
+        cfnDlq.addPropertyOverride('RedrivePolicy', {
+          maxReceiveCount: props.redriveMaxReceiverCount,
+        });
+      }
     }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));
