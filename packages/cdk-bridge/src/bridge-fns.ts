@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { makeContext, Context, MakeContextOptions } from '@sevenpico/cdk-context';
+import { makeContext, Context, ContextProps } from '@sevenpico/cdk-context';
 import { BridgeConfig } from './bridge-types';
 
 const CONTEXT_KEY = 'sevenpico';
@@ -16,8 +16,8 @@ export const readBridgeConfig = (scope: Construct): BridgeConfig => {
   return config as BridgeConfig;
 };
 
-/** Map BridgeConfig fields to MakeContextOptions. */
-export const bridgeConfigToContextProps = (config: BridgeConfig): MakeContextOptions => ({
+/** Map BridgeConfig fields to ContextProps. */
+export const bridgeConfigToContextProps = (config: BridgeConfig): ContextProps => ({
   namespace: config.namespace,
   environment: config.environment,
   stage: config.stage,

@@ -24,6 +24,11 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
     defaultReleaseBranch: 'main',
     jsiiVersion: '~5.4.0',
     packageManager: NodePackageManager.NPM,
+    tsconfigDev: {
+      compilerOptions: {
+        types: ['jest', 'node'],
+      },
+    },
     ...opts,
   });
 
@@ -70,7 +75,6 @@ pkg('cdk-construct-cloudwatch-flow-logs',            'cdk-construct-cloudwatch-f
 // lodash in @aws/pdk has no upstream fix available.
 monorepo.package.addField('overrides', {
   '@types/babel__traverse': '7.18.2',       // PDK-managed, keep
-  '@zkochan/js-yaml': 'npm:js-yaml@^4.1.1', // was 4.1.0, needs >=4.1.1
   'wrap-ansi': '^7.0.0',                    // PDK-managed, keep
   'brace-expansion': '^2.0.1',              // safe: v2 is API-compatible with v1
   'js-yaml': '^4.1.1',                      // safe: targets packages already on v4
