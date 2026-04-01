@@ -76,6 +76,9 @@ export interface S3BucketProps {
   /** Enable transfer acceleration. Default: false */
   readonly transferAccelerationEnabled?: boolean;
 
+  /** Enable MFA delete (requires versioning). Default: false */
+  readonly mfaDeleteEnabled?: boolean;
+
   /** Cross-region replication rules */
   readonly replicationRules?: S3ReplicationRule[];
 
