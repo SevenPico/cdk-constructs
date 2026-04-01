@@ -23,15 +23,6 @@ export class S3Bucket extends Construct {
         : undefined,
     });
 
-    // MFA delete via CfnBucket escape hatch (not exposed on L2)
-    if (props.mfaDeleteEnabled) {
-      const cfnBucket = this.bucket.node.defaultChild as s3.CfnBucket;
-      cfnBucket.addPropertyOverride('VersioningConfiguration', {
-        Status: 'Enabled',
-        MfaDelete: 'Enabled',
-      });
-    }
-
     if (props.allowSslRequestsOnly) {
       this.bucket.addToResourcePolicy(new iam.PolicyStatement({
         sid: 'AllowSSLRequestsOnly',

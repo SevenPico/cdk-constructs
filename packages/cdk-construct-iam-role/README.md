@@ -47,6 +47,7 @@ See the [examples](./examples) directory for complete usage examples.
 | `principals` | Map of principal type to identifiers | `Record<string, string[]>` | — | |
 | `assumeRolePolicyDocumentOverride` | Custom assume role policy JSON | `string` | — | |
 | `policyDocuments` | IAM policy document JSON strings to merge | `string[]` | `[]` | |
+| `policyDescription` | Description of the inline policy created from policyDocuments | `string` | — | |
 | `managedPolicyArns` | Managed policy ARNs to attach | `string[]` | `[]` | |
 | `maxSessionDuration` | Maximum session duration in seconds | `number` | `3600` | |
 | `permissionsBoundary` | Permissions boundary policy ARN | `string` | — | |

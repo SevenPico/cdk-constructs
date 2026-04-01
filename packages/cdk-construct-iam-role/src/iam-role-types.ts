@@ -25,6 +25,10 @@ export interface IamRoleProps {
 
   /** List of IAM policy document JSON strings to merge into the role policy */
   readonly policyDocuments?: string[];
+
+  /** Description of the inline policy created from policyDocuments */
+  readonly policyDescription?: string;
+
   /** Set of managed policy ARNs to attach to the role */
   readonly managedPolicyArns?: string[];
 

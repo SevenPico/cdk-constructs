@@ -47,6 +47,7 @@ See the [examples](./examples) directory for complete usage examples.
 | `delaySeconds` | Delivery delay in seconds | `number` | `0` | |
 | `receiveWaitTimeSeconds` | Long-polling wait time in seconds | `number` | `0` | |
 | `fifo` | Create a FIFO queue | `boolean` | `false` | |
+| `fifoThroughputLimit` | FIFO throughput limit (`perQueue` or `perMessageGroupId`) | `string` | — | |
 | `contentBasedDeduplication` | Enable content-based deduplication (FIFO) | `boolean` | `false` | |
 | `kmsMasterKeyId` | KMS key ID for encryption | `string` | — | |
 | `sqsManagedSseEnabled` | Enable SQS-managed SSE | `boolean` | `true` | |

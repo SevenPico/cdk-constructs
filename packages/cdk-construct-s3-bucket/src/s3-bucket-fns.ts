@@ -73,7 +73,7 @@ export const mapObjectLock = (props: S3BucketProps): s3.ObjectLockRetention | un
 
 export const s3BucketProps = (ctx: Context, props: S3BucketProps): s3.BucketProps => ({
   bucketName: s3BucketName(ctx, props),
-  versioned: props.mfaDeleteEnabled || (props.versioningEnabled ?? true),
+  versioned: props.versioningEnabled ?? true,
   encryption: s3EncryptionConfig(props),
   bucketKeyEnabled: props.bucketKeyEnabled ?? false,
   blockPublicAccess: new s3.BlockPublicAccess({

@@ -34,10 +34,16 @@ export class IamRole extends Construct {
 
     const mergedDoc = mergePolicyDocuments(props.policyDocuments ?? []);
     if (mergedDoc) {
-      this.role.attachInlinePolicy(new iam.Policy(this, 'Policy', {
+      const inlinePolicy = new iam.Policy(this, 'Policy', {
         document: mergedDoc,
         policyName: `${contextId(props.context)}-policy`,
-      }));
+      });
+      this.role.attachInlinePolicy(inlinePolicy);
+
+      if (props.policyDescription) {
+        const cfnPolicy = inlinePolicy.node.defaultChild as iam.CfnPolicy;
+        cfnPolicy.addMetadata('Description', props.policyDescription);
+      }
     }
 
     Object.entries(props.inlinePolicies ?? {}).forEach(([name, doc]) => {
