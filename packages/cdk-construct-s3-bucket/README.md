@@ -55,6 +55,7 @@ See the [examples](./examples) directory for complete usage examples.
 | `corsRules` | CORS rules | `S3CorsRule[]` | `[]` | |
 | `objectOwnership` | Object ownership | `string` | `BucketOwnerEnforced` | |
 | `transferAccelerationEnabled` | Enable transfer acceleration | `boolean` | `false` | |
+| `mfaDeleteEnabled` | Enable MFA delete (requires versioning) | `boolean` | `false` | |
 | `replicationRules` | Cross-region replication rules | `S3ReplicationRule[]` | — | |
 | `replicationRoleArn` | IAM role ARN for replication | `string` | — | |
 | `loggingBucketName` | Logging target bucket name | `string` | — | |
