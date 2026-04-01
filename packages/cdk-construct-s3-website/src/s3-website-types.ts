@@ -31,15 +31,6 @@ export interface S3WebsiteProps {
   /** Enable WAF on the CloudFront distribution. Default: false */
   readonly wafEnabled?: boolean;
 
-  /** Enable CloudFront access logging. Default: false */
-  readonly cloudfrontAccessLoggingEnabled?: boolean;
-
-  /** S3 bucket ID to receive CloudFront access logs */
-  readonly cloudfrontAccessLogBucketId?: string;
-
-  /** CloudFront access log prefix */
-  readonly cloudfrontAccessLogPrefix?: string;
-
   /** Enable S3 origin access logging. Default: true */
   readonly s3AccessLoggingEnabled?: boolean;
 
@@ -51,6 +42,9 @@ export interface S3WebsiteProps {
 
   /** CloudFront function associations for the default behavior */
   readonly functionAssociations?: cloudfront.FunctionAssociation[];
+
+  /** CORS allowed origins */
+  readonly corsAllowedOrigins?: string[];
 
   /** IAM principal ARNs allowed to deploy to the S3 origin bucket */
   readonly deploymentPrincipalArns?: string[];

@@ -52,12 +52,10 @@ See the [examples](./examples) directory for complete usage examples.
 | `defaultRootObject` | Default root object | `string` | `'index.html'` | |
 | `customErrorResponses` | Custom error responses | `CustomErrorResponse[]` | 404 -> index.html | |
 | `wafEnabled` | Enable WAF on CloudFront | `boolean` | `false` | |
-| `cloudfrontAccessLoggingEnabled` | Enable CloudFront access logging | `boolean` | `false` | |
-| `cloudfrontAccessLogBucketId` | S3 bucket for CloudFront logs | `string` | -- | |
-| `cloudfrontAccessLogPrefix` | CloudFront log prefix | `string` | -- | |
 | `s3AccessLoggingEnabled` | Enable S3 origin access logging | `boolean` | `true` | |
 | `s3AccessLogBucketId` | S3 bucket for S3 access logs | `string` | -- | |
 | `s3AccessLogPrefix` | S3 access log prefix | `string` | -- | |
+| `corsAllowedOrigins` | CORS allowed origins | `string[]` | -- | |
 | `deploymentPrincipalArns` | IAM ARNs allowed to deploy | `string[]` | `[]` | |
 | `parentZoneId` | Route53 hosted zone ID | `string` | -- | |
 | `parentZoneName` | Route53 hosted zone name | `string` | -- | |
@@ -94,7 +92,7 @@ See the [examples](./examples) directory for complete usage examples.
 
 ### v0.2.0
 
-- [ ] CORS configuration support
+- [x] CORS configuration support
 - [ ] CloudFront access logging to S3
 - [ ] Custom CloudFront cache policies
 

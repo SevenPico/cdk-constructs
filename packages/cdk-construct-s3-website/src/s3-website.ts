@@ -43,6 +43,12 @@ export class S3Website extends Construct {
       ...originBucketProps(props.context, props),
       serverAccessLogsBucket,
       serverAccessLogsPrefix: props.s3AccessLogPrefix,
+      cors: props.corsAllowedOrigins?.length ? [{
+        allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+        allowedOrigins: props.corsAllowedOrigins,
+        allowedHeaders: ['*'],
+        maxAge: 3000,
+      }] : undefined,
     });
 
     // OAC
