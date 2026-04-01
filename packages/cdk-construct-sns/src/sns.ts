@@ -64,16 +64,17 @@ export class Sns extends Construct {
         encryptionMasterKey: dlqEncKey,
       });
 
-      // Redrive policy: route failed messages to DLQ
-      if (props.redrivePolicy) {
-        const cfnDlq = this.deadLetterQueue.node.defaultChild as sqs.CfnQueue;
-        cfnDlq.addPropertyOverride('RedrivePolicy', JSON.parse(props.redrivePolicy));
-      } else if (props.redriveMaxReceiverCount !== undefined) {
-        const cfnDlq = this.deadLetterQueue.node.defaultChild as sqs.CfnQueue;
-        cfnDlq.addPropertyOverride('RedrivePolicy', {
-          maxReceiveCount: props.redriveMaxReceiverCount,
-        });
-      }
+      // Apply redrive policy to SNS subscriptions to route failed deliveries to DLQ
+      const redriveObj = props.redrivePolicy
+        ? JSON.parse(props.redrivePolicy)
+        : { deadLetterTargetArn: this.deadLetterQueue.queueArn, maxReceiveCount: props.redriveMaxReceiverCount ?? 5 };
+      const redrivePolicyStr = JSON.stringify(redriveObj);
+
+      this.node.findAll().forEach(child => {
+        if (child instanceof sns.CfnSubscription) {
+          child.redrivePolicy = redrivePolicyStr;
+        }
+      });
     }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));

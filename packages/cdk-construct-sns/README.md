@@ -43,7 +43,7 @@ See the [examples](./examples) directory for complete usage examples.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | `context` | SevenPico context for naming and tagging | `Context` | — | ✓ |
-| `encryptionEnabled` | Enable KMS encryption | `boolean` | `false` | |
+| `encryptionEnabled` | Enable KMS encryption | `boolean` | `true` | |
 | `kmsMasterKeyId` | KMS key ARN for encryption | `string` | — | |
 | `fifoTopic` | Create FIFO topic | `boolean` | `false` | |
 | `contentBasedDeduplication` | Content-based dedup (FIFO) | `boolean` | `false` | |
@@ -52,6 +52,14 @@ See the [examples](./examples) directory for complete usage examples.
 | `allowedIamArnsForPublish` | IAM ARNs allowed to publish | `string[]` | `[]` | |
 | `snsTopicPolicyJson` | Custom topic policy JSON | `string` | — | |
 | `sqsDlqEnabled` | Enable SQS dead-letter queue | `boolean` | `false` | |
+| `sqsDlqMaxMessageSizeBytes` | DLQ max message size in bytes | `number` | `262144` | |
+| `sqsDlqMessageRetentionSeconds` | DLQ message retention seconds | `number` | `1209600` | |
+| `sqsDlqFifo` | Create FIFO DLQ | `boolean` | `false` | |
+| `sqsQueueKmsMasterKeyId` | KMS key ID for DLQ | `string` | — | |
+| `sqsQueueKmsDataKeyReusePeriodSeconds` | KMS data key reuse period for DLQ | `number` | `300` | |
+| `deliveryPolicy` | Custom SNS delivery retry policy JSON | `string` | — | |
+| `redrivePolicy` | Custom redrive policy JSON | `string` | — | |
+| `redriveMaxReceiverCount` | Max receive count for redrive policy | `number` | `5` | |
 
 ## Outputs
 
