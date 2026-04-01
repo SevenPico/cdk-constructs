@@ -64,17 +64,16 @@ pkg('cdk-construct-cloudwatch-flow-logs',            'cdk-construct-cloudwatch-f
 
 // ── Security overrides for vulnerable transitive dependencies ─────────────────
 // PDK-managed overrides are preserved here so they survive re-synths.
-// brace-expansion, js-yaml, minimatch, yaml: fix ReDoS/prototype-pollution in
-// projen, nx, and @aws/pdk internal deps.
-// lodash in @aws/pdk has no fix available upstream.
+// minimatch and yaml overrides are intentionally omitted — forcing major version
+// jumps (v3→v9, v1→v2) breaks packages that depend on older APIs (e.g. aws-cdk-lib
+// uses minimatch v3 internals). These are fixed by upgrading aws-cdk-lib instead.
+// lodash in @aws/pdk has no upstream fix available.
 monorepo.package.addField('overrides', {
   '@types/babel__traverse': '7.18.2',       // PDK-managed, keep
   '@zkochan/js-yaml': 'npm:js-yaml@^4.1.1', // was 4.1.0, needs >=4.1.1
   'wrap-ansi': '^7.0.0',                    // PDK-managed, keep
-  'brace-expansion': '^2.0.1',
-  'js-yaml': '^4.1.1',
-  'minimatch': '^9.0.7',
-  'yaml': '^2.9.0',
+  'brace-expansion': '^2.0.1',              // safe: v2 is API-compatible with v1
+  'js-yaml': '^4.1.1',                      // safe: targets packages already on v4
 });
 
 monorepo.synth();

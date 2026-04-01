@@ -52,9 +52,7 @@
     "@zkochan/js-yaml": "npm:js-yaml@^4.1.1",
     "wrap-ansi": "^7.0.0",
     "brace-expansion": "^2.0.1",
-    "js-yaml": "^4.1.1",
-    "minimatch": "^9.0.7",
-    "yaml": "^2.9.0"
+    "js-yaml": "^4.1.1"
   },
   "engines": {
     "node": ">=16"
