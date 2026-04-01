@@ -80,6 +80,14 @@ export class S3Website extends Construct {
       ? props.customErrorResponses.map(mapErrorResponse)
       : defaultCustomErrorResponses();
 
+    // CloudFront access log bucket
+    let cfLogBucket: s3.IBucket | undefined;
+    let cfLogPrefix: string | undefined;
+    if (props.cloudfrontAccessLoggingEnabled && props.cloudfrontAccessLogBucketId) {
+      cfLogBucket = s3.Bucket.fromBucketName(this, 'CfLogBucket', props.cloudfrontAccessLogBucketId);
+      cfLogPrefix = props.cloudfrontAccessLogPrefix;
+    }
+
     // CloudFront distribution
     this.distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
@@ -96,6 +104,9 @@ export class S3Website extends Construct {
       webAclId: webAclArn,
       geoRestriction: cloudfrontGeoRestriction(props.geoRestriction),
       minimumProtocolVersion: mapTlsVersion(props.tlsProtocolVersion ?? 'TLSv1.2_2021'),
+      logBucket: cfLogBucket,
+      logFilePrefix: cfLogPrefix,
+      enableLogging: props.cloudfrontAccessLoggingEnabled,
     });
 
     // Deployment principals - grant put to origin bucket

@@ -52,6 +52,9 @@ See the [examples](./examples) directory for complete usage examples.
 | `defaultRootObject` | Default root object | `string` | `'index.html'` | |
 | `customErrorResponses` | Custom error responses | `CustomErrorResponse[]` | 404 -> index.html | |
 | `wafEnabled` | Enable WAF on CloudFront | `boolean` | `false` | |
+| `cloudfrontAccessLoggingEnabled` | Enable CloudFront access logging | `boolean` | `false` | |
+| `cloudfrontAccessLogBucketId` | S3 bucket ID to receive CloudFront access logs | `string` | -- | |
+| `cloudfrontAccessLogPrefix` | CloudFront access log prefix | `string` | -- | |
 | `s3AccessLoggingEnabled` | Enable S3 origin access logging | `boolean` | `true` | |
 | `s3AccessLogBucketId` | S3 bucket for S3 access logs | `string` | -- | |
 | `s3AccessLogPrefix` | S3 access log prefix | `string` | -- | |
@@ -93,7 +96,7 @@ See the [examples](./examples) directory for complete usage examples.
 ### v0.2.0
 
 - [x] CORS configuration support
-- [ ] CloudFront access logging to S3
+- [x] CloudFront access logging to S3
 - [ ] Custom CloudFront cache policies
 
 ## License
