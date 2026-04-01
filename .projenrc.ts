@@ -6,8 +6,8 @@ const monorepo = new MonorepoTsProject({
   name: 'sevenpico-cdk-constructs',
   packageManager: NodePackageManager.NPM,
   defaultReleaseBranch: 'main',
-  devDeps: ['@aws/pdk'],
-  gitIgnoreOptions: { ignorePatterns: ['.env', '*.js.map'] },
+  devDeps: ['@aws/pdk', 'projen@^0.99.27'],
+  gitIgnoreOptions: { ignorePatterns: ['.env', '*.js.map', '.claude'] },
 });
 
 // ── Shared helper ─────────────────────────────────────────────────────────────
@@ -19,7 +19,8 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
     author: 'SevenPico',
     authorAddress: 'https://sevenpico.com',
     repositoryUrl: 'https://github.com/SevenPico/cdk-constructs',
-    cdkVersion: '2.100.0',
+    cdkVersion: '2.246.0',
+    constructsVersion: '10.5.0',
     defaultReleaseBranch: 'main',
     jsiiVersion: '~5.4.0',
     packageManager: NodePackageManager.NPM,
@@ -27,7 +28,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
   });
 
 // ── Foundation packages ───────────────────────────────────────────────────────
-pkg('cdk-context', 'cdk-context', { cdkVersion: '2.100.0', deps: [] });
+pkg('cdk-context', 'cdk-context', { cdkVersion: '2.246.0', deps: [] });
 pkg('cdk-bridge',  'cdk-bridge',  { deps: ['@sevenpico/cdk-context'] });
 
 // ── Construct packages ────────────────────────────────────────────────────────
@@ -60,5 +61,20 @@ pkg('cdk-construct-cloudtrail',                      'cdk-construct-cloudtrail',
 pkg('cdk-construct-cloudtrail-cloudwatch-alarms',    'cdk-construct-cloudtrail-cloudwatch-alarms',    { deps: ctx });
 pkg('cdk-construct-cloudwatch-events',               'cdk-construct-cloudwatch-events',               { deps: ctx });
 pkg('cdk-construct-cloudwatch-flow-logs',            'cdk-construct-cloudwatch-flow-logs',            { deps: ctx });
+
+// ── Security overrides for vulnerable transitive dependencies ─────────────────
+// PDK-managed overrides are preserved here so they survive re-synths.
+// brace-expansion, js-yaml, minimatch, yaml: fix ReDoS/prototype-pollution in
+// projen, nx, and @aws/pdk internal deps.
+// lodash in @aws/pdk has no fix available upstream.
+monorepo.package.addField('overrides', {
+  '@types/babel__traverse': '7.18.2',       // PDK-managed, keep
+  '@zkochan/js-yaml': 'npm:js-yaml@^4.1.1', // was 4.1.0, needs >=4.1.1
+  'wrap-ansi': '^7.0.0',                    // PDK-managed, keep
+  'brace-expansion': '^2.0.1',
+  'js-yaml': '^4.1.1',
+  'minimatch': '^9.0.7',
+  'yaml': '^2.9.0',
+});
 
 monorepo.synth();

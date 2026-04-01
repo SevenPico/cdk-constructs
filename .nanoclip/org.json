@@ -1,0 +1,6 @@
+{
+  "name": "SevenPico CDK Constructs",
+  "goal": "Migrate many of SevenPico's open-source Terraform Modules to CDK Constructs. See spec/ for scope details",
+  "description": "",
+  "createdAt": "2026-04-01T18:50:48Z"
+}

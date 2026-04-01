@@ -1,0 +1,27 @@
+{
+  "id": "025",
+  "title": "Implement @sevenpico/cdk-construct-lambda-error-notification",
+  "description": "Compose cdk-construct-sqs-queue with Lambda error handling into a DLQ and error alerting pattern. Depends on task 005 (sqs-queue) and task 007 (lambda-function) being done. Read spec/construct-lambda-error-notification.md and the source Terraform module linked in the spec. GitHub issue #15.\n\nWorkflow:\n1. Pattern Specialist implements: pure functions in {name}-fns.ts, thin Construct class in {name}.ts, BDD tests, package README. Verify all dependency constructs are already implemented before starting.\n2. Code Reviewer signs off: JSII compliance (no union/function types, all props readonly, full re-exports), functional architecture split (no side-effects in fns.ts, no logic in construct), spec fidelity (props match Terraform vars, defaults match Terraform defaults, contextId/contextTags/isEnabled used correctly), README accuracy.\n3. QA Engineer signs off: BDD scenarios cover the full composed pattern including enabled:false on the parent and each composed resource, pure function tests cover defaults/overrides/edge cases, CDK assertions verify the wiring between composed constructs.\n\nTask is done only when all three phases are complete.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": "pattern-specialist",
+  "parentId": null,
+  "createdBy": "system",
+  "createdAt": "2026-04-01T19:04:36Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-01T19:04:36Z"
+    },
+    {
+      "action": "updated",
+      "by": "system",
+      "timestamp": "2026-04-01T19:13:25Z",
+      "comment": "Updated description to reflect full review workflow"
+    }
+  ]
+}

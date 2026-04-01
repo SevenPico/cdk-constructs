@@ -1,0 +1,27 @@
+{
+  "id": "002",
+  "title": "Implement @sevenpico/cdk-construct-kms-key",
+  "description": "Port terraform-aws-kms-key. Implement a KMS Key construct with context-based naming and tagging. Read spec/construct-kms-key.md and the source Terraform module linked in the spec. GitHub issue #4.\n\nWorkflow:\n1. Resource Specialist implements: pure functions in {name}-fns.ts, thin Construct class in {name}.ts, BDD tests, package README.\n2. Code Reviewer signs off: JSII compliance (no union/function types, all props readonly, full re-exports), functional architecture split (no side-effects in fns.ts, no logic in construct), spec fidelity (props match Terraform vars, defaults match Terraform defaults, contextId/contextTags/isEnabled used correctly), README accuracy.\n3. QA Engineer signs off: BDD scenarios cover all spec scenarios including enabled:false early-exit, pure function tests cover defaults/overrides/edge cases, CDK assertions are meaningful and would catch a broken implementation.\n\nTask is done only when all three phases are complete.",
+  "status": "todo",
+  "priority": "high",
+  "assignee": "resource-specialist",
+  "parentId": null,
+  "createdBy": "system",
+  "createdAt": "2026-04-01T19:04:36Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-01T19:04:36Z"
+    },
+    {
+      "action": "updated",
+      "by": "system",
+      "timestamp": "2026-04-01T19:13:25Z",
+      "comment": "Updated description to reflect full review workflow"
+    }
+  ]
+}

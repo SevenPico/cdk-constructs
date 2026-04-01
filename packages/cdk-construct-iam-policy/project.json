@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-construct-iam-policy"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-construct-iam-policy"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-construct-iam-policy"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

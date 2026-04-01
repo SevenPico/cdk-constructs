@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-construct-kinesis-stream"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-construct-kinesis-stream"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-construct-kinesis-stream"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

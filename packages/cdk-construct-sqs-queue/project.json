@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-construct-sqs-queue"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-construct-sqs-queue"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-construct-sqs-queue"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

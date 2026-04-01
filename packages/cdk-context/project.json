@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-context"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-context"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-context"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

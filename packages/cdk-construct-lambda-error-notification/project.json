@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-construct-lambda-error-notification"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-construct-lambda-error-notification"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-construct-lambda-error-notification"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

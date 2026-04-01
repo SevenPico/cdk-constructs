@@ -58,6 +58,20 @@
         "cwd": "packages/cdk-construct-cloudtrail"
       }
     },
+    "post-upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen post-upgrade",
+        "cwd": "packages/cdk-construct-cloudtrail"
+      }
+    },
+    "upgrade": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen upgrade",
+        "cwd": "packages/cdk-construct-cloudtrail"
+      }
+    },
     "watch": {
       "executor": "nx:run-commands",
       "options": {

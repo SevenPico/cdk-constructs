@@ -22,11 +22,11 @@
   },
   "devDependencies": {
     "@aws/pdk": "^0.26.15",
-    "@types/node": "^25.5.0",
-    "@typescript-eslint/eslint-plugin": "^8",
-    "@typescript-eslint/parser": "^8",
+    "@types/node": "^18",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
     "constructs": "^10.0.0",
-    "eslint": "^9",
+    "eslint": "^8",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -44,13 +44,17 @@
   },
   "dependencies": {
     "@aws-cdk/aws-cognito-identitypool-alpha": "latest",
-    "aws-cdk-lib": "^2.245.0",
+    "aws-cdk-lib": "2.246.0",
     "cdk-nag": "^2.37.55"
   },
   "overrides": {
     "@types/babel__traverse": "7.18.2",
-    "@zkochan/js-yaml": "npm:js-yaml@4.1.0",
-    "wrap-ansi": "^7.0.0"
+    "@zkochan/js-yaml": "npm:js-yaml@^4.1.1",
+    "wrap-ansi": "^7.0.0",
+    "brace-expansion": "^2.0.1",
+    "js-yaml": "^4.1.1",
+    "minimatch": "^9.0.7",
+    "yaml": "^2.9.0"
   },
   "engines": {
     "node": ">=16"
