@@ -68,11 +68,10 @@ export class Sns extends Construct {
       const redriveObj = props.redrivePolicy
         ? JSON.parse(props.redrivePolicy)
         : { deadLetterTargetArn: this.deadLetterQueue.queueArn, maxReceiveCount: props.redriveMaxReceiverCount ?? 5 };
-      const redrivePolicyStr = JSON.stringify(redriveObj);
 
       this.node.findAll().forEach(child => {
         if (child instanceof sns.CfnSubscription) {
-          child.redrivePolicy = redrivePolicyStr;
+          child.redrivePolicy = redriveObj;
         }
       });
     }
