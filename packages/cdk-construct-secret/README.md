@@ -88,6 +88,9 @@ new Secret(this, 'DbSecret', {
 - Read principals receive `secretsmanager:GetSecretValue` and `secretsmanager:DescribeSecret` on the secret, plus `kms:Decrypt` and `kms:DescribeKey` on the KMS key (if created).
 - The SNS topic is encrypted with the same KMS key used for the secret.
 - Context attributes are appended to the base context ID: secret gets `-secret` suffix, KMS key gets `-key` suffix by default.
+- `SecretReadPrincipal` supports an optional `conditions` array of `SecretPrincipalCondition` objects (`{ test, variable, values }`). Conditions are applied only to the `secretsmanager:GetSecretValue`/`DescribeSecret` policy statement, not to the KMS statement.
+- `secretIgnoreChanges` sets CloudFormation metadata (`aws:cdk:ignore-secret-value`) as a best-effort hint; it does not use `CfnResource.cfnOptions.updatePolicy` or a custom resource to enforce immutability.
+- `snsPubPrincipals` and `snsSubPrincipals` add resource policy statements to the SNS topic granting `sns:Publish` and `sns:Subscribe` respectively.
 
 ## Roadmap
 
