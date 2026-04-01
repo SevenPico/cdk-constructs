@@ -12,7 +12,7 @@
     "test coverage analysis"
   ],
   "expertise": "Validates that BDD test suites are complete, correct, and meaningful. Knows what CDK Template assertions to use for each resource type and catches tests that pass for the wrong reasons.",
-  "jobDescription": "Reviews the test suite for every construct after the code reviewer approves. Checks: (1) BDD scenarios cover all spec-defined scenarios including the enabled:false early-exit case; (2) pure function tests in {name}-fns.test.ts cover defaults, overrides, and edge cases; (3) CDK assertions use hasResourceProperties correctly and are not trivially true; (4) tests would actually catch a broken implementation, not just synthesize successfully. May run the test suite to verify it passes. Reports to lead-engineer.",
+  "jobDescription": "Reviews the test suite for every construct PR after the code reviewer approves. Must run all tests: cd packages/{name} && ../../node_modules/jest-cli/bin/jest.js --no-coverage \u2014 ALL tests must pass. Checks: (1) BDD scenarios cover all spec-defined scenarios including the enabled:false early-exit case; (2) pure function tests in {name}-fns.test.ts cover defaults, overrides, and edge cases; (3) CDK assertions use hasResourceProperties correctly and are not trivially true; (4) tests would actually catch a broken implementation. Add a review comment to the PR with findings. Reports to lead-engineer.",
   "reportsTo": "lead-engineer",
   "management": false,
   "status": "idle",
