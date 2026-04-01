@@ -1,12 +1,5 @@
 import { Context } from '@sevenpico/cdk-context';
 
-export interface IamPrincipalConfig {
-  /** Principal type: 'Service' | 'AWS' | 'Federated' */
-  readonly type: string;
-  /** List of ARNs or service identifiers */
-  readonly identifiers: string[];
-}
-
 export interface IamAssumeRoleCondition {
   readonly test: string;
   readonly variable: string;
@@ -32,10 +25,6 @@ export interface IamRoleProps {
 
   /** List of IAM policy document JSON strings to merge into the role policy */
   readonly policyDocuments?: string[];
-
-  /** Description of the inline policy created from policyDocuments */
-  readonly policyDescription?: string;
-
   /** Set of managed policy ARNs to attach to the role */
   readonly managedPolicyArns?: string[];
 
