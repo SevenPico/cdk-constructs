@@ -62,14 +62,8 @@ export interface LambdaFunctionProps {
   /** Environment variables */
   readonly environment?: LambdaEnvironment;
 
-  /** KMS key ARN for environment variable encryption */
-  readonly kmsKeyArn?: string;
-
   /** Lambda layer ARNs (max 5) */
   readonly layers?: string[];
-
-  /** Publish new version on each deploy. Default: false */
-  readonly publish?: boolean;
 
   /** X-Ray tracing mode. 'Active' | 'PassThrough'. Default: no tracing */
   readonly tracingMode?: string;
@@ -95,6 +89,4 @@ export interface LambdaFunctionProps {
   /** Additional IAM policy document JSON strings for the execution role */
   readonly roleSourcePolicyDocuments?: string[];
 
-  /** Existing IAM role name to use instead of creating one */
-  readonly roleName?: string;
 }

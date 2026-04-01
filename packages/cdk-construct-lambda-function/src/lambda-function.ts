@@ -10,6 +10,7 @@ import {
   aws_ec2 as ec2,
   aws_efs as efs,
   aws_s3 as s3,
+  aws_ecr as ecr,
 } from 'aws-cdk-lib';
 import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
@@ -156,10 +157,17 @@ export class LambdaFunction extends Construct {
 
   private resolveCode(props: LambdaFunctionProps): lambda.Code {
     if (props.imageUri) {
-      return lambda.Code.fromEcrImage(
-        // @ts-ignore - ECR repo resolved from URI
-        { repositoryUri: props.imageUri } as any,
-      );
+      // Parse ECR image URI: {account}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}
+      const match = props.imageUri.match(/^(\d+)\.dkr\.ecr\.([\w-]+)\.amazonaws\.com\/([^:]+)/);
+      if (!match) {
+        throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
+      }
+      const repo = ecr.Repository.fromRepositoryAttributes(this, 'EcrRepo', {
+        repositoryArn: `arn:aws:ecr:${match[2]}:${match[1]}:repository/${match[3]}`,
+        repositoryName: match[3],
+      });
+      const tag = props.imageUri.split(':')[1];
+      return lambda.Code.fromEcrImage(repo, tag ? { tagOrDigest: tag } : undefined);
     }
     if (props.s3Bucket && props.s3Key) {
       return lambda.Code.fromBucket(

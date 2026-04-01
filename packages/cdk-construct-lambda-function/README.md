@@ -63,9 +63,7 @@ new LambdaFunction(this, 'MyFunction', {
 | `reservedConcurrentExecutions` | `number` | `-1` | Reserved concurrency (`-1` = no limit) |
 | `architecture` | `string` | `'x86_64'` | Architecture (`x86_64` or `arm64`) |
 | `environment` | `LambdaEnvironment` | — | Environment variables |
-| `kmsKeyArn` | `string` | — | KMS key ARN for env var encryption |
 | `layers` | `string[]` | — | Lambda layer ARNs (max 5) |
-| `publish` | `boolean` | `false` | Publish new version on deploy |
 | `tracingMode` | `string` | — | X-Ray mode (`Active` or `PassThrough`) |
 | `lambdaInsightsEnabled` | `boolean` | `false` | Enable Lambda Insights |
 | `cloudwatchLogsRetentionDays` | `number` | — | Log retention in days |
@@ -74,7 +72,6 @@ new LambdaFunction(this, 'MyFunction', {
 | `fileSystemConfig` | `LambdaFileSystemConfig` | — | EFS configuration |
 | `ssmParameterNames` | `string[]` | — | SSM parameter prefixes to read |
 | `roleSourcePolicyDocuments` | `string[]` | — | Additional IAM policy JSON docs |
-| `roleName` | `string` | — | Existing role name to use |
 
 ## Public Properties
 
