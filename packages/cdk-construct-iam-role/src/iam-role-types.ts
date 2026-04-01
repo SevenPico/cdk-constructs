@@ -23,6 +23,7 @@ export interface IamRoleProps {
    * Map of principal type to list of identifiers for the trust policy.
    * Key: principal type ('Service', 'AWS', 'Federated')
    * Value: list of identifiers
+   * Example: { Service: ['lambda.amazonaws.com'] }
    */
   readonly principals?: Record<string, string[]>;
 
@@ -59,7 +60,10 @@ export interface IamRoleProps {
   /** Create an EC2 instance profile for this role. Default: false */
   readonly instanceProfileEnabled?: boolean;
 
-  /** Map of inline policy name to JSON policy document string */
+  /**
+   * Map of inline policy name to JSON policy document string.
+   * Allows multiple named inline policies.
+   */
   readonly inlinePolicies?: Record<string, string>;
 
   /** Whether to include tags on IAM roles and policies. Default: true */

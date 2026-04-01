@@ -1,46 +1,57 @@
-import { aws_iam as iam } from 'aws-cdk-lib';
+import { aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
-import { IamRoleProps, IamAssumeRoleCondition } from './iam-role-types';
+import { IamRoleProps } from './iam-role-types';
 
 export const roleName = (ctx: Context, props: IamRoleProps): string =>
   (props.useFullname ?? true) ? contextId(ctx) : ctx.name;
 
 export const buildIamPrincipal = (type: string, identifier: string): iam.IPrincipal => {
   switch (type) {
-    case 'Service': return new iam.ServicePrincipal(identifier);
-    case 'AWS': return new iam.ArnPrincipal(identifier);
+    case 'Service':   return new iam.ServicePrincipal(identifier);
+    case 'AWS':       return new iam.ArnPrincipal(identifier);
     case 'Federated': return new iam.FederatedPrincipal(identifier, {});
-    default: return new iam.ArnPrincipal(identifier);
+    default:          return new iam.ArnPrincipal(identifier);
   }
 };
 
-export const buildTrustPolicyJson = (props: IamRoleProps): Record<string, unknown> => {
+export const buildTrustPolicy = (props: IamRoleProps): iam.PolicyDocument => {
   if (props.assumeRolePolicyDocumentOverride) {
-    return JSON.parse(props.assumeRolePolicyDocumentOverride);
+    return iam.PolicyDocument.fromJson(JSON.parse(props.assumeRolePolicyDocumentOverride));
   }
 
-  const principals: Record<string, string[]> = {};
-  for (const [type, ids] of Object.entries(props.principals ?? {})) {
-    principals[type] = ids;
-  }
+  const principals = Object.entries(props.principals ?? {}).flatMap(([type, ids]) =>
+    ids.map(id => buildIamPrincipal(type, id)),
+  );
 
-  const statement: Record<string, unknown> = {
-    Effect: 'Allow',
-    Action: props.assumeRoleActions ?? ['sts:AssumeRole', 'sts:TagSession'],
-    Principal: Object.keys(principals).length > 0 ? principals : { AWS: '*' },
-  };
+  const statement = new iam.PolicyStatement({
+    actions: props.assumeRoleActions ?? ['sts:AssumeRole', 'sts:TagSession'],
+    principals: principals.length > 0 ? principals : [new iam.AccountRootPrincipal()],
+  });
 
-  if (props.assumeRoleConditions?.length) {
-    const condition: Record<string, Record<string, string[]>> = {};
-    props.assumeRoleConditions.forEach((c: IamAssumeRoleCondition) => {
-      if (!condition[c.test]) condition[c.test] = {};
-      condition[c.test][c.variable] = c.values;
-    });
-    statement.Condition = condition;
-  }
+  (props.assumeRoleConditions ?? []).forEach(c =>
+    statement.addCondition(c.test, { [c.variable]: c.values }),
+  );
 
-  return {
-    Version: '2012-10-17',
-    Statement: [statement],
-  };
+  return new iam.PolicyDocument({ statements: [statement] });
 };
+
+export const mergePolicyDocuments = (docs: string[]): iam.PolicyDocument | undefined => {
+  if (!docs || docs.length === 0) return undefined;
+  const allStatements: iam.PolicyStatement[] = [];
+  for (const doc of docs) {
+    const parsed = JSON.parse(doc);
+    const stmts: unknown[] = parsed.Statement ?? [];
+    stmts.forEach(stmt => {
+      allStatements.push(iam.PolicyStatement.fromJson(stmt));
+    });
+  }
+  return new iam.PolicyDocument({ statements: allStatements });
+};
+
+export const iamRoleProps = (ctx: Context, props: IamRoleProps): iam.RoleProps => ({
+  roleName: roleName(ctx, props),
+  description: props.roleDescription,
+  assumedBy: new iam.AccountRootPrincipal(),
+  maxSessionDuration: Duration.seconds(props.maxSessionDuration ?? 3600),
+  path: props.path ?? '/',
+});

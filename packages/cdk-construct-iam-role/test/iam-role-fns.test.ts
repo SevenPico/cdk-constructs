@@ -1,10 +1,11 @@
 import { makeContext } from '@sevenpico/cdk-context';
-import { roleName, buildTrustPolicyJson } from '../src/iam-role-fns';
+import { aws_iam as iam } from 'aws-cdk-lib';
+import { roleName, buildIamPrincipal, buildTrustPolicy, mergePolicyDocuments, iamRoleProps } from '../src/iam-role-fns';
 
 describe('roleName', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'lambda' });
 
-  test('uses context id by default', () => {
+  test('defaults to full context id', () => {
     expect(roleName(ctx, { context: ctx, roleDescription: 'test' })).toBe('7p-prod-lambda');
   });
 
@@ -13,43 +14,140 @@ describe('roleName', () => {
   });
 });
 
-describe('buildTrustPolicyJson', () => {
+describe('buildIamPrincipal', () => {
+  test('creates ServicePrincipal for Service type', () => {
+    const principal = buildIamPrincipal('Service', 'lambda.amazonaws.com');
+    expect(principal).toBeInstanceOf(iam.ServicePrincipal);
+  });
+
+  test('creates ArnPrincipal for AWS type', () => {
+    const principal = buildIamPrincipal('AWS', 'arn:aws:iam::123456789:root');
+    expect(principal).toBeInstanceOf(iam.ArnPrincipal);
+  });
+
+  test('creates FederatedPrincipal for Federated type', () => {
+    const principal = buildIamPrincipal('Federated', 'cognito-identity.amazonaws.com');
+    expect(principal).toBeInstanceOf(iam.FederatedPrincipal);
+  });
+
+  test('defaults to ArnPrincipal for unknown type', () => {
+    const principal = buildIamPrincipal('Unknown', 'some-arn');
+    expect(principal).toBeInstanceOf(iam.ArnPrincipal);
+  });
+});
+
+describe('buildTrustPolicy', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'lambda' });
 
-  test('builds trust policy with service principal', () => {
-    const result = buildTrustPolicyJson({
+  test('uses AccountRootPrincipal when no principals provided', () => {
+    const doc = buildTrustPolicy({ context: ctx, roleDescription: 'test' });
+    const json = doc.toJSON();
+    expect(json.Statement).toHaveLength(1);
+    expect(json.Statement[0].Action).toContain('sts:AssumeRole');
+  });
+
+  test('uses provided principals', () => {
+    const doc = buildTrustPolicy({
       context: ctx,
       roleDescription: 'test',
       principals: { Service: ['lambda.amazonaws.com'] },
     });
-    expect(result.Version).toBe('2012-10-17');
-    const stmt = (result.Statement as any[])[0];
-    expect(stmt.Principal).toEqual({ Service: ['lambda.amazonaws.com'] });
-    expect(stmt.Action).toEqual(['sts:AssumeRole', 'sts:TagSession']);
+    const json = doc.toJSON();
+    expect(json.Statement).toHaveLength(1);
+    expect(JSON.stringify(json.Statement[0].Principal)).toContain('lambda.amazonaws.com');
   });
 
-  test('uses override document when provided', () => {
-    const override = JSON.stringify({ Version: '2012-10-17', Statement: [{ Effect: 'Allow' }] });
-    const result = buildTrustPolicyJson({
+  test('uses custom assume role actions', () => {
+    const doc = buildTrustPolicy({
       context: ctx,
       roleDescription: 'test',
-      assumeRolePolicyDocumentOverride: override,
+      assumeRoleActions: ['sts:AssumeRoleWithSAML'],
     });
-    expect((result.Statement as any[])[0].Effect).toBe('Allow');
+    const json = doc.toJSON();
+    expect(json.Statement[0].Action).toContain('sts:AssumeRoleWithSAML');
   });
 
-  test('includes conditions when provided', () => {
-    const result = buildTrustPolicyJson({
-      context: ctx,
-      roleDescription: 'test',
-      principals: { Service: ['lambda.amazonaws.com'] },
-      assumeRoleConditions: [{
-        test: 'StringEquals',
-        variable: 'aws:SourceAccount',
-        values: ['123456789012'],
+  test('uses override policy document when provided', () => {
+    const overrideDoc = JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [{
+        Effect: 'Allow',
+        Principal: { Service: 'ec2.amazonaws.com' },
+        Action: 'sts:AssumeRole',
       }],
     });
-    const stmt = (result.Statement as any[])[0];
-    expect(stmt.Condition.StringEquals['aws:SourceAccount']).toEqual(['123456789012']);
+    const doc = buildTrustPolicy({
+      context: ctx,
+      roleDescription: 'test',
+      assumeRolePolicyDocumentOverride: overrideDoc,
+    });
+    const json = doc.toJSON();
+    expect(JSON.stringify(json)).toContain('ec2.amazonaws.com');
+  });
+
+  test('adds conditions when provided', () => {
+    const doc = buildTrustPolicy({
+      context: ctx,
+      roleDescription: 'test',
+      principals: { Service: ['lambda.amazonaws.com'] },
+      assumeRoleConditions: [{ test: 'StringEquals', variable: 'aws:SourceAccount', values: ['123456789'] }],
+    });
+    const json = doc.toJSON();
+    expect(json.Statement[0].Condition).toBeDefined();
+  });
+});
+
+describe('mergePolicyDocuments', () => {
+  test('returns undefined for empty array', () => {
+    expect(mergePolicyDocuments([])).toBeUndefined();
+  });
+
+  test('merges multiple policy documents', () => {
+    const doc1 = JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [{ Effect: 'Allow', Action: 's3:GetObject', Resource: '*' }],
+    });
+    const doc2 = JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [{ Effect: 'Allow', Action: 'logs:PutLogEvents', Resource: '*' }],
+    });
+    const merged = mergePolicyDocuments([doc1, doc2]);
+    expect(merged).toBeDefined();
+    const json = merged!.toJSON();
+    expect(json.Statement).toHaveLength(2);
+  });
+});
+
+describe('iamRoleProps', () => {
+  const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'lambda' });
+
+  test('sets role name from context', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'My role' });
+    expect(props.roleName).toBe('7p-prod-lambda');
+  });
+
+  test('sets description from prop', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'My role' });
+    expect(props.description).toBe('My role');
+  });
+
+  test('defaults path to /', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test' });
+    expect(props.path).toBe('/');
+  });
+
+  test('uses custom path', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test', path: '/custom/' });
+    expect(props.path).toBe('/custom/');
+  });
+
+  test('defaults max session duration to 3600', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test' });
+    expect(props.maxSessionDuration?.toSeconds()).toBe(3600);
+  });
+
+  test('uses custom max session duration', () => {
+    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test', maxSessionDuration: 7200 });
+    expect(props.maxSessionDuration?.toSeconds()).toBe(7200);
   });
 });
