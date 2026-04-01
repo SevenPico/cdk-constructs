@@ -193,3 +193,78 @@ defineFeature(feature, (test: any) => {
     });
   });
 });
+
+
+// Additional prop tests beyond BDD scenarios
+describe('LambdaFunction additional props', () => {
+  const baseCode = { s3Bucket: 'my-bucket', s3Key: 'code.zip' };
+
+  test('kmsKeyArn sets environment encryption key', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new LambdaFunction(stack, 'SUT', {
+      context: makeContext({ namespace: '7p', stage: 'prod', name: 'processor' }),
+      ...baseCode,
+      kmsKeyArn: 'arn:aws:kms:us-east-1:123456789012:key/test-key-id',
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      KmsKeyArn: 'arn:aws:kms:us-east-1:123456789012:key/test-key-id',
+    });
+  });
+
+  test('publish creates a Lambda version', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new LambdaFunction(stack, 'SUT', {
+      context: makeContext({ namespace: '7p', stage: 'prod', name: 'processor' }),
+      ...baseCode,
+      publish: true,
+    });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::Lambda::Version', 1);
+  });
+
+  test('publish false does not create a Lambda version', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new LambdaFunction(stack, 'SUT', {
+      context: makeContext({ namespace: '7p', stage: 'prod', name: 'processor' }),
+      ...baseCode,
+      publish: false,
+    });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::Lambda::Version', 0);
+  });
+
+  test('roleName uses existing role instead of creating one', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    const construct = new LambdaFunction(stack, 'SUT', {
+      context: makeContext({ namespace: '7p', stage: 'prod', name: 'processor' }),
+      ...baseCode,
+      roleName: 'my-existing-role',
+    });
+    expect(construct.role).toBeUndefined();
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Role: Match.objectLike({
+        'Fn::Join': Match.arrayWith([
+          Match.arrayWith([
+            Match.stringLikeRegexp('my-existing-role'),
+          ]),
+        ]),
+      }),
+    });
+  });
+
+  test('without roleName creates a new role', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    const construct = new LambdaFunction(stack, 'SUT', {
+      context: makeContext({ namespace: '7p', stage: 'prod', name: 'processor' }),
+      ...baseCode,
+    });
+    expect(construct.role).toBeDefined();
+  });
+});

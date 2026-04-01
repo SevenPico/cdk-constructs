@@ -24,3 +24,30 @@ export const logRetention = (days?: number): logs.RetentionDays | undefined => {
   if (!days) return undefined;
   return days as logs.RetentionDays;
 };
+
+export interface EcrImageParts {
+  readonly account: string;
+  readonly region: string;
+  readonly repoName: string;
+  readonly tag?: string;
+}
+
+/** Parse an ECR image URI into its component parts. Returns undefined if not a valid ECR URI. */
+export const parseEcrImageUri = (uri: string): EcrImageParts | undefined => {
+  const match = uri.match(/^(\d+)\.dkr\.ecr\.([\w-]+)\.amazonaws\.com\/([^:]+)(?::(.+))?$/);
+  if (!match) return undefined;
+  return {
+    account: match[1],
+    region: match[2],
+    repoName: match[3],
+    tag: match[4],
+  };
+};
+
+/** Determine which code source type to use based on props. */
+export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'asset' => {
+  if (props.imageUri) return 'ecr';
+  if (props.s3Bucket && props.s3Key) return 's3';
+  if (props.filename) return 'asset';
+  throw new Error('LambdaFunction: one of filename, s3Bucket/s3Key, or imageUri must be provided');
+};

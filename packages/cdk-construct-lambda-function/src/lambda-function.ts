@@ -20,6 +20,8 @@ import {
   lambdaArchitecture,
   lambdaTracingConfig,
   logRetention,
+  parseEcrImageUri,
+  resolveCodeSource,
 } from './lambda-function-fns';
 import { LambdaFunctionProps } from './lambda-function-types';
 
@@ -42,62 +44,61 @@ export class LambdaFunction extends Construct {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    // Execution role
-    this.role = new iam.Role(this, 'Role', {
-      roleName: `${contextId(props.context)}-role`,
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-    });
-
-    // Base CloudWatch Logs policy
-    this.role.addManagedPolicy(
-      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-    );
-
-    // VPC policy
-    if (props.vpcConfig) {
-      this.role.addManagedPolicy(
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
-      );
-    }
-
-    // X-Ray policy
-    if (props.tracingMode) {
-      this.role.addManagedPolicy(
-        iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
-      );
-    }
-
-    // Lambda Insights policy
-    if (props.lambdaInsightsEnabled) {
-      this.role.addManagedPolicy(
-        iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLambdaInsightsExecutionRolePolicy'),
-      );
-    }
-
-    // SSM parameter access
-    if (props.ssmParameterNames?.length) {
-      this.role.addToPolicy(
-        new iam.PolicyStatement({
-          actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
-          resources: props.ssmParameterNames.map(
-            (n) => `arn:aws:ssm:*:*:parameter/${n.replace(/^\//, '')}`,
-          ),
-        }),
-      );
-    }
-
-    // Additional policy documents
-    (props.roleSourcePolicyDocuments ?? []).forEach((doc) => {
-      const parsed = JSON.parse(doc);
-      (parsed.Statement ?? []).forEach((stmt: Record<string, unknown>) => {
-        this.role!.addToPolicy(iam.PolicyStatement.fromJson(stmt));
+    // Execution role - use existing or create new
+    let executionRole: iam.IRole;
+    if (props.roleName) {
+      executionRole = iam.Role.fromRoleName(this, 'ImportedRole', props.roleName);
+    } else {
+      this.role = new iam.Role(this, 'Role', {
+        roleName: `${contextId(props.context)}-role`,
+        assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
       });
-    });
 
-    // VPC config — use CfnFunction escape hatch to set VpcConfig directly
-    // This avoids the CDK L2 requirement for a full IVpc reference
+      this.role.addManagedPolicy(
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+      );
+
+      if (props.vpcConfig) {
+        this.role.addManagedPolicy(
+          iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
+        );
+      }
+
+      if (props.tracingMode) {
+        this.role.addManagedPolicy(
+          iam.ManagedPolicy.fromAwsManagedPolicyName('AWSXRayDaemonWriteAccess'),
+        );
+      }
+
+      if (props.lambdaInsightsEnabled) {
+        this.role.addManagedPolicy(
+          iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLambdaInsightsExecutionRolePolicy'),
+        );
+      }
+
+      if (props.ssmParameterNames?.length) {
+        this.role.addToPolicy(
+          new iam.PolicyStatement({
+            actions: ['ssm:GetParameter', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+            resources: props.ssmParameterNames.map(
+              (n) => `arn:aws:ssm:*:*:parameter/${n.replace(/^\//, '')}`,
+            ),
+          }),
+        );
+      }
+
+      (props.roleSourcePolicyDocuments ?? []).forEach((doc) => {
+        const parsed = JSON.parse(doc);
+        (parsed.Statement ?? []).forEach((stmt: Record<string, unknown>) => {
+          this.role!.addToPolicy(iam.PolicyStatement.fromJson(stmt));
+        });
+      });
+
+      executionRole = this.role;
+    }
+
+    // VPC config
     let securityGroups: ec2.ISecurityGroup[] | undefined;
-
     if (props.vpcConfig) {
       securityGroups = props.vpcConfig.securityGroupIds.map((sgId, i) =>
         ec2.SecurityGroup.fromSecurityGroupId(this, `Sg${i}`, sgId),
@@ -120,12 +121,17 @@ export class LambdaFunction extends Construct {
     // Resolve code
     const code = this.resolveCode(props);
 
+    // Environment encryption key
+    const environmentEncryption = props.kmsKeyArn
+      ? kms.Key.fromKeyArn(this, 'EnvKey', props.kmsKeyArn)
+      : undefined;
+
     this.fn = new lambda.Function(this, 'Function', {
       functionName: functionName(props.context, props),
       handler: props.handler ?? 'index.handler',
       runtime: lambdaRuntime(props.runtime),
       code,
-      role: this.role,
+      role: executionRole,
       description: props.description,
       memorySize: props.memorySizeMb ?? 128,
       timeout: Duration.seconds(props.timeoutSeconds ?? 3),
@@ -135,15 +141,22 @@ export class LambdaFunction extends Construct {
           : props.reservedConcurrentExecutions,
       architecture: lambdaArchitecture(props.architecture),
       environment: props.environment?.variables,
+      environmentEncryption,
       layers: (props.layers ?? []).map((arn, i) =>
         lambda.LayerVersion.fromLayerVersionArn(this, `Layer${i}`, arn),
       ),
       tracing: lambdaTracingConfig(props.tracingMode),
       logGroup: this.logGroup,
       filesystem,
+      currentVersionOptions: props.publish ? {} : undefined,
     });
 
-    // Apply VPC config via CfnFunction escape hatch to avoid needing a full IVpc
+    // Publish a version if requested
+    if (props.publish) {
+      this.fn.currentVersion;
+    }
+
+    // Apply VPC config via CfnFunction escape hatch
     if (props.vpcConfig) {
       const cfnFn = this.fn.node.defaultChild as lambda.CfnFunction;
       cfnFn.vpcConfig = {
@@ -156,31 +169,27 @@ export class LambdaFunction extends Construct {
   }
 
   private resolveCode(props: LambdaFunctionProps): lambda.Code {
-    if (props.imageUri) {
-      // Parse ECR image URI: {account}.dkr.ecr.{region}.amazonaws.com/{repo}:{tag}
-      const match = props.imageUri.match(/^(\d+)\.dkr\.ecr\.([\w-]+)\.amazonaws\.com\/([^:]+)/);
-      if (!match) {
-        throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
+    const source = resolveCodeSource(props);
+    switch (source) {
+      case 'ecr': {
+        const parts = parseEcrImageUri(props.imageUri!);
+        if (!parts) {
+          throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
+        }
+        const repo = ecr.Repository.fromRepositoryAttributes(this, 'EcrRepo', {
+          repositoryArn: `arn:aws:ecr:${parts.region}:${parts.account}:repository/${parts.repoName}`,
+          repositoryName: parts.repoName,
+        });
+        return lambda.Code.fromEcrImage(repo, parts.tag ? { tagOrDigest: parts.tag } : undefined);
       }
-      const repo = ecr.Repository.fromRepositoryAttributes(this, 'EcrRepo', {
-        repositoryArn: `arn:aws:ecr:${match[2]}:${match[1]}:repository/${match[3]}`,
-        repositoryName: match[3],
-      });
-      const tag = props.imageUri.split(':')[1];
-      return lambda.Code.fromEcrImage(repo, tag ? { tagOrDigest: tag } : undefined);
+      case 's3':
+        return lambda.Code.fromBucket(
+          s3.Bucket.fromBucketName(this, 'CodeBucket', props.s3Bucket!),
+          props.s3Key!,
+          props.s3ObjectVersion,
+        );
+      case 'asset':
+        return lambda.Code.fromAsset(props.filename!);
     }
-    if (props.s3Bucket && props.s3Key) {
-      return lambda.Code.fromBucket(
-        s3.Bucket.fromBucketName(this, 'CodeBucket', props.s3Bucket),
-        props.s3Key,
-        props.s3ObjectVersion,
-      );
-    }
-    if (props.filename) {
-      return lambda.Code.fromAsset(props.filename);
-    }
-    throw new Error(
-      'LambdaFunction: one of filename, s3Bucket/s3Key, or imageUri must be provided',
-    );
   }
 }
