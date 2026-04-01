@@ -63,8 +63,11 @@ new Secret(this, 'DbSecret', {
 | `kmsKeyDeletionWindowInDays` | KMS key deletion window in days | `number` | `30` | |
 | `kmsKeyEnableKeyRotation` | Enable KMS key rotation | `boolean` | `true` | |
 | `kmsKeyMultiRegion` | Use multi-region KMS key | `boolean` | `false` | |
+| `secretIgnoreChanges` | Ignore changes to secret value after creation | `boolean` | `false` | |
 | `createSns` | Create SNS topic for notifications | `boolean` | `false` | |
 | `secretReadPrincipals` | IAM principals allowed to read the secret | `SecretReadPrincipal[]` | `[]` | |
+| `snsPubPrincipals` | IAM principals allowed to publish to the SNS topic | `SecretReadPrincipal[]` | `[]` | |
+| `snsSubPrincipals` | IAM principals allowed to subscribe to the SNS topic | `SecretReadPrincipal[]` | `[]` | |
 | `replicaRegions` | Regions to replicate the secret to | `string[]` | `[]` | |
 | `secretAttributesOverride` | Context attributes override for the secret | `string[]` | `['secret']` | |
 | `kmsKeyAttributesOverride` | Context attributes override for the KMS key | `string[]` | `['key']` | |
@@ -102,7 +105,7 @@ new Secret(this, 'DbSecret', {
 
 - [ ] Secret rotation configuration
 - [ ] Secret version stages
-- [ ] SNS pub/sub principal policies
+- [x] SNS pub/sub principal policies
 
 ## License
 

@@ -44,7 +44,7 @@ See the [examples](./examples) directory for complete usage examples.
 |------|-------------|------|---------|:--------:|
 | `context` | SevenPico context for naming and tagging | `Context` | — | ✓ |
 | `encryptionEnabled` | Enable KMS encryption | `boolean` | `true` | |
-| `kmsMasterKeyId` | KMS key ARN for encryption | `string` | — | |
+| `kmsMasterKeyId` | KMS key ID or alias for SNS encryption | `string` | `alias/aws/sns` | |
 | `fifoTopic` | Create FIFO topic | `boolean` | `false` | |
 | `contentBasedDeduplication` | Content-based dedup (FIFO) | `boolean` | `false` | |
 | `subscribers` | Map of subscriber name to config | `Record<string, SnsSubscriber>` | `{}` | |
