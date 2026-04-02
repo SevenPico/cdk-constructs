@@ -1,0 +1,17 @@
+{
+  "id": "045",
+  "title": "cdk-construct-s3-website examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-s3-website/examples/.\n\nScenarios:\n- minimal/ — required acmCertificateArn only (from bridge fixture hostedZones.certificate_arn)\n- comprehensive/ — WAF, CloudFront logging, custom error responses, CORS, geo restriction, function associations\n- with-dns/ — parentZoneId + parentZoneName from bridge fixture (divergent: adds Route53 record)\n\nAll 5 languages. Assertion tests in test/s3-website-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "043",
+  "title": "cdk-construct-s3-bucket examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-s3-bucket/examples/.\n\nScenarios:\n- minimal/ — defaults\n- comprehensive/ — versioning, lifecycle rules, CORS rules, object ownership, transfer acceleration\n- kms-encrypted/ — sseAlgorithm KMS with kmsKeyArn from bridge fixture (divergent: adds KMS grant resources)\n- s3-managed-encrypted/ — sseAlgorithm S3_MANAGED\n\nAll 5 languages. Assertion tests in test/s3-bucket-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

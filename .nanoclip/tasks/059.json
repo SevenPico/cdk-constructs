@@ -1,0 +1,17 @@
+{
+  "id": "059",
+  "title": "cdk-construct-http-api-gateway examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-http-api-gateway/examples/.\n\nScenarios:\n- minimal/ — bare API, no routes\n- with-routes/ — routes + Lambda integrations\n- with-jwt-authorizer/ — JWT authorizer (divergent: adds authorizer resource)\n- with-custom-domain/ — dnsName + acmCertificateArn from bridge fixture + route53ZoneIds (divergent: adds domain name + DNS record)\n- with-vpc-link/ — vpcLinks for private integrations (divergent: adds VPC Link resource)\n- with-cors/ — corsConfiguration\n\nAll 5 languages. Assertion tests in test/http-api-gateway-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

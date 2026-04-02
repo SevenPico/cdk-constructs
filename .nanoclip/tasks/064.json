@@ -1,0 +1,17 @@
+{
+  "id": "064",
+  "title": "cdk-construct-ses examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-ses/examples/.\n\nScenarios:\n- minimal/ — zoneId + zoneName from bridge fixture, defaults\n- with-dkim/ — verifyDkim:true (divergent: adds DKIM DNS records)\n- with-iam-group/ — sesGroupEnabled:true (divergent: adds IAM group)\n- with-user-access-key/ — sesUserEnabled + createIamAccessKey (divergent: adds IAM user + access key)\n- comprehensive/ — all props\n\nAll 5 languages. Assertion tests in test/ses-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

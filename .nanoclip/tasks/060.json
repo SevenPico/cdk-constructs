@@ -1,0 +1,17 @@
+{
+  "id": "060",
+  "title": "cdk-construct-sfn-error-notification examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-sfn-error-notification/examples/.\n\nScenarios:\n- minimal/ — stateMachineArn + rateAlarmSnsTopicArn + volumeAlarmSnsTopicArn from bridge fixture\n- comprehensive/ — all optional props: custom queue names, alarm tuning, pipe log level, EventBridge pipe config, KMS\n\nAll 5 languages. Assertion tests in test/sfn-error-notification-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

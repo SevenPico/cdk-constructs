@@ -104,14 +104,61 @@ ctx = make_context(namespace="7p", environment="prod", name="orders")
 SqsQueue(self, "OrdersQueue", context=ctx)
 ```
 
-### Loading Context from `cdk.json`
+### The Platform Bridge: CDK Bridge JSON
 
-Use `@sevenpico/cdk-bridge` to load context from your CDK app's context file instead of constructing it in code:
+SevenPico's infrastructure is organized into two layers: a **Terraform Platform** (VPC networking, DNS zones, shared KMS keys, account-level resources) and one or more **CDK Workloads** that deploy into it. The CDK Workloads need to reference Platform outputs — VPC IDs, subnet ARNs, hosted zone IDs, KMS key ARNs — without re-declaring them.
+
+The **CDK Bridge JSON** is the handoff artifact. After each Terraform Platform apply, a JSON file is written to S3 containing all Platform outputs. It includes the SevenPico Context labels (`namespace`, `environment`, `stage`, `region`) plus any ARNs or IDs the Workload depends on.
+
+Before running `cdk synth`, `cdk diff`, or `cdk deploy`, a helper script downloads the CDK Bridge JSON for the target region/stage from S3 and writes it to `~/.cdk.json` under the `sevenpico` context key. CDK loads `~/.cdk.json` automatically, making every Platform output available at synth time via `scope.node.tryGetContext('sevenpico')`.
+
+```
+Terraform Platform apply
+  └── writes CDK Bridge JSON → S3 (per region/stage)
+
+Before cdk synth:
+  └── script downloads CDK Bridge JSON from S3 → ~/.cdk.json
+
+cdk synth:
+  └── CDK reads ~/.cdk.json → context available at synth time
+  └── bridgeContext(scope) → Context object (naming, tagging, enabled)
+  └── bridgeString(scope, 'vpcId') → Platform output value
+```
+
+Use `@sevenpico/cdk-bridge` to read the bridge context in your CDK app:
 
 ```typescript
-import { CdkBridge } from '@sevenpico/cdk-bridge';
+import { App, Stack } from 'aws-cdk-lib';
+import { bridgeContext, bridgeString } from '@sevenpico/cdk-bridge';
 
-const ctx = CdkBridge.fromApp(app, 'sevenpico');
+const app = new App();
+const stack = new Stack(app, 'MyStack');
+
+// SevenPico Context (naming, tagging, enabled) from Platform
+const ctx = bridgeContext(stack);
+
+// Arbitrary Platform outputs
+const vpcId = bridgeString(stack, 'vpcId');
+const subnetIds = bridgeString(stack, 'privateSubnetIds');
+```
+
+Example `~/.cdk.json` (written by the bridge setup script):
+
+```json
+{
+  "context": {
+    "sevenpico": {
+      "namespace": "7p",
+      "environment": "prod",
+      "stage": "api",
+      "region": "us-east-1",
+      "tags": { "CostCenter": "platform" },
+      "vpcId": "vpc-abc123",
+      "privateSubnetIds": "subnet-aaa,subnet-bbb",
+      "accountId": "123456789012"
+    }
+  }
+}
 ```
 
 ## Development

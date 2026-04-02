@@ -1,0 +1,17 @@
+{
+  "id": "049",
+  "title": "cdk-construct-kinesis-stream examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-kinesis-stream/examples/.\n\nScenarios:\n- minimal/ — defaults\n- provisioned/ — streamMode PROVISIONED with explicit shardCount (divergent: different capacity model)\n- on-demand/ — streamMode ON_DEMAND (divergent: serverless capacity)\n- with-consumers/ — consumerCount > 0 (divergent: adds Enhanced Fan-Out consumers)\n\nAll 5 languages. Assertion tests in test/kinesis-stream-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

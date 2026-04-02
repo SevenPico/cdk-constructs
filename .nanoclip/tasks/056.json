@@ -1,0 +1,17 @@
+{
+  "id": "056",
+  "title": "cdk-construct-iam-policy + iam-role + iam-user examples (all languages)",
+  "description": "Create runnable examples for all three IAM constructs together (they compose naturally).\n\npackages/cdk-construct-iam-policy/examples/:\n- minimal/ — empty policy (no statements)\n- with-statements/ — policyStatements map\n- from-json/ — sourceJsonUrl / sourcePolicyDocuments\n\npackages/cdk-construct-iam-role/examples/:\n- minimal/ — roleDescription + service principal\n- comprehensive/ — multiple principals, managed policies, inline policies, instance profile\n- with-instance-profile/ — instanceProfileEnabled:true (divergent: adds instance profile resource)\n- cross-account/ — assumeRoleConditions with external account\n\npackages/cdk-construct-iam-user/examples/:\n- minimal/ — userName only\n- with-login-profile/ — loginProfileEnabled:true (divergent: adds console access)\n- with-groups/ — group membership\n\nAll 5 languages each. Assertion tests in each packages test/ dir.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

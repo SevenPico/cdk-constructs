@@ -1,0 +1,17 @@
+{
+  "id": "063",
+  "title": "cdk-construct-redshift-cluster examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-redshift-cluster/examples/.\n\nScenarios:\n- minimal/ — required props: subnetIds from bridge fixture vpc.database_subnet_ids, adminPassword placeholder\n- single-node/ — clusterType single-node (divergent: numberOfNodes ignored)\n- multi-node/ — clusterType multi-node with numberOfNodes\n- encrypted/ — kmsKeyArn from bridge fixture (divergent: customer-managed encryption)\n- with-logging/ — loggingEnabled, loggingBucketName from bridge fixture logs.bucket_name\n- with-snapshot/ — snapshotIdentifier (divergent: restore from snapshot)\n\nAll 5 languages. Assertion tests in test/redshift-cluster-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

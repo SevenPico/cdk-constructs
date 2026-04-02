@@ -1,0 +1,17 @@
+{
+  "id": "068",
+  "title": "[Backlog] Registry credentials and automated release workflow",
+  "description": "Configure GitHub Actions secrets for npm token, PyPI API key, Maven GPG signing key, NuGet API key, and Go module proxy. Implement release-please or semantic-release for automated version bumps and changelog. Define release branch strategy (main → release, or tag-based).",
+  "status": "backlog",
+  "priority": "low",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

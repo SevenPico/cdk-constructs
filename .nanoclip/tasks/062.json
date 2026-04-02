@@ -1,0 +1,17 @@
+{
+  "id": "062",
+  "title": "cdk-construct-lambda-error-notification examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-lambda-error-notification/examples/.\n\nScenarios:\n- minimal/ — required props (lambdaArn, lambdaFunctionName, lambdaRoleName, rateAlarmSnsTopicArn, volumeAlarmSnsTopicArn)\n- comprehensive/ — all optional props: alarm tuning, SQS config, EventBridge pipe, async event config, KMS\n\nAll 5 languages. Assertion tests in test/lambda-error-notification-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

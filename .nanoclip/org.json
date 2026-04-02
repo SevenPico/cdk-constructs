@@ -1,6 +1,6 @@
 {
   "name": "SevenPico CDK Constructs",
   "goal": "Migrate many of SevenPico's open-source Terraform Modules to CDK Constructs. See spec/ for scope details",
-  "description": "",
+  "description": "This repo publishes multi-language CDK constructs via JSII (TypeScript source → Python, Java, Go, .NET bindings). All constructs share a common Context object (cdk-context) for deterministic naming, tagging, and enable/disable control.\n\nArchitecture: Two-layer platform model. A Terraform Platform layer (VPC, DNS, shared resources) writes a CDK Bridge JSON file to S3 on every apply. Before cdk synth/diff/deploy, a script downloads the CDK Bridge JSON for the target region+stage from S3 into ~/.cdk.json. CDK reads it at synth time. The cdk-bridge package (bridgeContext, bridgeString) reads the 'sevenpico' context key from ~/.cdk.json and returns typed access to Platform outputs (VPC IDs, subnet ARNs, KMS keys, etc.) plus the SevenPico Context for naming and tagging. CDK Workloads depend on Platform outputs exclusively through the CDK Bridge JSON — never by re-declaring Terraform resources.\n\nAll constructs: context is always required. Constructs are disabled (no resources created) when context.enabled = false, mirroring Terraform count = 0.",
   "createdAt": "2026-04-01T18:50:48Z"
 }

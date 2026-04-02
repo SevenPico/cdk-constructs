@@ -1,0 +1,17 @@
+{
+  "id": "058",
+  "title": "cdk-construct-step-functions examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-step-functions/examples/.\n\nScenarios:\n- standard/ — type STANDARD, simple Pass state definition\n- express/ — type EXPRESS (divergent: different execution model, logging required)\n- with-logging/ — loggingConfiguration enabled, log group from new or existing ARN\n- with-tracing/ — tracingEnabled:true (divergent: adds X-Ray)\n- with-policies/ — policyDocuments, managedPolicyArns\n\nAll 5 languages. Assertion tests in test/step-functions-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

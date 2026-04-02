@@ -1,0 +1,17 @@
+{
+  "id": "050",
+  "title": "cdk-construct-eventbridge + eventbridge-rule examples (all languages)",
+  "description": "Create runnable examples for both packages together since EventBridge rules are commonly paired with a bus.\n\npackages/cdk-construct-eventbridge/examples/:\n- minimal/ — custom event bus, no encryption\n- with-kms/ — kmsKeyIdentifier from bridge fixture\n- with-policy/ — policyDocument\n\npackages/cdk-construct-eventbridge-rule/examples/:\n- minimal/ — eventPattern + targetArn\n- with-role/ — targetRoleArn (divergent: adds IAM role assumption)\n- cross-bus/ — sourceEventBusName + targetEventBusArn (divergent: cross-bus routing)\n\nAll 5 languages. Assertion tests in each packages test/ dir.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

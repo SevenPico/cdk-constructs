@@ -1,0 +1,17 @@
+{
+  "id": "053",
+  "title": "cdk-construct-cloudtrail examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-cloudtrail/examples/.\n\nScenarios:\n- minimal/ — s3BucketName from bridge fixture logs.cloudtrail_bucket_name\n- with-cloudwatch/ — cloudWatchLogsEnabled:true (divergent: adds CloudWatch log group + IAM role)\n- multi-region/ — isMultiRegionTrail:true, with SNS and KMS from bridge fixture\n- with-insights/ — enableInsights:true (divergent: adds Insights event selectors)\n- with-data-events/ — dataEvents selector (divergent: S3/Lambda data event tracking)\n\nAll 5 languages. Assertion tests in test/cloudtrail-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "041",
+  "title": "cdk-bridge examples (all languages)",
+  "description": "Create runnable examples for @sevenpico/cdk-bridge in packages/cdk-bridge/examples/.\n\nScenarios:\n- basic/ — reads Context + one Platform output (vpcId) via bridgeString/bridgeValue\n- full-platform/ — demonstrates reading all bridge sections (vpc, kms, hostedZones, logs, alarms) to wire into a simple stack\n\nEach scenario in all 5 languages. Include the shared fixture cdk.json. Show how each CDK context key (context, vpc, kms, etc.) maps to a separate tryGetContext call.\n\nAdd assertion tests to packages/cdk-bridge/test/bridge-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

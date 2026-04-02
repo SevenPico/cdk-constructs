@@ -1,0 +1,17 @@
+{
+  "id": "042",
+  "title": "cdk-construct-kms-key examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-kms-key/examples/.\n\nScenarios:\n- minimal/ — defaults only\n- comprehensive/ — all props (alias, rotation, pending window, policy, multiRegion)\n- asymmetric/ — keySpec RSA_2048, keyUsage SIGN_VERIFY (divergent: creates different key type)\n- symmetric-hmac/ — keySpec HMAC_256 (divergent: different key type)\n\nAll 5 languages per scenario. Assertion tests in test/kms-key-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

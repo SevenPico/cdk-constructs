@@ -1,0 +1,17 @@
+{
+  "id": "048",
+  "title": "cdk-construct-sqs-queue examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-sqs-queue/examples/.\n\nScenarios:\n- minimal/ — defaults\n- standard-with-dlq/ — dlqEnabled:true (divergent: creates DLQ queue)\n- fifo/ — fifo:true (divergent: FIFO resource type)\n- fifo-with-dlq/ — fifo + DLQ (divergent: both)\n- encrypted/ — KMS from bridge fixture\n\nAll 5 languages. Assertion tests in test/sqs-queue-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

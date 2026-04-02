@@ -1,0 +1,17 @@
+{
+  "id": "067",
+  "title": "[Backlog] JSII multi-language publishing pipeline",
+  "description": "Set up automated publishing of all construct packages to language-specific registries:\n- TypeScript/JavaScript: npm\n- Python: PyPI\n- Java: Maven Central\n- .NET: NuGet\n- Go: pkg.go.dev (via GitHub tags)\n\nRequires: registry credentials as CI secrets, projen release configuration, version tagging strategy. Unblock only after sprint 2 examples validate the JSII bindings work correctly.",
+  "status": "backlog",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

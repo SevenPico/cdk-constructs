@@ -1,0 +1,17 @@
+{
+  "id": "065",
+  "title": "cdk-construct-slackbot examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-slackbot/examples/.\n\nScenarios:\n- minimal/ — slackChannels map + slackTokenSecretArn from bridge fixture secrets.slack_token_arn\n- with-kms/ — slackTokenSecretKmsKeyArn from bridge fixture (divergent: KMS decrypt permission added)\n- comprehensive/ — all optional props: custom lambda code path, runtime, log expiration, pub/sub principals\n\nAll 5 languages. Assertion tests in test/slackbot-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

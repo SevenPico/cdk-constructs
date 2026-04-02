@@ -1,0 +1,17 @@
+{
+  "id": "040",
+  "title": "cdk-context examples (all languages)",
+  "description": "Create runnable examples for @sevenpico/cdk-context in packages/cdk-context/examples/.\n\nScenarios:\n- minimal/ — required props only (namespace, environment, stage)\n- comprehensive/ — all props exercised (all labelOrder, labelKeyCase, labelValueCase options, custom delimiter, attributes, tags, idLengthLimit)\n- disabled/ — enabled:false to demonstrate the zero-resources pattern\n\nEach scenario is a CDK app in all 5 languages (TypeScript, Python, Java, C#, Go). Each scenario directory contains: app.ts (and language equivalents), cdk.json referencing the shared bridge fixture, README.md.\n\nAdd CDK assertion tests to packages/cdk-context/test/context-examples.test.ts validating the Tag output and resource naming for each scenario.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

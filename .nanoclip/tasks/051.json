@@ -1,0 +1,17 @@
+{
+  "id": "051",
+  "title": "cdk-construct-cloudwatch-events examples (all languages)",
+  "description": "Create runnable examples in packages/cdk-construct-cloudwatch-events/examples/.\n\nScenarios:\n- scheduled/ — schedule-based rule targeting an ARN\n- event-pattern/ — eventPattern-based rule\n- multiple-rules/ — comprehensive example with multiple rules and target types\n\nAll 5 languages. Assertion tests in test/cloudwatch-events-examples.test.ts.",
+  "status": "todo",
+  "priority": "medium",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}

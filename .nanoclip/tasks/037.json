@@ -1,0 +1,17 @@
+{
+  "id": "037",
+  "title": "[Setup] Configure JSII language targets for all packages",
+  "description": "Add Python, Java, .NET C#, and Go JSII targets to every package.json in the monorepo. Re-run projen to regenerate managed files. Targets follow JSII naming conventions:\n- Python: distName sevenpico.<package-slug>, module sevenpico.<package_slug>\n- Java: groupId com.sevenpico, artifactId <package-slug>\n- dotnet: namespace SevenPico.<PascalCaseName>\n- go: moduleName github.com/sevenpico/cdk-constructs/\n\nVerify each package builds cleanly with `npx jsii` after targets are added. This task is a prerequisite for all construct example tasks involving non-TypeScript languages.",
+  "status": "todo",
+  "priority": "high",
+  "assignee": null,
+  "parentId": "036",
+  "createdBy": "system",
+  "createdAt": "2026-04-02T00:00:00Z",
+  "startedAt": null,
+  "completedAt": null,
+  "comments": [],
+  "history": [
+    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+  ]
+}
