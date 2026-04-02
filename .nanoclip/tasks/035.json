@@ -2,16 +2,43 @@
   "id": "035",
   "title": "Sync local develop — commit nanoclip task status updates and fast-forward to origin",
   "description": "Local develop is behind origin/develop by ~20 commits. The working tree contains uncommitted nanoclip task status updates (tasks 002-028 marked done, task 034 added, counter updated). Package file changes in the working tree are identical to origin/develop and do not need to be committed.\n\nSteps:\n1. Create branch chore/sync-develop from local develop\n2. Stage and commit only the .nanoclip/ changes (counter.txt and tasks/*.json)\n3. Rebase branch onto origin/develop (fast-forward local)\n4. Open PR against develop\n5. Code review and QA verify task states are accurate\n6. Merge",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "assignee": "lead-engineer",
   "parentId": null,
   "createdBy": "system",
   "createdAt": "2026-04-02T13:20:00Z",
-  "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "startedAt": "2026-04-02T13:25:41Z",
+  "completedAt": "2026-04-02T13:25:44Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "merging PR #74",
+      "timestamp": "2026-04-02T13:25:41Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "merged PR #74",
+      "timestamp": "2026-04-02T13:25:44Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T13:20:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T13:20:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T13:25:41Z",
+      "detail": "Changed from todo to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T13:25:44Z",
+      "detail": "Changed from in_progress to done"
+    }
   ]
 }
