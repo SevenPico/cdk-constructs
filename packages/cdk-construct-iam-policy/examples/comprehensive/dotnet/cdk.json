@@ -1,0 +1,10 @@
+{
+  "app": "dotnet run --project src/IamPolicyComprehensive.csproj",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app"
+    }
+  }
+}
