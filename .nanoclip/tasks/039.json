@@ -2,19 +2,24 @@
   "id": "039",
   "title": "[Setup] Shared CDK Bridge JSON fixture and example app template",
   "description": "Create the shared CDK Bridge JSON fixture used by all construct examples.\n\nFixture location: examples/fixtures/bridge.cdk.json\n\nThe file maps directly to CDK context keys (each top-level key becomes a separate CDK context entry in ~/.cdk.json). Structure:\n{\n  \"context\": { namespace, environment, stage, region, tags },\n  \"vpc\": { vpc_id, vpc_cidr_block, availability_zones, private_subnet_ids, public_subnet_ids, database_subnet_ids },\n  \"hostedZones\": { public_zone_id, public_zone_name, private_zone_id, private_zone_name, certificate_arn, waf_web_acl_arn },\n  \"kms\": { key_arn, key_id, log_key_arn, secrets_key_arn, sns_key_arn },\n  \"secrets\": { slack_token_arn },\n  \"logs\": { bucket_name, bucket_arn, cloudtrail_bucket_name },\n  \"alarms\": { sns_topic_arn },\n  \"network\": { shared_security_group_id }\n}\n\nAll values are realistic-looking placeholders. Use acme/dev/app as the context labels.\n\nAlso create examples/fixtures/README.md explaining what CDK Bridge JSON is and how to use the fixture in local development.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "high",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": "2026-04-02T20:51:36Z",
-  "completedAt": null,
+  "completedAt": "2026-04-02T20:54:28Z",
   "comments": [
     {
       "author": "resource-specialist",
       "body": "Starting: creating bridge.cdk.json fixture",
       "timestamp": "2026-04-02T20:51:36Z"
+    },
+    {
+      "author": "resource-specialist",
+      "body": "Complete. Created examples/fixtures/bridge.cdk.json with acme/dev/app placeholder values covering all cross-stack references; added examples/fixtures/README.md explaining CDK Bridge JSON pattern.",
+      "timestamp": "2026-04-02T20:54:28Z"
     }
   ],
   "history": [
@@ -28,6 +33,12 @@
       "by": "resource-specialist",
       "timestamp": "2026-04-02T20:51:36Z",
       "detail": "Changed from todo to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "resource-specialist",
+      "timestamp": "2026-04-02T20:54:28Z",
+      "detail": "Changed from in_progress to done"
     }
   ]
 }
