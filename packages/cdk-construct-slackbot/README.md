@@ -60,3 +60,34 @@ See the [examples](./examples) directory for complete usage examples.
 |------|-------------|------|
 | `snsTopic` | The SNS topic that receives notifications | `sns.Topic \| undefined` |
 | `lambdaFn` | The Lambda handler posting to Slack | `lambda.Function \| undefined` |
+
+## Special Considerations
+
+- **Python runtime**: The Lambda function defaults to Python 3.9. The caller must provide a Lambda deployment package containing a `main.py` file with a `lambda_handler` function.
+- **Secrets Manager setup**: Before deploying, create a Secrets Manager secret containing a valid Slack bot token. Pass the secret ARN via `slackTokenSecretArn`. If the secret is KMS-encrypted, also provide `slackTokenSecretKmsKeyArn`.
+- **Slack webhook format**: The Lambda reads `SLACK_CHANNELS` (a JSON map of attribute name to Slack channel ID) and `SLACK_TOKEN_SECRET_ARN` from environment variables. Messages are posted via the Slack `chat.postMessage` API.
+- **Disabled context**: When `context.enabled` is `false`, no resources are created and the public properties (`snsTopic`, `lambdaFn`) remain `undefined`.
+
+## Roadmap
+
+### v0.1.0
+
+- [x] SNS topic with context-based naming
+- [x] Lambda function with Python runtime and configurable code path
+- [x] SNS-to-Lambda subscription
+- [x] IAM role with Secrets Manager and CloudWatch Logs permissions
+- [x] KMS decrypt permissions when KMS key ARN is provided
+- [x] Publish and subscribe principal permissions on the SNS topic
+- [x] Context-based tagging on all resources
+- [x] Disabled context support
+
+### v0.2.0
+
+- [ ] Support for S3-based Lambda code references
+- [ ] Dead-letter queue for failed SNS deliveries
+- [ ] Custom Lambda timeout and memory configuration
+- [ ] SNS message filtering policies per channel
+
+## License
+
+Apache 2.0 — see [LICENSE](../../LICENSE)

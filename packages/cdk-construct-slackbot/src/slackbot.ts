@@ -38,6 +38,12 @@ export class Slackbot extends Construct {
       ),
     );
 
+    Object.entries(props.snsSubPrincipals ?? {}).forEach(([type, ids]) =>
+      ids.forEach(principalId =>
+        this.snsTopic!.grantSubscribe(buildPrincipal(type, principalId)),
+      ),
+    );
+
     const role = new iam.Role(this, 'LambdaRole', {
       roleName: lambdaRoleName(props.context),
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
