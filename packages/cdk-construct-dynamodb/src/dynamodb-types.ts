@@ -1,5 +1,10 @@
 import { Context } from '@sevenpico/cdk-context';
 
+export interface DynamodbAttribute {
+  readonly name: string;
+  readonly type: string;
+}
+
 export interface DynamodbGsi {
   readonly name: string;
   readonly hashKey: string;
@@ -48,6 +53,7 @@ export interface DynamodbProps {
   readonly ttlEnabled?: boolean;
   readonly ttlAttribute?: string;
   readonly tableClass?: string;
+  readonly dynamodbAttributes?: DynamodbAttribute[];
   readonly globalSecondaryIndexes?: DynamodbGsi[];
   readonly localSecondaryIndexes?: DynamodbLsi[];
   readonly replicas?: DynamodbReplicaConfig[];
