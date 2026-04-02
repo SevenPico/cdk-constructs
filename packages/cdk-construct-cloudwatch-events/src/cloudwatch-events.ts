@@ -1,19 +1,34 @@
 import { Construct } from 'constructs';
 import { Tags } from 'aws-cdk-lib';
-import { Context, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { cloudwatchEventsProps, CloudwatchEventsOptions } from './cloudwatch-events-fns';
-
-export interface CloudwatchEventsProps extends CloudwatchEventsOptions {
-  readonly context: Context;
-}
+import { aws_events as events } from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { CloudwatchEventsProps } from './cloudwatch-events-types';
+import { ruleProps, buildTarget } from './cloudwatch-events-fns';
 
 export class CloudwatchEvents extends Construct {
+  public readonly rules?: events.Rule[];
+
   constructor(scope: Construct, id: string, props: CloudwatchEventsProps) {
     super(scope, id);
     if (!isEnabled(props.context)) return;
 
-    // TODO: create AWS resources using cloudwatchEventsProps(props.context, props)
-    Object.entries(contextTags(props.context))
-      .forEach(([k, v]) => Tags.of(this).add(k, v));
+    this.rules = props.rules.map((ruleCfg) => {
+      const rule = new events.Rule(
+        this,
+        `Rule-${ruleCfg.name}`,
+        ruleProps(props.context, ruleCfg),
+      );
+
+      ruleCfg.targets.forEach((targetCfg, index) => {
+        const targetId = `${ruleCfg.name}-${index}`;
+        rule.addTarget(buildTarget(this, targetId, targetCfg));
+      });
+
+      return rule;
+    });
+
+    Object.entries(contextTags(props.context)).forEach(([k, v]) =>
+      Tags.of(this).add(k, v),
+    );
   }
 }
