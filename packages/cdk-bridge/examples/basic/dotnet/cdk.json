@@ -1,0 +1,6 @@
+{
+  "app": "dotnet run --project src/CdkBridgeBasic.csproj",
+  "context": {
+    "@sevenpico/load-bridge": "examples/fixtures/bridge.cdk.json"
+  }
+}
