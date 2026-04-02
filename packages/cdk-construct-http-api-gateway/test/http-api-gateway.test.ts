@@ -260,7 +260,6 @@ describe('HttpApiGateway construct', () => {
       context,
       vpcLinks: {
         myVpc: {
-          vpcId: 'vpc-12345',
           subnetIds: ['subnet-aaa', 'subnet-bbb'],
           securityGroupIds: ['sg-111'],
         },

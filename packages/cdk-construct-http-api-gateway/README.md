@@ -73,16 +73,16 @@ See the [examples](./examples) directory for complete usage examples.
 
 | Name | Description | Type |
 |------|-------------|------|
-| `api` | The HTTP API resource | `apigwv2.HttpApi \| undefined` |
+| `api` | The HTTP API resource | `apigwv2.CfnApi \| undefined` |
 | `logGroup` | Access log CloudWatch log group | `logs.LogGroup \| undefined` |
-| `customDomain` | Custom domain resource | `apigwv2.DomainName \| undefined` |
+| `customDomain` | Custom domain resource | `apigwv2.CfnDomainName \| undefined` |
 
 ## Special Considerations
 
-- **VPC Links** require a VPC lookup (`Vpc.fromLookup`) which only works in environment-aware stacks (stacks with explicit account/region). Environment-agnostic stacks will fail synthesis when VPC links are configured.
+- **VPC Links** are created using L1 `CfnVpcLink` with subnet IDs and security group IDs passed directly. No VPC lookup is required.
 - **Route53 alias records** use `HostedZone.fromHostedZoneId` which does not resolve the zone name. The A-record will use the `dnsName` prop as the record name.
 - **Authorizers** (JWT, Lambda) are defined in the props interface for Terraform parity but integration with routes requires additional wiring in the construct consumer.
-- **CORS methods** are mapped from string values (e.g., `'GET'`, `'POST'`) to `CorsHttpMethod` enum values.
+- **CORS methods** are passed as string values (e.g., `'GET'`, `'POST'`) directly to the CloudFormation `CorsConfiguration` property.
 
 ## Roadmap
 

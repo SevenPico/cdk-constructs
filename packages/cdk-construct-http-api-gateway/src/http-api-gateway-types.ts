@@ -24,7 +24,6 @@ export interface HttpApiAuthorizer {
 }
 
 export interface HttpApiVpcLink {
-  readonly vpcId: string;
   readonly subnetIds: string[];
   readonly securityGroupIds?: string[];
 }
