@@ -1,0 +1,19 @@
+{
+  "app": "npx ts-node app.ts",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "enabled": false,
+      "tags": {
+        "Owner": "platform-team"
+      },
+      "lambdaArn": "arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor",
+      "lambdaFunctionName": "acme-dev-app-processor",
+      "lambdaRoleName": "acme-dev-app-processor-role",
+      "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms"
+    }
+  }
+}
