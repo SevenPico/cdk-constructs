@@ -276,3 +276,27 @@ describe('Example: s3-managed-encrypted', () => {
     template.resourceCountIs('AWS::KMS::Grant', 0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Example scenario: disabled
+// ---------------------------------------------------------------------------
+
+describe('Example: disabled', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: makeContext({ namespace: 'acme', environment: 'dev', stage: 'app', enabled: false }),
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('creates no S3 buckets when disabled', () => {
+    template.resourceCountIs('AWS::S3::Bucket', 0);
+  });
+
+  test('creates no KMS grants when disabled', () => {
+    template.resourceCountIs('AWS::KMS::Grant', 0);
+  });
+});
