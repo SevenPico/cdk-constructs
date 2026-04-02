@@ -106,6 +106,26 @@ describe('S3LogStorage construct', () => {
       template.resourceCountIs('AWS::SQS::Queue', 1);
     });
 
+    test('SQS queue created when notificationsType is undefined (defaults to SQS)', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps({
+        notificationsEnabled: true,
+        notificationsType: undefined,
+      }));
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
+    });
+
+    test('No SQS queue when notificationsType is not SQS', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps({
+        notificationsEnabled: true,
+        notificationsType: 'SNS',
+      }));
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 0);
+    });
+
     test('No SQS queue when notificationsEnabled is false', () => {
       const stack = makeStack();
       new S3LogStorage(stack, 'SUT', baseProps());
@@ -121,6 +141,16 @@ describe('S3LogStorage construct', () => {
       }));
       const template = Template.fromStack(stack);
       template.resourceCountIs('AWS::SQS::Queue', 0);
+    });
+
+    test('SQS queue created with notificationsPrefix', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps({
+        notificationsEnabled: true,
+        notificationsPrefix: 'logs/',
+      }));
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
     });
   });
 
