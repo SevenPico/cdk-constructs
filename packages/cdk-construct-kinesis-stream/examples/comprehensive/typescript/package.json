@@ -1,0 +1,16 @@
+{
+  "name": "kinesis-stream-comprehensive-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "cdk": "cdk" },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
+    "@sevenpico/cdk-context": "*",
+    "@sevenpico/cdk-construct-kinesis-stream": "*"
+  },
+  "devDependencies": {
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}
