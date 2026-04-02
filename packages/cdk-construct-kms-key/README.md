@@ -31,7 +31,10 @@ Pass the `context` prop to get deterministic naming (e.g., `alias/7p-prod-secret
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Asymmetric](./examples/asymmetric)
+- [Symmetric HMAC](./examples/symmetric-hmac)
 
 ## Inputs
 
