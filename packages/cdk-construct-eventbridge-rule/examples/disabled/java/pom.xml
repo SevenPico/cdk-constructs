@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.sevenpico.example</groupId>
+  <artifactId>cdk-construct-eventbridge-rule-disabled</artifactId>
+  <version>0.0.1</version>
+
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <cdk.version>2.246.0</cdk.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>software.amazon.awscdk</groupId>
+      <artifactId>aws-cdk-lib</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sevenpico</groupId>
+      <artifactId>cdk-context</artifactId>
+      <version>0.0.0</version>
+      <!-- Install from local build: mvn install:install-file -Dfile=../../../dist/java/*.jar -DpomFile=../../../dist/java/*.pom -->
+    </dependency>
+    <dependency>
+      <groupId>com.sevenpico</groupId>
+      <artifactId>cdk-construct-eventbridge-rule</artifactId>
+      <version>0.0.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <mainClass>com.sevenpico.example.App</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
