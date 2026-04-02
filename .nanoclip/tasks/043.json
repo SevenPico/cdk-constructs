@@ -1,17 +1,33 @@
 {
   "id": "043",
   "title": "cdk-construct-s3-bucket examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-s3-bucket/examples/.\n\nScenarios:\n- minimal/ — defaults\n- comprehensive/ — versioning, lifecycle rules, CORS rules, object ownership, transfer acceleration\n- kms-encrypted/ — sseAlgorithm KMS with kmsKeyArn from bridge fixture (divergent: adds KMS grant resources)\n- s3-managed-encrypted/ — sseAlgorithm S3_MANAGED\n\nAll 5 languages. Assertion tests in test/s3-bucket-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-s3-bucket/examples/.\n\nScenarios:\n- minimal/ \u2014 defaults\n- comprehensive/ \u2014 versioning, lifecycle rules, CORS rules, object ownership, transfer acceleration\n- kms-encrypted/ \u2014 sseAlgorithm KMS with kmsKeyArn from bridge fixture (divergent: adds KMS grant resources)\n- s3-managed-encrypted/ \u2014 sseAlgorithm S3_MANAGED\n\nAll 5 languages. Assertion tests in test/s3-bucket-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR merged: s3-bucket examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

@@ -1,17 +1,33 @@
 {
   "id": "055",
   "title": "cdk-construct-dynamodb examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-dynamodb/examples/.\n\nScenarios:\n- minimal/ — hashKey only, PAY_PER_REQUEST billing\n- provisioned/ — PROVISIONED billing with autoscaler (divergent: adds Application AutoScaling)\n- with-gsi/ — global secondary indexes\n- with-lsi/ — local secondary indexes\n- with-range-key/ — composite primary key (hashKey + rangeKey)\n- encrypted/ — KMS from bridge fixture (divergent: customer-managed key)\n- with-replicas/ — replicaConfig for Global Tables (divergent: cross-region replication)\n\nAll 5 languages. Assertion tests in test/dynamodb-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-dynamodb/examples/.\n\nScenarios:\n- minimal/ \u2014 hashKey only, PAY_PER_REQUEST billing\n- provisioned/ \u2014 PROVISIONED billing with autoscaler (divergent: adds Application AutoScaling)\n- with-gsi/ \u2014 global secondary indexes\n- with-lsi/ \u2014 local secondary indexes\n- with-range-key/ \u2014 composite primary key (hashKey + rangeKey)\n- encrypted/ \u2014 KMS from bridge fixture (divergent: customer-managed key)\n- with-replicas/ \u2014 replicaConfig for Global Tables (divergent: cross-region replication)\n\nAll 5 languages. Assertion tests in test/dynamodb-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "Merged via PR #98: dynamodb examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

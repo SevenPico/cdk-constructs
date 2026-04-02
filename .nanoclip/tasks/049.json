@@ -1,17 +1,33 @@
 {
   "id": "049",
   "title": "cdk-construct-kinesis-stream examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-kinesis-stream/examples/.\n\nScenarios:\n- minimal/ — defaults\n- provisioned/ — streamMode PROVISIONED with explicit shardCount (divergent: different capacity model)\n- on-demand/ — streamMode ON_DEMAND (divergent: serverless capacity)\n- with-consumers/ — consumerCount > 0 (divergent: adds Enhanced Fan-Out consumers)\n\nAll 5 languages. Assertion tests in test/kinesis-stream-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-kinesis-stream/examples/.\n\nScenarios:\n- minimal/ \u2014 defaults\n- provisioned/ \u2014 streamMode PROVISIONED with explicit shardCount (divergent: different capacity model)\n- on-demand/ \u2014 streamMode ON_DEMAND (divergent: serverless capacity)\n- with-consumers/ \u2014 consumerCount > 0 (divergent: adds Enhanced Fan-Out consumers)\n\nAll 5 languages. Assertion tests in test/kinesis-stream-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR merged: kinesis-stream examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

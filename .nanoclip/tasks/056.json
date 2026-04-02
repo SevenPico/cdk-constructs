@@ -1,17 +1,33 @@
 {
   "id": "056",
   "title": "cdk-construct-iam-policy + iam-role + iam-user examples (all languages)",
-  "description": "Create runnable examples for all three IAM constructs together (they compose naturally).\n\npackages/cdk-construct-iam-policy/examples/:\n- minimal/ — empty policy (no statements)\n- with-statements/ — policyStatements map\n- from-json/ — sourceJsonUrl / sourcePolicyDocuments\n\npackages/cdk-construct-iam-role/examples/:\n- minimal/ — roleDescription + service principal\n- comprehensive/ — multiple principals, managed policies, inline policies, instance profile\n- with-instance-profile/ — instanceProfileEnabled:true (divergent: adds instance profile resource)\n- cross-account/ — assumeRoleConditions with external account\n\npackages/cdk-construct-iam-user/examples/:\n- minimal/ — userName only\n- with-login-profile/ — loginProfileEnabled:true (divergent: adds console access)\n- with-groups/ — group membership\n\nAll 5 languages each. Assertion tests in each packages test/ dir.",
-  "status": "todo",
+  "description": "Create runnable examples for all three IAM constructs together (they compose naturally).\n\npackages/cdk-construct-iam-policy/examples/:\n- minimal/ \u2014 empty policy (no statements)\n- with-statements/ \u2014 policyStatements map\n- from-json/ \u2014 sourceJsonUrl / sourcePolicyDocuments\n\npackages/cdk-construct-iam-role/examples/:\n- minimal/ \u2014 roleDescription + service principal\n- comprehensive/ \u2014 multiple principals, managed policies, inline policies, instance profile\n- with-instance-profile/ \u2014 instanceProfileEnabled:true (divergent: adds instance profile resource)\n- cross-account/ \u2014 assumeRoleConditions with external account\n\npackages/cdk-construct-iam-user/examples/:\n- minimal/ \u2014 userName only\n- with-login-profile/ \u2014 loginProfileEnabled:true (divergent: adds console access)\n- with-groups/ \u2014 group membership\n\nAll 5 languages each. Assertion tests in each packages test/ dir.",
+  "status": "in_progress",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
-  "startedAt": null,
+  "startedAt": "2026-04-02T23:15:00Z",
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR #97 open: iam examples under review",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to in_progress"
+    }
   ]
 }

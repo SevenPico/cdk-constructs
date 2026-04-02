@@ -1,17 +1,33 @@
 {
   "id": "052",
   "title": "cdk-construct-cloudwatch-flow-logs examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-cloudwatch-flow-logs/examples/.\n\nScenarios:\n- minimal/ — vpcId from bridge fixture, defaults (ALL traffic)\n- accept-only/ — trafficType ACCEPT\n- reject-only/ — trafficType REJECT\n- with-kms/ — logGroupKmsKeyArn from bridge fixture\n\nAll 5 languages. Assertion tests in test/cloudwatch-flow-logs-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-cloudwatch-flow-logs/examples/.\n\nScenarios:\n- minimal/ \u2014 vpcId from bridge fixture, defaults (ALL traffic)\n- accept-only/ \u2014 trafficType ACCEPT\n- reject-only/ \u2014 trafficType REJECT\n- with-kms/ \u2014 logGroupKmsKeyArn from bridge fixture\n\nAll 5 languages. Assertion tests in test/cloudwatch-flow-logs-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR merged: cloudwatch-flow-logs examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

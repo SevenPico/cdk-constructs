@@ -1,17 +1,33 @@
 {
   "id": "058",
   "title": "cdk-construct-step-functions examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-step-functions/examples/.\n\nScenarios:\n- standard/ — type STANDARD, simple Pass state definition\n- express/ — type EXPRESS (divergent: different execution model, logging required)\n- with-logging/ — loggingConfiguration enabled, log group from new or existing ARN\n- with-tracing/ — tracingEnabled:true (divergent: adds X-Ray)\n- with-policies/ — policyDocuments, managedPolicyArns\n\nAll 5 languages. Assertion tests in test/step-functions-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-step-functions/examples/.\n\nScenarios:\n- standard/ \u2014 type STANDARD, simple Pass state definition\n- express/ \u2014 type EXPRESS (divergent: different execution model, logging required)\n- with-logging/ \u2014 loggingConfiguration enabled, log group from new or existing ARN\n- with-tracing/ \u2014 tracingEnabled:true (divergent: adds X-Ray)\n- with-policies/ \u2014 policyDocuments, managedPolicyArns\n\nAll 5 languages. Assertion tests in test/step-functions-examples.test.ts.",
+  "status": "in_progress",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
-  "startedAt": null,
+  "startedAt": "2026-04-02T23:15:00Z",
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR #100 open: step-functions examples in QA",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to in_progress"
+    }
   ]
 }
