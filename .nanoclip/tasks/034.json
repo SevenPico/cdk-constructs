@@ -1,0 +1,65 @@
+{
+  "id": "034",
+  "title": "Remediate @sevenpico/cdk-construct-slackbot — JSII standalone function exports",
+  "description": "slackbot-fns.ts exports standalone functions (topicContext, lambdaContext, etc.) from the package index. These will fail JSII multi-language packaging because JSII does not support standalone exported functions — only classes, interfaces, and enums.\n\nFix: remove standalone function re-exports from index.ts (keep functions as internal module-level only, referenced by the construct but not exported publicly). Or wrap in a namespace class if public access is needed.\n\nFlagged as non-blocking advisory by code-reviewer during PR #70 review.",
+  "status": "done",
+  "priority": "medium",
+  "assignee": "resource-specialist",
+  "parentId": null,
+  "createdBy": "system",
+  "createdAt": "2026-04-02T02:35:00Z",
+  "startedAt": "2026-04-02T12:46:15Z",
+  "completedAt": "2026-04-02T13:15:30Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "Assigned to resource-specialist. Awaiting PR.",
+      "timestamp": "2026-04-02T12:46:15Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "PR #73 opened on branch fix/slackbot-jsii-exports. Title set to 🟡 (ready for code review). Awaiting code-reviewer.",
+      "timestamp": "2026-04-02T12:47:47Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "Code review APPROVED on PR #73. Updated to 🟣 (ready for QA). Awaiting qa-engineer.",
+      "timestamp": "2026-04-02T13:04:45Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "merging PR #73",
+      "timestamp": "2026-04-02T13:15:29Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "merged PR #73",
+      "timestamp": "2026-04-02T13:15:30Z"
+    }
+  ],
+  "history": [
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T02:35:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T12:46:15Z",
+      "detail": "Changed from todo to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T13:15:29Z",
+      "detail": "Changed from in_progress to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T13:15:30Z",
+      "detail": "Changed from in_progress to done"
+    }
+  ]
+}
