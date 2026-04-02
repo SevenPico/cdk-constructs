@@ -1,0 +1,17 @@
+{
+  "app": "mvn -e -q compile exec:java",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      },
+      "logKmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/bbbbbbbb-cccc-dddd-eeee-ffffffffffff",
+      "logsBucketName": "acme-dev-app-logs-123456789012"
+    }
+  }
+}
