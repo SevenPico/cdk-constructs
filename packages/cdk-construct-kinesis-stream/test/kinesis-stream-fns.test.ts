@@ -6,6 +6,7 @@ import {
   kinesisStreamProps,
   mapShardLevelMetrics,
   consumerName,
+  enforceConsumerDeletion,
 } from '../src/kinesis-stream-fns';
 import { KinesisStreamProps } from '../src/kinesis-stream-types';
 
@@ -88,6 +89,20 @@ describe('mapShardLevelMetrics', () => {
   test('filters out unknown metrics', () => {
     const metrics = mapShardLevelMetrics({ ...baseProps, shardLevelMetrics: ['IncomingBytes', 'UnknownMetric'] });
     expect(metrics).toEqual(['IncomingBytes']);
+  });
+});
+
+describe('enforceConsumerDeletion', () => {
+  test('defaults to true', () => {
+    expect(enforceConsumerDeletion(baseProps)).toBe(true);
+  });
+
+  test('returns false when explicitly set', () => {
+    expect(enforceConsumerDeletion({ ...baseProps, enforceConsumerDeletion: false })).toBe(false);
+  });
+
+  test('returns true when explicitly set', () => {
+    expect(enforceConsumerDeletion({ ...baseProps, enforceConsumerDeletion: true })).toBe(true);
   });
 });
 

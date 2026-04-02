@@ -23,6 +23,9 @@ export const kinesisStreamProps = (ctx: Context, props: KinesisStreamProps): kin
   encryption: streamEncryption(props),
 });
 
+export const enforceConsumerDeletion = (props: KinesisStreamProps): boolean =>
+  props.enforceConsumerDeletion ?? true;
+
 export const consumerName = (ctx: Context, index: number): string =>
   `${contextId(ctx)}-consumer-${index}`;
 

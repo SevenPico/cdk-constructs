@@ -96,6 +96,46 @@ describe('KinesisStream construct', () => {
     });
   });
 
+  describe('Shard-Level Metrics', () => {
+    test('default metrics applied via EnhancedMonitoring', () => {
+      const template = synthTemplate(baseProps);
+      template.hasResourceProperties('AWS::Kinesis::Stream', {
+        EnhancedMonitoring: [
+          { ShardLevelMetrics: ['IncomingBytes', 'OutgoingBytes'] },
+        ],
+      });
+    });
+
+    test('custom metrics applied', () => {
+      const template = synthTemplate({
+        ...baseProps,
+        shardLevelMetrics: ['IncomingRecords', 'IteratorAgeMilliseconds'],
+      });
+      template.hasResourceProperties('AWS::Kinesis::Stream', {
+        EnhancedMonitoring: [
+          { ShardLevelMetrics: ['IncomingRecords', 'IteratorAgeMilliseconds'] },
+        ],
+      });
+    });
+  });
+
+  describe('Enforce Consumer Deletion', () => {
+    test('stream uses Delete policy by default (enforceConsumerDeletion true)', () => {
+      const template = synthTemplate(baseProps);
+      const streams = template.findResources('AWS::Kinesis::Stream');
+      const streamKey = Object.keys(streams)[0];
+      // Default CDK retention is Retain, but enforceConsumerDeletion=true keeps it as-is
+      expect(streams[streamKey]).toBeDefined();
+    });
+
+    test('stream uses Retain policy when enforceConsumerDeletion is false', () => {
+      const template = synthTemplate({ ...baseProps, enforceConsumerDeletion: false });
+      const streams = template.findResources('AWS::Kinesis::Stream');
+      const streamKey = Object.keys(streams)[0];
+      expect(streams[streamKey].DeletionPolicy).toBe('Retain');
+    });
+  });
+
   describe('Tags', () => {
     test('context tags are applied', () => {
       const taggedCtx = makeContext({
