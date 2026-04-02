@@ -5,8 +5,8 @@ Demonstrates `@sevenpico/cdk-bridge` with `enabled: false` set in the bridge fix
 When a Context is disabled, `ctx.enabled` is `false` and constructs that receive it
 should skip resource creation — mirroring Terraform's `count = 0` pattern.
 
-The fixture `examples/fixtures/bridge-disabled.cdk.json` is identical to the main
-bridge fixture except for `"enabled": false`.
+Each language's `cdk.json` contains the `sevenpico` context inline with `"enabled": false`
+set directly in the `context.sevenpico` block.
 
 ## Expected Output
 

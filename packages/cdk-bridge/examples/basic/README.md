@@ -3,8 +3,8 @@
 Demonstrates `@sevenpico/cdk-bridge` reading a Context from the CDK Bridge JSON fixture
 and one Platform output (`vpcId`) via `CdkBridge.string()`.
 
-The bridge fixture is loaded from the shared `examples/fixtures/bridge.cdk.json` via
-the `@sevenpico/load-bridge` CDK context key.
+The `sevenpico` context values are inlined directly in each language's `cdk.json`
+under the `context.sevenpico` key — no external fixture file is required at runtime.
 
 ## Expected Output
 
