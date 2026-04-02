@@ -38,7 +38,10 @@ The Lambda source code (Python handler) is provided by the caller as a local ass
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal Example](./examples/minimal)
+- [Comprehensive Example](./examples/comprehensive)
+- [Disabled Example](./examples/disabled)
+- [With KMS Example](./examples/with-kms)
 
 ## Inputs
 
