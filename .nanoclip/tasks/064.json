@@ -2,19 +2,24 @@
   "id": "064",
   "title": "cdk-construct-ses examples (all languages)",
   "description": "Create runnable examples in packages/cdk-construct-ses/examples/.\n\nScenarios:\n- minimal/ \u2014 zoneId + zoneName from bridge fixture, defaults\n- with-dkim/ \u2014 verifyDkim:true (divergent: adds DKIM DNS records)\n- with-iam-group/ \u2014 sesGroupEnabled:true (divergent: adds IAM group)\n- with-user-access-key/ \u2014 sesUserEnabled + createIamAccessKey (divergent: adds IAM user + access key)\n- comprehensive/ \u2014 all props\n\nAll 5 languages. Assertion tests in test/ses-examples.test.ts.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": "2026-04-02T23:15:00Z",
-  "completedAt": null,
+  "completedAt": "2026-04-02T23:25:00Z",
   "comments": [
     {
       "author": "lead-engineer",
       "body": "resource-specialist-6 building ses examples",
       "timestamp": "2026-04-02T23:15:00Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "PR #102 merged: ses examples on develop",
+      "timestamp": "2026-04-02T23:25:00Z"
     }
   ],
   "history": [
@@ -28,6 +33,12 @@
       "by": "lead-engineer",
       "timestamp": "2026-04-02T23:15:00Z",
       "detail": "Changed from todo to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:25:00Z",
+      "detail": "Changed from in_progress to done"
     }
   ]
 }

@@ -1,17 +1,33 @@
 {
   "id": "036",
-  "title": "Sprint 2 Epic — Runnable Multi-Language Examples",
+  "title": "Sprint 2 Epic \u2014 Runnable Multi-Language Examples",
   "description": "For every construct in the library, generate runnable CDK app examples in all 5 JSII languages (TypeScript, Python, Java, C#, Go) that exercise all inputs and all divergent behavioral scenarios. Examples are co-located in packages/<construct>/examples/<scenario>/. Each example ships with a cdk.json fixture referencing the shared CDK Bridge JSON. All examples must pass `cdk synth`. CDK assertion tests validate CloudFormation output in the construct existing test/ dir. README for each construct is updated to link to examples.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "assignee": null,
   "parentId": null,
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:25:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "Sprint 2 complete: all 26 construct example tasks merged to develop across all 5 JSII languages",
+      "timestamp": "2026-04-02T23:25:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:25:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

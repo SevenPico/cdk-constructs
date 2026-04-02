@@ -2,7 +2,7 @@
   "id": "066",
   "title": "[CI] Add cdk synth validation for all examples to CI pipeline",
   "description": "Add a CI step that runs `cdk synth` on every example app across all constructs and languages. The step should:\n1. Run jsii-pacmak to build local artifacts for each package\n2. Install local artifacts into each non-TypeScript example\n3. Run `cdk synth` in each example directory and assert exit 0\n4. Collect and report any synth failures\n\nIntegrate into the existing Nx pipeline as a new target (e.g. nx run-many --target=synth-examples --all). Ensure this runs in CI on every PR.",
-  "status": "todo",
+  "status": "backlog",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
@@ -10,8 +10,24 @@
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "Deferred: CI cdk synth validation requires jsii-pacmak infra; out of scope for Sprint 2 close-out",
+      "timestamp": "2026-04-02T23:25:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:25:00Z",
+      "detail": "Changed from todo to backlog"
+    }
   ]
 }
