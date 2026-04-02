@@ -60,14 +60,11 @@ See the [examples](./examples) directory for complete usage examples.
 | `sqsMessageRetentionSeconds` | SQS message retention in seconds | `number` | `604800` | |
 | `sqsVisibilityTimeoutSeconds` | SQS visibility timeout in seconds | `number` | `2` | |
 | `sqsKmsConfig` | KMS encryption config for the SQS DLQ | `SqsKmsConfig` | — | |
-| `snsKmsKeyId` | KMS key ID for SNS topic encryption | `string` | — | |
 | `eventbridgePipeName` | EventBridge Pipe name override | `string` | `{context.id}-pipe` | |
 | `eventbridgePipeBatchSize` | Batch size for the EventBridge Pipe | `number` | `1` | |
 | `eventbridgePipeLogLevel` | Log level for the EventBridge Pipe | `string` | `'ERROR'` | |
 | `cloudwatchLogRetentionDays` | CloudWatch log retention for pipe in days | `number` | `90` | |
 | `targetLambdaInputTemplate` | Input template for the pipe target | `string` | `'<$.requestPayload>'` | |
-| `lambdaAsyncMaxEventAgeSeconds` | Lambda async max event age in seconds | `number` | `3600` | |
-| `lambdaAsyncMaxRetryAttempts` | Lambda async max retry attempts | `number` | `2` | |
 
 ## Outputs
 

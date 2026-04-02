@@ -51,8 +51,6 @@ export interface LambdaErrorNotificationProps {
   readonly sqsKmsConfig?: SqsKmsConfig;
 
   /** KMS key ID for SNS topic encryption (for alarm actions) */
-  readonly snsKmsKeyId?: string;
-
   /** EventBridge Pipe name override. Default: derived from context.id */
   readonly eventbridgePipeName?: string;
 
@@ -69,8 +67,5 @@ export interface LambdaErrorNotificationProps {
   readonly targetLambdaInputTemplate?: string;
 
   /** Lambda async config: max event age in seconds. Default: 3600 */
-  readonly lambdaAsyncMaxEventAgeSeconds?: number;
-
   /** Lambda async config: max retry attempts. Default: 2 */
-  readonly lambdaAsyncMaxRetryAttempts?: number;
 }
