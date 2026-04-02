@@ -2,18 +2,23 @@
   "id": "059",
   "title": "cdk-construct-http-api-gateway examples (all languages)",
   "description": "Create runnable examples in packages/cdk-construct-http-api-gateway/examples/.\n\nScenarios:\n- minimal/ \u2014 bare API, no routes\n- with-routes/ \u2014 routes + Lambda integrations\n- with-jwt-authorizer/ \u2014 JWT authorizer (divergent: adds authorizer resource)\n- with-custom-domain/ \u2014 dnsName + acmCertificateArn from bridge fixture + route53ZoneIds (divergent: adds domain name + DNS record)\n- with-vpc-link/ \u2014 vpcLinks for private integrations (divergent: adds VPC Link resource)\n- with-cors/ \u2014 corsConfiguration\n\nAll 5 languages. Assertion tests in test/http-api-gateway-examples.test.ts.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": "2026-04-02T23:15:00Z",
-  "completedAt": null,
+  "completedAt": "2026-04-02T23:15:00Z",
   "comments": [
     {
       "author": "lead-engineer",
       "body": "PR #99 open: http-api-gateway examples in QA",
+      "timestamp": "2026-04-02T23:15:00Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "PR #99 merged: http-api-gateway examples on develop",
       "timestamp": "2026-04-02T23:15:00Z"
     }
   ],

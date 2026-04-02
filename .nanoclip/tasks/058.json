@@ -2,18 +2,23 @@
   "id": "058",
   "title": "cdk-construct-step-functions examples (all languages)",
   "description": "Create runnable examples in packages/cdk-construct-step-functions/examples/.\n\nScenarios:\n- standard/ \u2014 type STANDARD, simple Pass state definition\n- express/ \u2014 type EXPRESS (divergent: different execution model, logging required)\n- with-logging/ \u2014 loggingConfiguration enabled, log group from new or existing ARN\n- with-tracing/ \u2014 tracingEnabled:true (divergent: adds X-Ray)\n- with-policies/ \u2014 policyDocuments, managedPolicyArns\n\nAll 5 languages. Assertion tests in test/step-functions-examples.test.ts.",
-  "status": "in_progress",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": "2026-04-02T23:15:00Z",
-  "completedAt": null,
+  "completedAt": "2026-04-02T23:15:00Z",
   "comments": [
     {
       "author": "lead-engineer",
       "body": "PR #100 open: step-functions examples in QA",
+      "timestamp": "2026-04-02T23:15:00Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "PR #100 merged: step-functions examples on develop",
       "timestamp": "2026-04-02T23:15:00Z"
     }
   ],
