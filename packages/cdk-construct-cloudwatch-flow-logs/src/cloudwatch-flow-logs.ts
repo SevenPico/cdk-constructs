@@ -1,19 +1,48 @@
 import { Construct } from 'constructs';
 import { Tags } from 'aws-cdk-lib';
-import { Context, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { cloudwatchFlowLogsProps, CloudwatchFlowLogsOptions } from './cloudwatch-flow-logs-fns';
-
-export interface CloudwatchFlowLogsProps extends CloudwatchFlowLogsOptions {
-  readonly context: Context;
-}
+import {
+  aws_ec2 as ec2,
+  aws_logs as logs,
+  aws_iam as iam,
+  aws_kms as kms,
+} from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { CloudwatchFlowLogsProps } from './cloudwatch-flow-logs-types';
+import {
+  logGroupProps,
+  flowLogRoleName,
+  flowLogsPolicyStatement,
+  flowLogProps,
+} from './cloudwatch-flow-logs-fns';
 
 export class CloudwatchFlowLogs extends Construct {
+  public readonly logGroup?: logs.LogGroup;
+  public readonly flowLog?: ec2.FlowLog;
+  public readonly role?: iam.Role;
+
   constructor(scope: Construct, id: string, props: CloudwatchFlowLogsProps) {
     super(scope, id);
     if (!isEnabled(props.context)) return;
 
-    // TODO: create AWS resources using cloudwatchFlowLogsProps(props.context, props)
-    Object.entries(contextTags(props.context))
-      .forEach(([k, v]) => Tags.of(this).add(k, v));
+    const encryptionKey = props.logGroupKmsKeyArn
+      ? kms.Key.fromKeyArn(this, 'KmsKey', props.logGroupKmsKeyArn)
+      : undefined;
+
+    this.logGroup = new logs.LogGroup(this, 'LogGroup', {
+      ...logGroupProps(props.context, props),
+      encryptionKey,
+    });
+
+    this.role = new iam.Role(this, 'Role', {
+      roleName: flowLogRoleName(props.context),
+      assumedBy: new iam.ServicePrincipal('vpc-flow-logs.amazonaws.com'),
+    });
+    this.role.addToPolicy(flowLogsPolicyStatement());
+
+    this.flowLog = new ec2.FlowLog(this, 'FlowLog', flowLogProps(this, props.context, props, this.logGroup, this.role));
+
+    Object.entries(contextTags(props.context)).forEach(([k, v]) =>
+      Tags.of(this).add(k, v),
+    );
   }
 }
