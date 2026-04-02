@@ -105,6 +105,15 @@ export class Ses extends Construct {
         });
       }
 
+      // Inline policies — parse JSON strings into PolicyDocuments and attach to user
+      (props.inlinePolicies ?? []).forEach((policyJson, i) => {
+        const doc = iam.PolicyDocument.fromJson(JSON.parse(policyJson));
+        new iam.Policy(this, `InlinePolicy${i}`, {
+          document: doc,
+          users: [this.iamUser!],
+        });
+      });
+
       (props.policyArns ?? []).forEach((arn, i) =>
         this.iamUser!.addManagedPolicy(iam.ManagedPolicy.fromManagedPolicyArn(this, `Policy${i}`, arn)),
       );

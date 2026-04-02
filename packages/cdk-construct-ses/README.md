@@ -85,6 +85,8 @@ See the [examples](./examples) directory for complete usage examples.
 - Route53 verification requires both `zoneId` and `zoneName` to be provided along with `verifyDomain` and/or `verifyDkim`. CDK's `fromHostedZoneId` cannot resolve `zoneName`, so `fromHostedZoneAttributes` is used instead.
 - The identity ARN for the IAM policy is constructed using `Arn.format` since `CfnEmailIdentity` does not expose an `attrArn` attribute.
 - When context is disabled (`enabled: false`), all public properties are `undefined` and no resources are created.
+- The `forceDestroy` prop is accepted for Terraform parity but has no CDK effect — IAM users can always be deleted regardless of this setting.
+- The `inlinePolicies` prop accepts JSON policy document strings. Each string is parsed and its statements are attached to the IAM user via `addToPolicy`.
 
 ## Roadmap
 

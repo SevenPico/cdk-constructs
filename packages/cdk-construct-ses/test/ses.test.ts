@@ -171,6 +171,31 @@ describe('Ses construct', () => {
       });
     });
 
+    test('inline policies attached when provided', () => {
+      const policyJson = JSON.stringify({
+        Version: '2012-10-17',
+        Statement: [{
+          Effect: 'Allow',
+          Action: 's3:GetObject',
+          Resource: 'arn:aws:s3:::my-bucket/*',
+        }],
+      });
+      const template = synthTemplate({
+        ...baseProps,
+        inlinePolicies: [policyJson],
+      });
+      template.hasResourceProperties('AWS::IAM::Policy', {
+        PolicyDocument: Match.objectLike({
+          Statement: Match.arrayWith([
+            Match.objectLike({
+              Action: 's3:GetObject',
+              Resource: 'arn:aws:s3:::my-bucket/*',
+            }),
+          ]),
+        }),
+      });
+    });
+
     test('permissions boundary applied when provided', () => {
       const template = synthTemplate({
         ...baseProps,
