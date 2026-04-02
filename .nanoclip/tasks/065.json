@@ -1,17 +1,33 @@
 {
   "id": "065",
   "title": "cdk-construct-slackbot examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-slackbot/examples/.\n\nScenarios:\n- minimal/ — slackChannels map + slackTokenSecretArn from bridge fixture secrets.slack_token_arn\n- with-kms/ — slackTokenSecretKmsKeyArn from bridge fixture (divergent: KMS decrypt permission added)\n- comprehensive/ — all optional props: custom lambda code path, runtime, log expiration, pub/sub principals\n\nAll 5 languages. Assertion tests in test/slackbot-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-slackbot/examples/.\n\nScenarios:\n- minimal/ \u2014 slackChannels map + slackTokenSecretArn from bridge fixture secrets.slack_token_arn\n- with-kms/ \u2014 slackTokenSecretKmsKeyArn from bridge fixture (divergent: KMS decrypt permission added)\n- comprehensive/ \u2014 all optional props: custom lambda code path, runtime, log expiration, pub/sub principals\n\nAll 5 languages. Assertion tests in test/slackbot-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR merged: slackbot examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

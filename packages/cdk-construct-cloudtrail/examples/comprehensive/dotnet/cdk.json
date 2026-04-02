@@ -1,0 +1,11 @@
+{
+  "app": "dotnet run",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "tags": { "Owner": "platform-team", "CostCenter": "engineering" }
+    }
+  }
+}

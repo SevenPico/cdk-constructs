@@ -1,0 +1,15 @@
+{
+  "app": "go run main.go",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "enabled": false,
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      }
+    }
+  }
+}

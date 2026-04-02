@@ -1,17 +1,33 @@
 {
   "id": "050",
   "title": "cdk-construct-eventbridge + eventbridge-rule examples (all languages)",
-  "description": "Create runnable examples for both packages together since EventBridge rules are commonly paired with a bus.\n\npackages/cdk-construct-eventbridge/examples/:\n- minimal/ — custom event bus, no encryption\n- with-kms/ — kmsKeyIdentifier from bridge fixture\n- with-policy/ — policyDocument\n\npackages/cdk-construct-eventbridge-rule/examples/:\n- minimal/ — eventPattern + targetArn\n- with-role/ — targetRoleArn (divergent: adds IAM role assumption)\n- cross-bus/ — sourceEventBusName + targetEventBusArn (divergent: cross-bus routing)\n\nAll 5 languages. Assertion tests in each packages test/ dir.",
-  "status": "todo",
+  "description": "Create runnable examples for both packages together since EventBridge rules are commonly paired with a bus.\n\npackages/cdk-construct-eventbridge/examples/:\n- minimal/ \u2014 custom event bus, no encryption\n- with-kms/ \u2014 kmsKeyIdentifier from bridge fixture\n- with-policy/ \u2014 policyDocument\n\npackages/cdk-construct-eventbridge-rule/examples/:\n- minimal/ \u2014 eventPattern + targetArn\n- with-role/ \u2014 targetRoleArn (divergent: adds IAM role assumption)\n- cross-bus/ \u2014 sourceEventBusName + targetEventBusArn (divergent: cross-bus routing)\n\nAll 5 languages. Assertion tests in each packages test/ dir.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR merged: eventbridge examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }

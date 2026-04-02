@@ -1,17 +1,33 @@
 {
   "id": "064",
   "title": "cdk-construct-ses examples (all languages)",
-  "description": "Create runnable examples in packages/cdk-construct-ses/examples/.\n\nScenarios:\n- minimal/ — zoneId + zoneName from bridge fixture, defaults\n- with-dkim/ — verifyDkim:true (divergent: adds DKIM DNS records)\n- with-iam-group/ — sesGroupEnabled:true (divergent: adds IAM group)\n- with-user-access-key/ — sesUserEnabled + createIamAccessKey (divergent: adds IAM user + access key)\n- comprehensive/ — all props\n\nAll 5 languages. Assertion tests in test/ses-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples in packages/cdk-construct-ses/examples/.\n\nScenarios:\n- minimal/ \u2014 zoneId + zoneName from bridge fixture, defaults\n- with-dkim/ \u2014 verifyDkim:true (divergent: adds DKIM DNS records)\n- with-iam-group/ \u2014 sesGroupEnabled:true (divergent: adds IAM group)\n- with-user-access-key/ \u2014 sesUserEnabled + createIamAccessKey (divergent: adds IAM user + access key)\n- comprehensive/ \u2014 all props\n\nAll 5 languages. Assertion tests in test/ses-examples.test.ts.",
+  "status": "in_progress",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
-  "startedAt": null,
+  "startedAt": "2026-04-02T23:15:00Z",
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "resource-specialist-6 building ses examples",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to in_progress"
+    }
   ]
 }

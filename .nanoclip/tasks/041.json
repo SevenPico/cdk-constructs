@@ -1,17 +1,33 @@
 {
   "id": "041",
   "title": "cdk-bridge examples (all languages)",
-  "description": "Create runnable examples for @sevenpico/cdk-bridge in packages/cdk-bridge/examples/.\n\nScenarios:\n- basic/ — reads Context + one Platform output (vpcId) via bridgeString/bridgeValue\n- full-platform/ — demonstrates reading all bridge sections (vpc, kms, hostedZones, logs, alarms) to wire into a simple stack\n\nEach scenario in all 5 languages. Include the shared fixture cdk.json. Show how each CDK context key (context, vpc, kms, etc.) maps to a separate tryGetContext call.\n\nAdd assertion tests to packages/cdk-bridge/test/bridge-examples.test.ts.",
-  "status": "todo",
+  "description": "Create runnable examples for @sevenpico/cdk-bridge in packages/cdk-bridge/examples/.\n\nScenarios:\n- basic/ \u2014 reads Context + one Platform output (vpcId) via bridgeString/bridgeValue\n- full-platform/ \u2014 demonstrates reading all bridge sections (vpc, kms, hostedZones, logs, alarms) to wire into a simple stack\n\nEach scenario in all 5 languages. Include the shared fixture cdk.json. Show how each CDK context key (context, vpc, kms, etc.) maps to a separate tryGetContext call.\n\nAdd assertion tests to packages/cdk-bridge/test/bridge-examples.test.ts.",
+  "status": "done",
   "priority": "medium",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
   "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "completedAt": "2026-04-02T23:15:00Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "PR #79 merged: cdk-bridge examples on develop",
+      "timestamp": "2026-04-02T23:15:00Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T23:15:00Z",
+      "detail": "Changed from todo to done"
+    }
   ]
 }
