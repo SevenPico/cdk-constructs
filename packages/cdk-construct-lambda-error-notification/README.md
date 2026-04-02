@@ -65,6 +65,9 @@ See the [examples](./examples) directory for complete usage examples.
 | `eventbridgePipeLogLevel` | Log level for the EventBridge Pipe | `string` | `'ERROR'` | |
 | `cloudwatchLogRetentionDays` | CloudWatch log retention for pipe in days | `number` | `90` | |
 | `targetLambdaInputTemplate` | Input template for the pipe target | `string` | `'<$.requestPayload>'` | |
+| `snsKmsKeyId` | KMS key ID for SNS topic encryption (spec parity; not yet wired) | `string` | — | |
+| `lambdaAsyncMaxEventAgeSeconds` | Lambda async max event age in seconds (spec parity; not yet wired) | `number` | `3600` | |
+| `lambdaAsyncMaxRetryAttempts` | Lambda async max retry attempts (spec parity; not yet wired) | `number` | `2` | |
 
 ## Outputs
 
@@ -81,6 +84,7 @@ See the [examples](./examples) directory for complete usage examples.
 - The construct grants `sqs:SendMessage` to the Lambda execution role and `events.amazonaws.com` service principal on the DLQ.
 - The EventBridge Pipe uses a `FIRE_AND_FORGET` invocation type for reprocessing, so retried messages will also be subject to the Lambda's own retry/DLQ configuration.
 - KMS encryption for the DLQ is optional via `sqsKmsConfig`.
+- `snsKmsKeyId`, `lambdaAsyncMaxEventAgeSeconds`, and `lambdaAsyncMaxRetryAttempts` are accepted in the props interface for spec parity with the source Terraform module, but are not yet wired to resources. They will be implemented when CDK supports `configureAsyncInvoke` on imported functions reliably.
 
 ## Roadmap
 
