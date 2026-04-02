@@ -1,16 +1,27 @@
 {
   "id": "016",
   "title": "Implement @sevenpico/cdk-construct-dynamodb",
-  "description": "Port terraform-aws-dynamodb. Implement a DynamoDB Table construct with context-based naming and tagging. Read spec/construct-dynamodb.md and the source Terraform module linked in the spec. GitHub issue #22.\n\nWorkflow:\n1. Resource Specialist creates a feature branch: git checkout -b feat/{package-name} develop\n2. Resource Specialist implements: pure functions in {name}-fns.ts, thin Construct class in {name}.ts, BDD tests, package README.\n3. Resource Specialist compiles: cd packages/{name} && ../../node_modules/.bin/tsc -p tsconfig.dev.json --noEmit\n4. Resource Specialist runs tests: cd packages/{name} && ../../node_modules/jest-cli/bin/jest.js --no-coverage (must pass)\n5. Resource Specialist pushes branch and opens PR against develop: gh pr create --base develop --title \"feat({name}): implement {package}\"\n6. Code Reviewer reviews the PR on GitHub. MUST run all tests (cd packages/{name} && ../../node_modules/jest-cli/bin/jest.js --no-coverage) \u2014 all must pass. Checks: JSII compliance (no union/function types, all props readonly, full re-exports), functional architecture split (no side-effects in fns.ts, no logic in construct), spec fidelity (props match Terraform vars/defaults, contextId/contextTags/isEnabled used correctly), README accuracy.\n7. QA Engineer reviews the PR test suite on GitHub. MUST verify tests pass. Checks: BDD scenarios cover all spec scenarios including enabled:false early-exit, pure function tests cover defaults/overrides/edge cases, CDK assertions are meaningful.\n8. Lead Engineer merges the PR to develop after all approvals.\n\nTask is done only when the PR is merged to develop with all three review phases complete and all tests passing.",
-  "status": "todo",
+  "description": "Port terraform-aws-dynamodb. Implement a DynamoDB Table construct with context-based naming and tagging. Read spec/construct-dynamodb.md and the source Terraform module linked in the spec. GitHub issue #22.\n\nWorkflow:\n1. Resource Specialist creates a feature branch: git checkout -b feat/{package-name} develop\n2. Resource Specialist implements: pure functions in {name}-fns.ts, thin Construct class in {name}.ts, BDD tests, package README.\n3. Resource Specialist compiles: cd packages/{name} && ../../node_modules/.bin/tsc -p tsconfig.dev.json --noEmit\n4. Resource Specialist runs tests: cd packages/{name} && ../../node_modules/jest-cli/bin/jest.js --no-coverage (must pass)\n5. Resource Specialist pushes branch and opens PR against develop: gh pr create --base develop --title \"feat({name}): implement {package}\"\n6. Code Reviewer reviews the PR on GitHub. MUST run all tests (cd packages/{name} && ../../node_modules/jest-cli/bin/jest.js --no-coverage) — all must pass. Checks: JSII compliance (no union/function types, all props readonly, full re-exports), functional architecture split (no side-effects in fns.ts, no logic in construct), spec fidelity (props match Terraform vars/defaults, contextId/contextTags/isEnabled used correctly), README accuracy.\n7. QA Engineer reviews the PR test suite on GitHub. MUST verify tests pass. Checks: BDD scenarios cover all spec scenarios including enabled:false early-exit, pure function tests cover defaults/overrides/edge cases, CDK assertions are meaningful.\n8. Lead Engineer merges the PR to develop after all approvals.\n\nTask is done only when the PR is merged to develop with all three review phases complete and all tests passing.",
+  "status": "done",
   "priority": "medium",
   "assignee": "resource-specialist",
   "parentId": null,
   "createdBy": "system",
   "createdAt": "2026-04-01T19:04:36Z",
-  "startedAt": null,
-  "completedAt": null,
-  "comments": [],
+  "startedAt": "2026-04-02T12:45:17Z",
+  "completedAt": "2026-04-02T12:45:17Z",
+  "comments": [
+    {
+      "author": "lead-engineer",
+      "body": "implemented and merged via PR #58 and #60",
+      "timestamp": "2026-04-02T12:45:17Z"
+    },
+    {
+      "author": "lead-engineer",
+      "body": "done",
+      "timestamp": "2026-04-02T12:45:17Z"
+    }
+  ],
   "history": [
     {
       "action": "created",
@@ -22,6 +33,18 @@
       "by": "system",
       "timestamp": "2026-04-01T19:13:25Z",
       "comment": "Updated description to reflect full review workflow"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T12:45:17Z",
+      "detail": "Changed from todo to in_progress"
+    },
+    {
+      "action": "status_changed",
+      "by": "lead-engineer",
+      "timestamp": "2026-04-02T12:45:17Z",
+      "detail": "Changed from in_progress to done"
     }
   ]
 }
