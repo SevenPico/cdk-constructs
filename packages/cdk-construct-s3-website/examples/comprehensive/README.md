@@ -17,7 +17,7 @@ under the `context.sevenpico` key.
 
 ## Running
 
-See [EXAMPLES.md](../../../../../EXAMPLES.md) for the full local build workflow.
+See [EXAMPLES.md](../../../../EXAMPLES.md) for the full local build workflow.
 
 ### TypeScript
 ```bash
