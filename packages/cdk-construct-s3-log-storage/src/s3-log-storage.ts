@@ -21,19 +21,19 @@ export class S3LogStorage extends Construct {
     const s3Construct = new S3Bucket(this, 'Bucket', toS3BucketProps(props.context, props));
     this.bucket = s3Construct.bucket;
 
-    if (props.notificationsEnabled && props.notificationsType === 'SQS') {
+    if (props.notificationsEnabled && (props.notificationsType ?? 'SQS') === 'SQS') {
       this.notificationQueue = new sqs.Queue(
         this, 'NotificationQueue', notificationQueueProps(props.context),
       );
       if (this.bucket) {
-        const filter: s3.NotificationKeyFilter = props.notificationsPrefix
-          ? { prefix: props.notificationsPrefix }
-          : {};
-        this.bucket.addEventNotification(
+        const args: [s3.EventType, s3.IBucketNotificationDestination, ...s3.NotificationKeyFilter[]] = [
           s3.EventType.OBJECT_CREATED,
           new s3n.SqsDestination(this.notificationQueue),
-          filter,
-        );
+        ];
+        if (props.notificationsPrefix) {
+          args.push({ prefix: props.notificationsPrefix });
+        }
+        this.bucket.addEventNotification(...args);
       }
     }
 

@@ -98,6 +98,32 @@ describe('S3LogStorage construct', () => {
     });
   });
 
+  describe('Feature: SQS Notifications', () => {
+    test('SQS queue created when notificationsEnabled is true', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps({ notificationsEnabled: true }));
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
+    });
+
+    test('No SQS queue when notificationsEnabled is false', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps());
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 0);
+    });
+
+    test('No SQS queue when context is disabled', () => {
+      const stack = makeStack();
+      new S3LogStorage(stack, 'SUT', baseProps({
+        context: makeContext({ namespace: '7p', stage: 'test', name: 'test', enabled: false }),
+        notificationsEnabled: true,
+      }));
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 0);
+    });
+  });
+
   describe('Feature: Object Ownership', () => {
     test('Object ownership defaults to ObjectWriter', () => {
       const stack = makeStack();
