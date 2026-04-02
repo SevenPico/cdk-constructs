@@ -8,7 +8,7 @@ delimiter, label ordering, case modes, `idLengthLimit`, attributes, and context 
 ```
 Context ID:    acme-dev-app-api-v2
 Is enabled:    true
-Tags:          { Name: 'acme-dev-app-api-v2', Namespace: 'acme', Environment: 'dev', Stage: 'app', Name: 'api', CostCenter: 'engineering', Owner: 'platform-team', ManagedBy: 'cdk' }
+Tags:          { Namespace: 'acme', Environment: 'dev', Stage: 'app', Name: 'acme-dev-app-api-v2', ManagedBy: 'cdk', CostCenter: 'engineering', Owner: 'platform-team' }
 Child ID:      acme-dev-app-api-v2-worker
 ```
 
