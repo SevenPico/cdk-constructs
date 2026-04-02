@@ -1,0 +1,19 @@
+{
+  "name": "cdk-construct-s3-bucket-s3-managed-encrypted-ts",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "synth": "cdk synth"
+  },
+  "dependencies": {
+    "@sevenpico/cdk-context": "*",
+    "@sevenpico/cdk-construct-s3-bucket": "*",
+    "aws-cdk-lib": "^2.246.0",
+    "constructs": "^10.5.0"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.246.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}
