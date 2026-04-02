@@ -16,7 +16,7 @@ with a real KMS key ARN before deploying.
 
 ## Running
 
-See [EXAMPLES.md](../../../../../EXAMPLES.md) for the full local build workflow.
+See [EXAMPLES.md](../../../../EXAMPLES.md) for the full local build workflow.
 
 ### TypeScript
 ```bash
