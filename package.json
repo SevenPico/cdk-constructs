@@ -18,15 +18,13 @@
     "upgrade-deps": "npx projen upgrade-deps",
     "watch": "npx projen watch",
     "install:ci": "npx projen install:ci",
-    "synth-workspace": "npx projen",
-    "postinstall": "bash scripts/fix-unrs-resolver.sh"
+    "synth-workspace": "npx projen"
   },
   "devDependencies": {
     "@aws/pdk": "^0.26.15",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
-    "@unrs/resolver-binding-wasm32-wasi": "^1.11.1",
     "constructs": "^10.0.0",
     "eslint": "^8",
     "eslint-config-prettier": "^10.1.8",

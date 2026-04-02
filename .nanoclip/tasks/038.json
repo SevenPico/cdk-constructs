@@ -2,16 +2,32 @@
   "id": "038",
   "title": "[Setup] jsii-pacmak local build workflow for non-TypeScript examples",
   "description": "Establish and document the local build pattern that example apps in Python/Java/Go/.NET use to consume construct packages before they are published to public registries.\n\nDefine an npm script or Makefile target that:\n1. Runs `npx jsii-pacmak` on a construct package to produce language artifacts in dist/\n2. Installs the local artifact into the example app (pip install dist/python/*.whl, mvn install, etc.)\n\nDocument the pattern in a top-level EXAMPLES.md so all construct example tasks can follow the same approach. Include a one-liner per language showing how to install from a local build.",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "high",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
-  "startedAt": null,
+  "startedAt": "2026-04-02T20:51:36Z",
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "resource-specialist",
+      "body": "Starting: documenting jsii-pacmak local build workflow",
+      "timestamp": "2026-04-02T20:51:36Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "resource-specialist",
+      "timestamp": "2026-04-02T20:51:36Z",
+      "detail": "Changed from todo to in_progress"
+    }
   ]
 }

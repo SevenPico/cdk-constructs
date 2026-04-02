@@ -107,6 +107,34 @@
         "cwd": "packages/cdk-construct-ses"
       }
     },
+    "package:java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:java",
+        "cwd": "packages/cdk-construct-ses"
+      }
+    },
+    "package:python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:python",
+        "cwd": "packages/cdk-construct-ses"
+      }
+    },
+    "package:dotnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:dotnet",
+        "cwd": "packages/cdk-construct-ses"
+      }
+    },
+    "package:go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:go",
+        "cwd": "packages/cdk-construct-ses"
+      }
+    },
     "docgen": {
       "executor": "nx:run-commands",
       "options": {

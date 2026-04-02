@@ -107,6 +107,34 @@
         "cwd": "packages/cdk-context"
       }
     },
+    "package:java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:java",
+        "cwd": "packages/cdk-context"
+      }
+    },
+    "package:python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:python",
+        "cwd": "packages/cdk-context"
+      }
+    },
+    "package:dotnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:dotnet",
+        "cwd": "packages/cdk-context"
+      }
+    },
+    "package:go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:go",
+        "cwd": "packages/cdk-context"
+      }
+    },
     "docgen": {
       "executor": "nx:run-commands",
       "options": {

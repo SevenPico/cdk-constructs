@@ -107,6 +107,34 @@
         "cwd": "packages/cdk-construct-express-sfn-error-notification"
       }
     },
+    "package:java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:java",
+        "cwd": "packages/cdk-construct-express-sfn-error-notification"
+      }
+    },
+    "package:python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:python",
+        "cwd": "packages/cdk-construct-express-sfn-error-notification"
+      }
+    },
+    "package:dotnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:dotnet",
+        "cwd": "packages/cdk-construct-express-sfn-error-notification"
+      }
+    },
+    "package:go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:go",
+        "cwd": "packages/cdk-construct-express-sfn-error-notification"
+      }
+    },
     "docgen": {
       "executor": "nx:run-commands",
       "options": {

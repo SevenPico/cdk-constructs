@@ -2,16 +2,32 @@
   "id": "037",
   "title": "[Setup] Configure JSII language targets for all packages",
   "description": "Add Python, Java, .NET C#, and Go JSII targets to every package.json in the monorepo. Re-run projen to regenerate managed files. Targets follow JSII naming conventions:\n- Python: distName sevenpico.<package-slug>, module sevenpico.<package_slug>\n- Java: groupId com.sevenpico, artifactId <package-slug>\n- dotnet: namespace SevenPico.<PascalCaseName>\n- go: moduleName github.com/sevenpico/cdk-constructs/\n\nVerify each package builds cleanly with `npx jsii` after targets are added. This task is a prerequisite for all construct example tasks involving non-TypeScript languages.",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "high",
   "assignee": null,
   "parentId": "036",
   "createdBy": "system",
   "createdAt": "2026-04-02T00:00:00Z",
-  "startedAt": null,
+  "startedAt": "2026-04-02T20:51:33Z",
   "completedAt": null,
-  "comments": [],
+  "comments": [
+    {
+      "author": "resource-specialist",
+      "body": "Starting: adding JSII language targets to .projenrc.ts",
+      "timestamp": "2026-04-02T20:51:33Z"
+    }
+  ],
   "history": [
-    { "action": "created", "by": "system", "timestamp": "2026-04-02T00:00:00Z" }
+    {
+      "action": "created",
+      "by": "system",
+      "timestamp": "2026-04-02T00:00:00Z"
+    },
+    {
+      "action": "status_changed",
+      "by": "resource-specialist",
+      "timestamp": "2026-04-02T20:51:33Z",
+      "detail": "Changed from todo to in_progress"
+    }
   ]
 }

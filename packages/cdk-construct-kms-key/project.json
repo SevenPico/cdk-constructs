@@ -107,6 +107,34 @@
         "cwd": "packages/cdk-construct-kms-key"
       }
     },
+    "package:java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:java",
+        "cwd": "packages/cdk-construct-kms-key"
+      }
+    },
+    "package:python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:python",
+        "cwd": "packages/cdk-construct-kms-key"
+      }
+    },
+    "package:dotnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:dotnet",
+        "cwd": "packages/cdk-construct-kms-key"
+      }
+    },
+    "package:go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:go",
+        "cwd": "packages/cdk-construct-kms-key"
+      }
+    },
     "docgen": {
       "executor": "nx:run-commands",
       "options": {
