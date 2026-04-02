@@ -1,0 +1,18 @@
+{
+  "app": "dotnet run --project src/",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      },
+      "processorArn": "arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor",
+      "validatorArn": "arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-validator",
+      "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "app": "python app.py",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      },
+      "processorArn": "arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor",
+      "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms",
+      "kmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "kmsKeyId": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    }
+  }
+}
