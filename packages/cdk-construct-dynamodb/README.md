@@ -68,6 +68,7 @@ See the [examples](./examples) directory for complete usage examples.
 | `ttlEnabled` | Enable TTL | `boolean` | `true` | |
 | `ttlAttribute` | TTL attribute name | `string` | `'Expires'` | |
 | `tableClass` | Table class | `string` | `'STANDARD'` | |
+| `dynamodbAttributes` | Additional non-key attributes (Terraform parity) | `DynamodbAttribute[]` | `[]` | |
 | `globalSecondaryIndexes` | Global secondary indexes | `DynamodbGsi[]` | `[]` | |
 | `localSecondaryIndexes` | Local secondary indexes | `DynamodbLsi[]` | `[]` | |
 | `replicas` | Cross-region replica configurations | `DynamodbReplicaConfig[]` | `[]` | |
@@ -83,7 +84,7 @@ See the [examples](./examples) directory for complete usage examples.
 - When `billingMode` is `PAY_PER_REQUEST`, `readCapacity` and `writeCapacity` are ignored and autoscaling is not available.
 - The `kmsKeyArn` prop must be an ARN (not an alias). The construct uses `kms.Key.fromKeyArn` to resolve the key, which requires an environment-agnostic ARN.
 - The table has a `RETAIN` removal policy by default to prevent accidental data loss.
-- The Terraform source module accepts a `dynamodb_attributes` variable to declare additional non-key attributes. In CDK, DynamoDB is schemaless and attributes are only declared when used as keys (partition, sort, GSI, LSI), so this prop is not needed and has been omitted.
+- **dynamodbAttributes**: Accepted for Terraform module parity but has no effect in CDK. DynamoDB tables in CDK are schemaless — only key attributes (partition key, sort key) need declaration, which are handled via partitionKey/sortKey props.
 - When context is disabled (`enabled: false`), all public properties are `undefined` and no resources are created.
 
 ## Roadmap
