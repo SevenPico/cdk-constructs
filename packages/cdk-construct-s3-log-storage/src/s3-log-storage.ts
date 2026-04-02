@@ -1,19 +1,42 @@
 import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
-import { Context, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { s3LogStorageProps, S3LogStorageOptions } from './s3-log-storage-fns';
-
-export interface S3LogStorageProps extends S3LogStorageOptions {
-  readonly context: Context;
-}
+import {
+  Tags,
+  aws_s3 as s3,
+  aws_sqs as sqs,
+  aws_s3_notifications as s3n,
+} from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { S3Bucket } from '@sevenpico/cdk-construct-s3-bucket';
+import { S3LogStorageProps } from './s3-log-storage-types';
+import { toS3BucketProps, notificationQueueProps } from './s3-log-storage-fns';
 
 export class S3LogStorage extends Construct {
+  public readonly bucket?: s3.Bucket;
+  public readonly notificationQueue?: sqs.Queue;
+
   constructor(scope: Construct, id: string, props: S3LogStorageProps) {
     super(scope, id);
     if (!isEnabled(props.context)) return;
 
-    // TODO: create AWS resources using s3LogStorageProps(props.context, props)
-    Object.entries(contextTags(props.context))
-      .forEach(([k, v]) => Tags.of(this).add(k, v));
+    const s3Construct = new S3Bucket(this, 'Bucket', toS3BucketProps(props.context, props));
+    this.bucket = s3Construct.bucket;
+
+    if (props.notificationsEnabled && (props.notificationsType ?? 'SQS') === 'SQS') {
+      this.notificationQueue = new sqs.Queue(
+        this, 'NotificationQueue', notificationQueueProps(props.context),
+      );
+      if (this.bucket) {
+        const args: [s3.EventType, s3.IBucketNotificationDestination, ...s3.NotificationKeyFilter[]] = [
+          s3.EventType.OBJECT_CREATED,
+          new s3n.SqsDestination(this.notificationQueue),
+        ];
+        if (props.notificationsPrefix) {
+          args.push({ prefix: props.notificationsPrefix });
+        }
+        this.bucket.addEventNotification(...args);
+      }
+    }
+
+    Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));
   }
 }
