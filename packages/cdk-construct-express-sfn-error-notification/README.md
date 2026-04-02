@@ -39,7 +39,9 @@ Per state machine entry:
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal Example](./examples/minimal)
+- [Multi-Target Example](./examples/multi-target)
+- [Comprehensive Example](./examples/comprehensive)
 
 ## Inputs
 
