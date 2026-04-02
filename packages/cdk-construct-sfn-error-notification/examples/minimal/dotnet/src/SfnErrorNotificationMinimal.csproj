@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.CDK.Lib" Version="2.246.0" />
+    <PackageReference Include="Constructs" Version="10.5.0" />
+    <!--
+      Install from local build:
+        dotnet nuget add source <path-to-dist/dotnet> --name sevenpico-local
+        dotnet add package SevenPico.CdkBridge --version 0.0.0
+        dotnet add package SevenPico.CdkConstructSfnErrorNotification --version 0.0.0
+    -->
+    <PackageReference Include="SevenPico.CdkBridge" Version="0.0.0" />
+    <PackageReference Include="SevenPico.CdkConstructSfnErrorNotification" Version="0.0.0" />
+  </ItemGroup>
+</Project>
