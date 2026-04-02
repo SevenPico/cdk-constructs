@@ -121,3 +121,31 @@ describe('Example: full-platform', () => {
     expect(bridgeString(app, 'missingKey', 'default-value')).toBe('default-value');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Example scenario: disabled
+// Validates that enabled:false in the bridge fixture propagates to Context.
+// ---------------------------------------------------------------------------
+
+describe('Example: disabled', () => {
+  const DISABLED_FIXTURE = { ...FIXTURE, enabled: false };
+
+  function appWithDisabledFixture(): App {
+    return new App({ context: { sevenpico: DISABLED_FIXTURE } });
+  }
+
+  test('context is not enabled', () => {
+    const app = appWithDisabledFixture();
+    expect(bridgeContext(app).enabled).toBe(false);
+  });
+
+  test('context id is still computed when disabled', () => {
+    const app = appWithDisabledFixture();
+    expect(bridgeContext(app).id).toBe('acme-dev-app');
+  });
+
+  test('Platform outputs are still readable when disabled', () => {
+    const app = appWithDisabledFixture();
+    expect(bridgeString(app, 'vpcId')).toBe('vpc-0abc123456789def0');
+  });
+});

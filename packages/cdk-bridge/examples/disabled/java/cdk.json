@@ -1,0 +1,6 @@
+{
+  "app": "mvn -e -q compile exec:java",
+  "context": {
+    "@sevenpico/load-bridge": "examples/fixtures/bridge-disabled.cdk.json"
+  }
+}

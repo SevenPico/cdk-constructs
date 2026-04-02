@@ -1,0 +1,6 @@
+{
+  "app": "dotnet run --project src/CdkBridgeDisabled.csproj",
+  "context": {
+    "@sevenpico/load-bridge": "examples/fixtures/bridge-disabled.cdk.json"
+  }
+}
