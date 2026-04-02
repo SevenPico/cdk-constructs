@@ -12,7 +12,7 @@ export interface SnsSubscriber {
 export interface SnsProps {
   readonly context: Context;
 
-  /** Enable KMS encryption. Default: false */
+  /** Enable KMS encryption. Default: true */
   readonly encryptionEnabled?: boolean;
 
   /** KMS key ARN for SNS encryption */
@@ -53,4 +53,13 @@ export interface SnsProps {
 
   /** KMS data key reuse period for DLQ in seconds. Default: 300 */
   readonly sqsQueueKmsDataKeyReusePeriodSeconds?: number;
+
+  /** Custom SNS delivery retry policy JSON */
+  readonly deliveryPolicy?: string;
+
+  /** Custom redrive policy JSON */
+  readonly redrivePolicy?: string;
+
+  /** Max receive count for redrive policy. Default: 5 */
+  readonly redriveMaxReceiverCount?: number;
 }
