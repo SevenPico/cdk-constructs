@@ -1,0 +1,11 @@
+{
+  "name": "ses-disabled",
+  "version": "0.0.1",
+  "scripts": { "synth": "npx ts-node app.ts" },
+  "dependencies": {
+    "aws-cdk-lib": "^2.246.0",
+    "constructs": "^10.5.0",
+    "@sevenpico/cdk-context": "^0.0.0",
+    "@sevenpico/cdk-construct-ses": "^0.0.0"
+  }
+}
