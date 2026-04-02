@@ -22,9 +22,14 @@
     </dependency>
     <dependency>
       <groupId>com.sevenpico</groupId>
-      <artifactId>cdk-context</artifactId>
+      <artifactId>cdk-bridge</artifactId>
       <version>0.0.0</version>
       <!-- Install from local build: mvn install:install-file -Dfile=../../../dist/java/*.jar -DpomFile=../../../dist/java/*.pom -->
+    </dependency>
+    <dependency>
+      <groupId>com.sevenpico</groupId>
+      <artifactId>cdk-context</artifactId>
+      <version>0.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.sevenpico</groupId>

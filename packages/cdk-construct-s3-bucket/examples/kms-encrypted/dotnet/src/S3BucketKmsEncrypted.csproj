@@ -15,6 +15,7 @@
         dotnet add package SevenPico.CdkContext --version 0.0.0
         dotnet add package SevenPico.CdkConstructS3Bucket --version 0.0.0
     -->
+    <PackageReference Include="SevenPico.CdkBridge" Version="0.0.0" />
     <PackageReference Include="SevenPico.CdkContext" Version="0.0.0" />
     <PackageReference Include="SevenPico.CdkConstructS3Bucket" Version="0.0.0" />
   </ItemGroup>
