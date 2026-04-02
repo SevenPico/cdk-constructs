@@ -5,7 +5,11 @@
       "namespace": "acme",
       "environment": "dev",
       "stage": "app",
-      "enabled": false
+      "enabled": false,
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      }
     }
   }
 }
