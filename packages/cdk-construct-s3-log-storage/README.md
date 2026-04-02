@@ -64,3 +64,28 @@ Configure the construct with `S3LogStorageProps` to customize encryption, lifecy
 |------|-------------|------|
 | `bucket` | The log storage S3 bucket | `s3.Bucket \| undefined` |
 | `notificationQueue` | SQS queue for bucket notifications (if enabled) | `sqs.Queue \| undefined` |
+
+## Special Considerations
+
+- The bucket uses `ObjectWriter` ownership by default, which is required for S3 server access log delivery via ACL grants.
+- When `notificationsEnabled` is `true` and `notificationsType` is `'SQS'` (the default), an SQS queue is created and wired to receive `OBJECT_CREATED` events. If `notificationsPrefix` is set, only objects matching that prefix trigger notifications.
+- When `context.enabled` is `false`, no resources are created and all public properties are `undefined`.
+- This construct wraps `@sevenpico/cdk-construct-s3-bucket` with log-storage-specific defaults. All S3 bucket configuration props are passed through.
+
+## Roadmap
+
+### v0.1.0
+
+- [x] Initial implementation
+- [x] BDD test coverage
+- [x] Context-based naming and tagging
+- [x] Optional SQS event notifications
+
+### v0.2.0
+
+- [ ] SNS notification target support
+- [ ] Lambda notification target support
+
+## License
+
+Apache 2.0 — see [LICENSE](../../LICENSE).
