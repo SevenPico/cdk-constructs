@@ -13,7 +13,7 @@ None — the stack synthesizes with zero resources when `enabled` is false.
 
 ## Running
 
-See [EXAMPLES.md](../../../../../EXAMPLES.md) for the full local build workflow.
+See [EXAMPLES.md](../../../../EXAMPLES.md) for the full local build workflow.
 
 ### TypeScript
 ```bash
