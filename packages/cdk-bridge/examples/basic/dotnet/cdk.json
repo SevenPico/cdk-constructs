@@ -1,0 +1,24 @@
+{
+  "app": "dotnet run --project src/CdkBridgeBasic.csproj",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering",
+        "CDK": "true"
+      },
+      "vpcId": "vpc-0abc123456789def0",
+      "vpcCidrBlock": "10.0.0.0/16",
+      "kmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "logKmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/bbbbbbbb-cccc-dddd-eeee-ffffffffffff",
+      "publicZoneId": "Z0PUBLICZONEID00000",
+      "publicZoneName": "dev.acme.example.com",
+      "logsBucketName": "acme-dev-app-logs-123456789012",
+      "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms",
+      "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    }
+  }
+}
