@@ -1,0 +1,18 @@
+{
+  "app": "python app.py",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "enabled": false,
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      },
+      "stateMachineArn": "arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor",
+      "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms"
+    }
+  }
+}
