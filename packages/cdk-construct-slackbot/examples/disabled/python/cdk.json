@@ -1,0 +1,16 @@
+{
+  "app": "python app.py",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "region": "us-east-1",
+      "enabled": false,
+      "tags": {
+        "Owner": "platform-team"
+      },
+      "slackTokenArn": "arn:aws:secretsmanager:us-east-1:123456789012:secret:acme/dev/app/slack-token-AbCdEf"
+    }
+  }
+}
