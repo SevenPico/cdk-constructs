@@ -39,7 +39,9 @@ Configure the construct by providing the Lambda function ARN, function name, exe
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal Example](./examples/minimal)
+- [Comprehensive Example](./examples/comprehensive)
+- [Disabled Example](./examples/disabled)
 
 ## Inputs
 
