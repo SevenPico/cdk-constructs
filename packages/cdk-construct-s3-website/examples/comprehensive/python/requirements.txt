@@ -1,0 +1,4 @@
+aws-cdk-lib==2.246.0
+constructs>=10.5.0,<11.0.0
+sevenpico.cdk_context==0.0.0
+sevenpico.cdk_construct_s3_website==0.0.0
