@@ -1,0 +1,10 @@
+{
+  "app": "python app.py",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app"
+    }
+  }
+}
