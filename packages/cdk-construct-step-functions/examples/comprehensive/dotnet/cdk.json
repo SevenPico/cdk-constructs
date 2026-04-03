@@ -1,0 +1,14 @@
+{
+  "app": "dotnet run --project src/StepFunctionsComprehensive.csproj",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "tags": {
+        "Owner": "platform-team",
+        "CostCenter": "engineering"
+      }
+    }
+  }
+}
