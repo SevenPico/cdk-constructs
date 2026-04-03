@@ -107,6 +107,34 @@
         "cwd": "packages/cdk-construct-cloudtrail-cloudwatch-alarms"
       }
     },
+    "package:java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:java",
+        "cwd": "packages/cdk-construct-cloudtrail-cloudwatch-alarms"
+      }
+    },
+    "package:python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:python",
+        "cwd": "packages/cdk-construct-cloudtrail-cloudwatch-alarms"
+      }
+    },
+    "package:dotnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:dotnet",
+        "cwd": "packages/cdk-construct-cloudtrail-cloudwatch-alarms"
+      }
+    },
+    "package:go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx projen package:go",
+        "cwd": "packages/cdk-construct-cloudtrail-cloudwatch-alarms"
+      }
+    },
     "docgen": {
       "executor": "nx:run-commands",
       "options": {

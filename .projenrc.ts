@@ -10,6 +10,44 @@ const monorepo = new MonorepoTsProject({
   gitIgnoreOptions: { ignorePatterns: ['.env', '*.js.map', '.claude'] },
 });
 
+// ── JSII language target helpers ──────────────────────────────────────────────
+// Derive JSII target names from a package slug like 'cdk-context' or
+// 'cdk-construct-kms-key'.  All targets follow SevenPico naming conventions.
+//
+// Python: distName sevenpico.<slug-with-underscores>
+//         module   sevenpico.<slug_with_underscores>
+// Java:   groupId com.sevenpico, artifactId <slug>
+// .NET:   namespace SevenPico.<PascalCase>, packageId SevenPico.<PascalCase>
+// Go:     moduleName github.com/sevenpico/cdk-constructs
+//         packageName derived from slug (underscores, no hyphens)
+
+const toPascalCase = (slug: string): string =>
+  slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+
+const jsiiTargets = (slug: string) => {
+  const pyModule = `sevenpico.${slug.replace(/-/g, '_')}`;
+  const pascal = toPascalCase(slug);
+  return {
+    publishToPypi: {
+      distName: pyModule,
+      module: pyModule,
+    },
+    publishToMaven: {
+      javaPackage: `com.sevenpico.${slug.replace(/-/g, '.')}`,
+      mavenGroupId: 'com.sevenpico',
+      mavenArtifactId: slug,
+    },
+    publishToNuget: {
+      dotNetNamespace: `SevenPico.${pascal}`,
+      packageId: `SevenPico.${pascal}`,
+    },
+    publishToGo: {
+      moduleName: 'github.com/sevenpico/cdk-constructs',
+      packageName: slug.replace(/-/g, ''),
+    },
+  };
+};
+
 // ── Shared helper ─────────────────────────────────────────────────────────────
 const pkg = (name: string, outdir: string, opts: any = {}) =>
   new AwsCdkConstructLibrary({
@@ -29,6 +67,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
         types: ['jest', 'node'],
       },
     },
+    ...jsiiTargets(name),
     ...opts,
   });
 

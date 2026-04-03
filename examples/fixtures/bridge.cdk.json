@@ -1,0 +1,48 @@
+{
+  "sevenpico": {
+    "namespace": "acme",
+    "environment": "dev",
+    "stage": "app",
+    "region": "us-east-1",
+    "tags": {
+      "Owner": "platform-team",
+      "CostCenter": "engineering",
+      "CDK": "true"
+    },
+    "vpcId": "vpc-0abc123456789def0",
+    "vpcCidrBlock": "10.0.0.0/16",
+    "availabilityZones": ["us-east-1a", "us-east-1b", "us-east-1c"],
+    "privateSubnetIds": [
+      "subnet-0aaaaaaaaaaaaaaaa",
+      "subnet-0bbbbbbbbbbbbbbb",
+      "subnet-0ccccccccccccccc"
+    ],
+    "publicSubnetIds": [
+      "subnet-0ddddddddddddddd",
+      "subnet-0eeeeeeeeeeeeeee",
+      "subnet-0fffffffffffffff"
+    ],
+    "databaseSubnetIds": [
+      "subnet-01111111111111111",
+      "subnet-02222222222222222",
+      "subnet-03333333333333333"
+    ],
+    "publicZoneId": "Z0PUBLICZONEID00000",
+    "publicZoneName": "dev.acme.example.com",
+    "privateZoneId": "Z0PRIVATEZONEID0000",
+    "privateZoneName": "dev.acme.internal",
+    "certificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "wafWebAclArn": "arn:aws:wafv2:us-east-1:123456789012:regional/webacl/acme-dev-app/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "kmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "kmsKeyId": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "logKmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/bbbbbbbb-cccc-dddd-eeee-ffffffffffff",
+    "secretsKmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/cccccccc-dddd-eeee-ffff-000000000000",
+    "snsKmsKeyArn": "arn:aws:kms:us-east-1:123456789012:key/dddddddd-eeee-ffff-0000-111111111111",
+    "slackTokenArn": "arn:aws:secretsmanager:us-east-1:123456789012:secret:acme/dev/app/slack-token-AbCdEf",
+    "logsBucketName": "acme-dev-app-logs-123456789012",
+    "logsBucketArn": "arn:aws:s3:::acme-dev-app-logs-123456789012",
+    "cloudtrailBucketName": "acme-dev-app-cloudtrail-123456789012",
+    "alarmsSnsTopicArn": "arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms",
+    "sharedSecurityGroupId": "sg-0aaaaaaaaaaaaaaaa"
+  }
+}
