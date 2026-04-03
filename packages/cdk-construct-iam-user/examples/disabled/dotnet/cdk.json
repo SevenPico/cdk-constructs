@@ -1,0 +1,11 @@
+{
+  "app": "dotnet run --project src/IamUserDisabled.csproj",
+  "context": {
+    "sevenpico": {
+      "namespace": "acme",
+      "environment": "dev",
+      "stage": "app",
+      "enabled": false
+    }
+  }
+}
