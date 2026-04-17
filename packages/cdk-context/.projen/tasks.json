@@ -170,7 +170,15 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation"
+      "description": "Prepare the project for compilation",
+      "steps": [
+        {
+          "exec": "ln -sf ../../../node_modules/aws-cdk-lib node_modules/aws-cdk-lib 2>/dev/null || true"
+        },
+        {
+          "exec": "ln -sf ../../../node_modules/constructs node_modules/constructs 2>/dev/null || true"
+        }
+      ]
     },
     "test": {
       "name": "test",

@@ -100,6 +100,56 @@ console.log(dlqCtx.id);         // '7p-prod-api-queue-dlq'
 - **MD5 truncation**: when `idLengthLimit > 0` and the full ID exceeds the limit, the ID is truncated and a 5-character MD5 hex suffix is appended (format: `<truncated>-<hash>`). The suffix ensures uniqueness even when different long names share the same prefix.
 - **JSII consumers**: use the `ContextFns` static class (`ContextFns.make`, `ContextFns.extend`, `ContextFns.id`, `ContextFns.tags`, `ContextFns.isEnabled`) when consuming this package from Python, Java, or .NET via JSII.
 
+## Development
+
+### Prerequisites
+
+- **Node.js ≥ 18** with npm ≥ 9 (workspaces support required)
+- **jsii ~5.9.0** — earlier 5.4.x releases do not support the `intersection-types` feature used by `aws-cdk-lib ≥ 2.246.0`; the correct version is pinned in `package.json`
+
+Multi-language packaging (`package:java`, `package:python`, `package:dotnet`, `package:go`) additionally requires Maven, Python, .NET SDK, and Go installed. For local TypeScript development only the Node.js toolchain is needed.
+
+### Installing dependencies
+
+Run from the **monorepo root** (`../../`):
+
+```bash
+npm install
+```
+
+npm workspaces will hoist shared packages (including `aws-cdk-lib` and `constructs`) to the root `node_modules`. The build scripts automatically create workspace-local symlinks for these packages so that `jsii-docgen` can discover their JSII assemblies.
+
+### Build commands
+
+All commands should be run from the **monorepo root**, using the `--workspace` flag:
+
+| Goal | Command |
+|------|---------|
+| TypeScript compile only | `npm run compile --workspace=packages/cdk-context` |
+| Run tests | `npm run test --workspace=packages/cdk-context` |
+| Compile + test + JS package | `npm run build --workspace=packages/cdk-context` |
+| JS package only | `npm run package:js --workspace=packages/cdk-context` |
+| Watch mode (incremental compile) | `npm run watch --workspace=packages/cdk-context` |
+
+Alternatively, run the same tasks via `npx projen` from inside the package directory:
+
+```bash
+cd packages/cdk-context
+npx projen compile   # jsii compile → lib/
+npx projen test      # jest + eslint
+npx projen build     # full build (compile → docgen → test → package)
+```
+
+> **Note on direct jsii invocation**: Do _not_ call `../../node_modules/.bin/jsii` directly. The projen task runner (`npx projen compile`) sets up the correct `PATH` and environment; invoking `jsii` directly bypasses that setup.
+
+### Configuration files
+
+This package is managed by [projen](https://github.com/projen/projen). To change `package.json`, task definitions, or tsconfig:
+
+1. Edit `.projenrc.ts` in the monorepo root.
+2. Run `npx projen` from the root to regenerate the managed files.
+3. Do **not** edit `.projen/tasks.json`, `package.json` (this package), or `tsconfig.dev.json` directly — those are overwritten by projen.
+
 ## Roadmap
 
 ### v0.1.0
