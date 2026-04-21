@@ -41,7 +41,9 @@ Configure the construct by providing the state machine ARN and SNS topic ARNs fo
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 

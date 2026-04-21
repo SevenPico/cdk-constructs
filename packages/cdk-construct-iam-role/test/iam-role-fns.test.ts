@@ -116,6 +116,12 @@ describe('mergePolicyDocuments', () => {
     const json = merged!.toJSON();
     expect(json.Statement).toHaveLength(2);
   });
+
+  test('handles policy document with no Statement field', () => {
+    const docWithNoStatement = JSON.stringify({ Version: '2012-10-17' });
+    const merged = mergePolicyDocuments([docWithNoStatement]);
+    expect(merged).toBeDefined();
+  });
 });
 
 describe('iamRoleProps', () => {

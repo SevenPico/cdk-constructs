@@ -40,32 +40,34 @@ Configure the construct with an ACM certificate ARN (must be in us-east-1), cust
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| `context` | SevenPico context for naming and tagging | `Context` | -- | yes |
-| `acmCertificateArn` | ACM certificate ARN (must be in us-east-1) | `string` | -- | yes |
+| `context` | SevenPico context for naming and tagging | `Context` | — | ✓ |
+| `acmCertificateArn` | ACM certificate ARN (must be in us-east-1) | `string` | — | ✓ |
 | `additionalAliases` | Additional CloudFront aliases (CNAMEs) | `string[]` | `[]` | |
 | `defaultRootObject` | Default root object | `string` | `'index.html'` | |
 | `customErrorResponses` | Custom error responses | `CustomErrorResponse[]` | 404 -> index.html | |
 | `wafEnabled` | Enable WAF on CloudFront | `boolean` | `false` | |
 | `cloudfrontAccessLoggingEnabled` | Enable CloudFront access logging | `boolean` | `false` | |
-| `cloudfrontAccessLogBucketId` | S3 bucket ID to receive CloudFront access logs | `string` | -- | |
-| `cloudfrontAccessLogPrefix` | CloudFront access log prefix | `string` | -- | |
+| `cloudfrontAccessLogBucketId` | S3 bucket ID to receive CloudFront access logs | `string` | — | |
+| `cloudfrontAccessLogPrefix` | CloudFront access log prefix | `string` | — | |
 | `s3AccessLoggingEnabled` | Enable S3 origin access logging | `boolean` | `true` | |
-| `s3AccessLogBucketId` | S3 bucket for S3 access logs | `string` | -- | |
-| `s3AccessLogPrefix` | S3 access log prefix | `string` | -- | |
-| `corsAllowedOrigins` | CORS allowed origins | `string[]` | -- | |
+| `s3AccessLogBucketId` | S3 bucket for S3 access logs | `string` | — | |
+| `s3AccessLogPrefix` | S3 access log prefix | `string` | — | |
+| `corsAllowedOrigins` | CORS allowed origins | `string[]` | — | |
 | `deploymentPrincipalArns` | IAM ARNs allowed to deploy | `string[]` | `[]` | |
-| `parentZoneId` | Route53 hosted zone ID | `string` | -- | |
-| `parentZoneName` | Route53 hosted zone name | `string` | -- | |
+| `parentZoneId` | Route53 hosted zone ID | `string` | — | |
+| `parentZoneName` | Route53 hosted zone name | `string` | — | |
 | `dnsAliasEnabled` | Create Route53 DNS alias | `boolean` | `false` | |
 | `tlsProtocolVersion` | TLS protocol version | `string` | `'TLSv1.2_2021'` | |
-| `geoRestriction` | Geo restriction configuration | `GeoRestriction` | -- | |
-| `functionAssociations` | CloudFront function associations | `FunctionAssociation[]` | -- | |
+| `geoRestriction` | Geo restriction configuration | `GeoRestriction` | — | |
+| `functionAssociations` | CloudFront function associations | `FunctionAssociation[]` | — | |
 
 ## Outputs
 
@@ -101,4 +103,4 @@ See the [examples](./examples) directory for complete usage examples.
 
 ## License
 
-Apache 2.0 -- see [LICENSE](../../LICENSE).
+Apache 2.0 — see [LICENSE](../../LICENSE).

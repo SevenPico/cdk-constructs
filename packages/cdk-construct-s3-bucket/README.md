@@ -34,7 +34,11 @@ Pass the `context` prop to get deterministic bucket naming (e.g., `7p-prod-asset
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [S3-Managed Encrypted](./examples/s3-managed-encrypted)
+- [KMS Encrypted](./examples/kms-encrypted)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 
@@ -55,6 +59,7 @@ See the [examples](./examples) directory for complete usage examples.
 | `corsRules` | CORS rules | `S3CorsRule[]` | `[]` | |
 | `objectOwnership` | Object ownership | `string` | `BucketOwnerEnforced` | |
 | `transferAccelerationEnabled` | Enable transfer acceleration | `boolean` | `false` | |
+| `mfaDeleteEnabled` | Enable MFA delete (requires versioning) | `boolean` | `false` | |
 | `replicationRules` | Cross-region replication rules | `S3ReplicationRule[]` | — | |
 | `replicationRoleArn` | IAM role ARN for replication | `string` | — | |
 | `loggingBucketName` | Logging target bucket name | `string` | — | |

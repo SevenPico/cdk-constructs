@@ -1,6 +1,5 @@
-import { RemovalPolicy } from 'aws-cdk-lib';
-import { aws_kms as kms, aws_iam as iam } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { RemovalPolicy, aws_kms as kms, aws_iam as iam } from 'aws-cdk-lib';
 import { KmsKeyProps } from './kms-key';
 
 export const kmsKeyProps = (ctx: Context, props: KmsKeyProps): kms.KeyProps => ({

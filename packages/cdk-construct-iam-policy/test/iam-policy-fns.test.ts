@@ -1,5 +1,5 @@
-import { aws_iam as iam } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_iam as iam } from 'aws-cdk-lib';
 import { buildPolicyStatement, buildPolicyDocument, mergeStatements, managedPolicyProps } from '../src/iam-policy-fns';
 import { IamPolicyProps } from '../src/iam-policy-types';
 

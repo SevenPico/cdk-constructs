@@ -105,18 +105,17 @@ export class HttpApiGateway extends Construct {
         stage: stage.ref,
       });
 
-      // Route53 alias records
+      // Route53 alias records — use L1 CfnRecordSet to avoid zone name lookup
       (props.route53ZoneIds ?? []).forEach((zoneId, i) => {
-        const zone = route53.HostedZone.fromHostedZoneId(this, `Zone${i}`, zoneId);
-        new route53.ARecord(this, `DnsAlias${i}`, {
-          zone,
-          recordName: props.dnsName,
-          target: route53.RecordTarget.fromAlias({
-            bind: () => ({
-              dnsName: this.customDomain!.attrRegionalDomainName,
-              hostedZoneId: this.customDomain!.attrRegionalHostedZoneId,
-            }),
-          }),
+        new route53.CfnRecordSet(this, `DnsAlias${i}`, {
+          hostedZoneId: zoneId,
+          name: `${props.dnsName}.`,
+          type: 'A',
+          aliasTarget: {
+            dnsName: this.customDomain!.attrRegionalDomainName,
+            hostedZoneId: this.customDomain!.attrRegionalHostedZoneId,
+            evaluateTargetHealth: false,
+          },
         });
       });
     }

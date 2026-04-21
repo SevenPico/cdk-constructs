@@ -1,6 +1,5 @@
-import { RemovalPolicy } from 'aws-cdk-lib';
-import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { RemovalPolicy, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import { DynamodbProps } from './dynamodb-types';
 
 export const mapAttrType = (t: string): dynamodb.AttributeType => {
@@ -58,7 +57,10 @@ export const tableProps = (ctx: Context, props: DynamodbProps): dynamodb.TablePr
     : (props.enableEncryption !== false
       ? dynamodb.TableEncryption.AWS_MANAGED
       : dynamodb.TableEncryption.DEFAULT),
-  pointInTimeRecovery: props.enablePointInTimeRecovery ?? true,
+  pointInTimeRecoverySpecification: {
+    pointInTimeRecoveryEnabled: props.enablePointInTimeRecovery ?? true,
+    recoveryPeriodInDays: props.pointInTimeRecoveryPeriodInDays,
+  },
   stream: props.enableStreams
     ? mapStreamViewType(props.streamViewType)
     : undefined,

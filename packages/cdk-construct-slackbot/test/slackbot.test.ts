@@ -1,7 +1,7 @@
 import * as path from 'path';
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { Slackbot } from '../src/slackbot';
 import { SlackbotProps } from '../src/slackbot-types';
 

@@ -32,6 +32,14 @@ Configure the construct with `S3LogStorageProps` to customize encryption, lifecy
 - **AWS::S3::BucketPolicy** - Enforces SSL-only requests (deny on `aws:SecureTransport: false`).
 - **AWS::SQS::Queue** - (Optional) Receives S3 event notifications for new object creation.
 
+## Usage
+
+See the [examples](./examples) directory for complete usage examples.
+
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |

@@ -220,6 +220,120 @@ describe('Example: comprehensive', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Example scenario: role-source-policy-documents
+// ---------------------------------------------------------------------------
+
+describe('Example: role-source-policy-documents', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new LambdaFunction(stack, 'Fn', {
+      context: CONTEXT,
+      s3Bucket: 'my-bucket',
+      s3Key: 'code.zip',
+      roleSourcePolicyDocuments: [
+        JSON.stringify({
+          Statement: [{ Effect: 'Allow', Action: 's3:GetObject', Resource: '*' }],
+        }),
+        // policy doc with no Statement — exercises the `?? []` fallback
+        JSON.stringify({ Version: '2012-10-17' }),
+      ],
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('creates IAM policy from source policy documents', () => {
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({ Action: 's3:GetObject', Effect: 'Allow' }),
+        ]),
+      }),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: branch edge cases
+// ---------------------------------------------------------------------------
+
+describe('Example: branch edge cases', () => {
+  test('reservedConcurrentExecutions -1 results in no reservation', () => {
+    const stack = makeStack();
+    new LambdaFunction(stack, 'Fn', {
+      context: CONTEXT,
+      s3Bucket: 'my-bucket',
+      s3Key: 'code.zip',
+      reservedConcurrentExecutions: -1,
+    });
+    const template = Template.fromStack(stack);
+    const resources = template.toJSON().Resources;
+    const fn = Object.values(resources).find((r: any) => r.Type === 'AWS::Lambda::Function') as any;
+    expect(fn.Properties.ReservedConcurrentExecutions).toBeUndefined();
+  });
+
+  test('cloudwatchLogsKmsKeyArn encrypts the log group', () => {
+    const stack = makeStack();
+    new LambdaFunction(stack, 'Fn', {
+      context: CONTEXT,
+      s3Bucket: 'my-bucket',
+      s3Key: 'code.zip',
+      cloudwatchLogsKmsKeyArn: 'arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::Logs::LogGroup', {
+      KmsKeyId: Match.anyValue(),
+    });
+  });
+
+  test('layers are attached to the function', () => {
+    const stack = makeStack();
+    new LambdaFunction(stack, 'Fn', {
+      context: CONTEXT,
+      s3Bucket: 'my-bucket',
+      s3Key: 'code.zip',
+      layers: ['arn:aws:lambda:us-east-1:123456789012:layer:my-layer:1'],
+    });
+    const template = Template.fromStack(stack);
+    const resources = template.toJSON().Resources;
+    const fn = Object.values(resources).find((r: any) => r.Type === 'AWS::Lambda::Function') as any;
+    expect(fn.Properties.Layers).toBeDefined();
+    expect(fn.Properties.Layers.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: efs-filesystem
+// ---------------------------------------------------------------------------
+
+describe('Example: efs-filesystem', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new LambdaFunction(stack, 'Fn', {
+      context: CONTEXT,
+      s3Bucket: 'my-bucket',
+      s3Key: 'code.zip',
+      fileSystemConfig: {
+        arn: 'arn:aws:elasticfilesystem:us-east-1:123456789012:access-point/fsap-abcdef123456',
+        localMountPath: '/mnt/data',
+      },
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('lambda function has EFS file system config via escape hatch', () => {
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      FileSystemConfigs: Match.arrayWith([
+        Match.objectLike({ LocalMountPath: '/mnt/data' }),
+      ]),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Example scenario: disabled
 // ---------------------------------------------------------------------------
 

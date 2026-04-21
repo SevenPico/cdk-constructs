@@ -1,7 +1,6 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
-import { aws_kms as kms } from 'aws-cdk-lib';
 import { Context, contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { Tags, aws_kms as kms } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { kmsKeyProps, kmsAliasName } from './kms-key-fns';
 
 export interface KmsKeyProps {

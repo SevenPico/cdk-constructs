@@ -7,8 +7,6 @@ import {
   aws_iam as iam,
   aws_logs as logs,
   aws_kms as kms,
-  aws_ec2 as ec2,
-  aws_efs as efs,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import {
@@ -94,27 +92,6 @@ export class LambdaFunction extends Construct {
       executionRole = this.role;
     }
 
-    // VPC config
-    let securityGroups: ec2.ISecurityGroup[] | undefined;
-    if (props.vpcConfig) {
-      securityGroups = props.vpcConfig.securityGroupIds.map((sgId, i) =>
-        ec2.SecurityGroup.fromSecurityGroupId(this, `Sg${i}`, sgId),
-      );
-    }
-
-    // EFS access point
-    let filesystem: lambda.FileSystem | undefined;
-    if (props.fileSystemConfig) {
-      const ap = efs.AccessPoint.fromAccessPointAttributes(this, 'EfsAp', {
-        accessPointArn: props.fileSystemConfig.arn,
-        fileSystem: efs.FileSystem.fromFileSystemAttributes(this, 'Efs', {
-          fileSystemId: 'placeholder',
-          securityGroup: securityGroups?.[0]!,
-        }),
-      });
-      filesystem = lambda.FileSystem.fromEfsAccessPoint(ap, props.fileSystemConfig.localMountPath);
-    }
-
     // Resolve code
     const code = resolveCode(this, props);
 
@@ -144,7 +121,6 @@ export class LambdaFunction extends Construct {
       ),
       tracing: lambdaTracingConfig(props.tracingMode),
       logGroup: this.logGroup,
-      filesystem,
       currentVersionOptions: props.publish ? {} : undefined,
     });
 
@@ -153,13 +129,19 @@ export class LambdaFunction extends Construct {
       this.fn.currentVersion;
     }
 
-    // Apply VPC config via CfnFunction escape hatch
+    // Apply VPC config and EFS via CfnFunction escape hatch to avoid L2 VPC lookup requirements
+    const cfnFn = this.fn.node.defaultChild as lambda.CfnFunction;
     if (props.vpcConfig) {
-      const cfnFn = this.fn.node.defaultChild as lambda.CfnFunction;
       cfnFn.vpcConfig = {
         securityGroupIds: props.vpcConfig.securityGroupIds,
         subnetIds: props.vpcConfig.subnetIds,
       };
+    }
+    if (props.fileSystemConfig) {
+      cfnFn.fileSystemConfigs = [{
+        arn: props.fileSystemConfig.arn,
+        localMountPath: props.fileSystemConfig.localMountPath,
+      }];
     }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));

@@ -85,6 +85,11 @@ describe('dlqProps', () => {
     expect(props.retentionPeriod).toEqual(Duration.seconds(1209600));
   });
 
+  test('uses custom retention period', () => {
+    const props = dlqProps(ctx, { context: ctx, sqsDlqMessageRetentionSeconds: 3600 });
+    expect(props.retentionPeriod).toEqual(Duration.seconds(3600));
+  });
+
   test('uses KMS encryption when key provided', () => {
     const props = dlqProps(ctx, { context: ctx, sqsQueueKmsMasterKeyId: 'arn:aws:kms:us-east-1:123:key/test' });
     expect(props.encryption).toBe(sqs.QueueEncryption.KMS);

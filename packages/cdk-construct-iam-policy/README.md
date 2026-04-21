@@ -33,7 +33,9 @@ Pass the `context` prop to get deterministic policy naming (e.g., `7p-prod-s3-re
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 

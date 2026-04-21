@@ -1,8 +1,8 @@
+import path from 'path';
+import { makeContext, Context } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext, Context } from '@sevenpico/cdk-context';
 import { loadFeature, defineFeature } from 'jest-cucumber';
-import path from 'path';
 import { KmsKey } from '../src/kms-key';
 
 const feature = loadFeature(path.join(__dirname, 'kms-key.feature'));
@@ -137,11 +137,6 @@ defineFeature(feature, test => {
 
 // Additional CDK template assertions for overrideable props
 describe('KmsKey CloudFormation assertions for overrideable props', () => {
-  const makeStack = (): Stack => {
-    const app = new App();
-    return new Stack(app, 'TestStack');
-  };
-
   test('enableKeyRotation: false produces EnableKeyRotation: false in CFN', () => {
     const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'norotate' });
     const stack = makeStack();

@@ -1,5 +1,5 @@
-import { Construct } from 'constructs';
 import { makeContext, Context, ContextProps } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import { BridgeConfig } from './bridge-types';
 
 const CONTEXT_KEY = 'sevenpico';
@@ -10,7 +10,7 @@ export const readBridgeConfig = (scope: Construct): BridgeConfig => {
   if (!config || typeof config !== 'object') {
     throw new Error(
       `SevenPico CDK Bridge: context key '${CONTEXT_KEY}' not found or invalid. ` +
-      `Run the bridge setup script to load the environment config into ~/.cdk.json.`,
+      'Run the bridge setup script to load the environment config into ~/.cdk.json.',
     );
   }
   return config as BridgeConfig;

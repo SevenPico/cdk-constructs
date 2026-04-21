@@ -1,6 +1,6 @@
 import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
-import { Template } from 'aws-cdk-lib/assertions';
+import { Template, Match } from 'aws-cdk-lib/assertions';
 import { HttpApiGateway } from '../src/http-api-gateway';
 
 describe('HttpApiGateway construct', () => {
@@ -273,6 +273,23 @@ describe('HttpApiGateway construct', () => {
     });
   });
 
+  test('creates Route53 alias records when route53ZoneIds provided', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new HttpApiGateway(stack, 'SUT', {
+      context,
+      dnsName: 'api.example.com',
+      acmCertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/abc-123',
+      route53ZoneIds: ['Z1234567890ABC'],
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::Route53::RecordSet', {
+      Name: 'api.example.com.',
+      Type: 'A',
+      HostedZoneId: 'Z1234567890ABC',
+    });
+  });
+
   test('auto deploy enabled', () => {
     const app = new App();
     const stack = new Stack(app, 'Test');
@@ -283,6 +300,34 @@ describe('HttpApiGateway construct', () => {
     const template = Template.fromStack(stack);
     template.hasResourceProperties('AWS::ApiGatewayV2::Stage', {
       AutoDeploy: true,
+    });
+  });
+
+  test('execute-api endpoint enabled when disableExecuteApiEndpoint is false', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new HttpApiGateway(stack, 'SUT', {
+      context,
+      disableExecuteApiEndpoint: false,
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::ApiGatewayV2::Api', {
+      DisableExecuteApiEndpoint: false,
+    });
+  });
+
+  test('custom access log format applied to stage', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    new HttpApiGateway(stack, 'SUT', {
+      context,
+      accessLogFormat: '$context.requestId $context.status',
+    });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::ApiGatewayV2::Stage', {
+      AccessLogSettings: Match.objectLike({
+        Format: '$context.requestId $context.status',
+      }),
     });
   });
 });

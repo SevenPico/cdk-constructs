@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { StepFunctions } from '../src/step-functions';
 
 function makeStack(): Stack {
@@ -63,7 +63,7 @@ describe('Example: comprehensive', () => {
             Type: 'Task',
             Resource: 'arn:aws:states:::lambda:invoke',
             Parameters: {
-              FunctionName: 'arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor',
+              'FunctionName': 'arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor',
               'Payload.$': '$',
             },
             Next: 'Success',

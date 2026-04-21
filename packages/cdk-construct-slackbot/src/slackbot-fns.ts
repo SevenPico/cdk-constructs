@@ -1,5 +1,5 @@
-import { aws_iam as iam } from 'aws-cdk-lib';
 import { Context, contextId, extendContext } from '@sevenpico/cdk-context';
+import { aws_iam as iam } from 'aws-cdk-lib';
 import { SlackbotProps } from './slackbot-types';
 
 export const topicContext = (ctx: Context): Context =>

@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   Duration,
@@ -9,8 +9,7 @@ import {
   aws_iam as iam,
   aws_logs as logs,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { SlackbotProps } from './slackbot-types';
+import { Construct } from 'constructs';
 import {
   topicName,
   lambdaFunctionName,
@@ -19,6 +18,7 @@ import {
   lambdaEnvironment,
   secretsManagerPolicyStatements,
 } from './slackbot-fns';
+import { SlackbotProps } from './slackbot-types';
 
 export class Slackbot extends Construct {
   public readonly snsTopic?: sns.Topic;

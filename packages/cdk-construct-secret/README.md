@@ -35,31 +35,21 @@ How the deployed resources work:
 
 ## Usage
 
-```typescript
-import { Secret } from '@sevenpico/cdk-construct-secret';
-import { makeContext } from '@sevenpico/cdk-context';
+See the [examples](./examples) directory for complete usage examples.
 
-const context = makeContext({ namespace: '7p', stage: 'prod', name: 'db-password' });
-
-new Secret(this, 'DbSecret', {
-  context,
-  description: 'Database password for production',
-  secretReadPrincipals: [
-    { type: 'AWS', identifiers: ['arn:aws:iam::123456789012:role/app-role'] },
-  ],
-  createSns: true,
-});
-```
+- [Minimal](./examples/minimal)
+- [With SNS](./examples/with-sns)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| `context` | SevenPico context for naming and tagging | `Context` | -- | yes |
-| `secretString` | Initial secret value | `string` | -- | |
-| `description` | Secret description | `string` | -- | |
+| `context` | SevenPico context for naming and tagging | `Context` | — | ✓ |
+| `secretString` | Initial secret value | `string` | — | |
+| `description` | Secret description | `string` | — | |
 | `createKmsKey` | Create a dedicated KMS key | `boolean` | `true` | |
-| `kmsKeyArn` | Existing KMS key ARN (when createKmsKey=false) | `string` | -- | |
+| `kmsKeyArn` | Existing KMS key ARN (when createKmsKey=false) | `string` | — | |
 | `kmsKeyDeletionWindowInDays` | KMS key deletion window in days | `number` | `30` | |
 | `kmsKeyEnableKeyRotation` | Enable KMS key rotation | `boolean` | `true` | |
 | `kmsKeyMultiRegion` | Use multi-region KMS key | `boolean` | `false` | |
@@ -76,7 +66,7 @@ new Secret(this, 'DbSecret', {
 
 | Name | Description | Type |
 |------|-------------|------|
-| `secret` | The Secrets Manager secret | `sm.Secret \| undefined` |
+| `smSecret` | The Secrets Manager secret | `sm.Secret \| undefined` |
 | `kmsKey` | The dedicated KMS key | `kms.Key \| undefined` |
 | `kmsAlias` | The KMS key alias | `kms.Alias \| undefined` |
 | `snsTopic` | The SNS notification topic | `sns.Topic \| undefined` |
@@ -112,4 +102,4 @@ new Secret(this, 'DbSecret', {
 
 ## License
 
-Apache 2.0 -- see [LICENSE](../../LICENSE).
+Apache 2.0 — see [LICENSE](../../LICENSE).

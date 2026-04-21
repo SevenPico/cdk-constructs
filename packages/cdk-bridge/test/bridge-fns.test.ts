@@ -1,5 +1,5 @@
-import { App } from 'aws-cdk-lib';
 import { contextId, extendContext, isEnabled } from '@sevenpico/cdk-context';
+import { App } from 'aws-cdk-lib';
 import { bridgeContext, bridgeString } from '../src/bridge-fns';
 
 function appWithContext(ctx: Record<string, unknown>): App {

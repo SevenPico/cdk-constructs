@@ -36,7 +36,9 @@ Pass the `context` prop to get deterministic role naming (e.g., `7p-prod-lambda`
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 

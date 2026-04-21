@@ -45,7 +45,9 @@ Configure the construct by defining integration targets, route mappings, and opt
 
 See the [examples](./examples) directory for complete usage examples.
 
-- [Complete Example](./examples/complete)
+- [Minimal](./examples/minimal)
+- [Comprehensive](./examples/comprehensive)
+- [Disabled](./examples/disabled)
 
 ## Inputs
 
@@ -80,7 +82,7 @@ See the [examples](./examples) directory for complete usage examples.
 ## Special Considerations
 
 - **VPC Links** are created using L1 `CfnVpcLink` with subnet IDs and security group IDs passed directly. No VPC lookup is required.
-- **Route53 alias records** use `HostedZone.fromHostedZoneId` which does not resolve the zone name. The A-record will use the `dnsName` prop as the record name.
+- **Route53 alias records** are created as L1 `CfnRecordSet` resources pointing directly to the custom domain's regional endpoint, avoiding zone-name resolution requirements of the L2 `ARecord` construct.
 - **Authorizers** (JWT, Lambda) are defined in the props interface for Terraform parity but integration with routes requires additional wiring in the construct consumer.
 - **CORS methods** are passed as string values (e.g., `'GET'`, `'POST'`) directly to the CloudFormation `CorsConfiguration` property.
 

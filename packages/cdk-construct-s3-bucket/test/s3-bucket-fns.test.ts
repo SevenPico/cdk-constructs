@@ -233,6 +233,21 @@ describe('s3BucketProps', () => {
     expect(props.lifecycleRules![0].id).toBe('rule1');
   });
 
+  test('allows disabling individual public access block settings', () => {
+    const props = s3BucketProps(ctx, {
+      context: ctx,
+      blockPublicAcls: false,
+      blockPublicPolicy: false,
+      ignorePublicAcls: false,
+      restrictPublicBuckets: false,
+    });
+    const block = props.blockPublicAccess as any;
+    expect(block.blockPublicAcls).toBe(false);
+    expect(block.blockPublicPolicy).toBe(false);
+    expect(block.ignorePublicAcls).toBe(false);
+    expect(block.restrictPublicBuckets).toBe(false);
+  });
+
   test('maps cors rules', () => {
     const props = s3BucketProps(ctx, { context: ctx, corsRules: [{ allowedMethods: ['GET'], allowedOrigins: ['*'] }] });
     expect(props.cors).toHaveLength(1);
