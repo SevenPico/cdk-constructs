@@ -1,8 +1,8 @@
+import path from 'path';
+import { makeContext, Context } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext, Context } from '@sevenpico/cdk-context';
 import { loadFeature, defineFeature } from 'jest-cucumber';
-import path from 'path';
 import { S3Bucket } from '../src/s3-bucket';
 import { S3BucketProps } from '../src/s3-bucket-types';
 

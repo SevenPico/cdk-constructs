@@ -1,5 +1,5 @@
-import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { topicName, dlqContext, snsTopicProps, dlqProps } from '../src/sns-fns';
 
 describe('topicName', () => {

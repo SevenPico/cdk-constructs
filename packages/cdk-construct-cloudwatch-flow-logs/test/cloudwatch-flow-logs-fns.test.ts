@@ -1,4 +1,5 @@
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_ec2 as ec2, RemovalPolicy } from 'aws-cdk-lib';
 import {
   logGroupName,
   flowLogRoleName,
@@ -6,7 +7,6 @@ import {
   logGroupProps,
   mapTrafficType,
 } from '../src/cloudwatch-flow-logs-fns';
-import { aws_ec2 as ec2, RemovalPolicy } from 'aws-cdk-lib';
 
 describe('CloudwatchFlowLogs pure functions', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'network' });

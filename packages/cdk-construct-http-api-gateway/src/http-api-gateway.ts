@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   RemovalPolicy,
   Tags,
@@ -7,9 +7,9 @@ import {
   aws_logs as logs,
   aws_route53 as route53,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { HttpApiGatewayProps } from './http-api-gateway-types';
+import { Construct } from 'constructs';
 import { corsConfigProperty, defaultAccessLogFormat } from './http-api-gateway-fns';
+import { HttpApiGatewayProps } from './http-api-gateway-types';
 
 export class HttpApiGateway extends Construct {
   public readonly api?: apigwv2.CfnApi;

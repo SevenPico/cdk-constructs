@@ -1,6 +1,6 @@
-import { Construct } from 'constructs';
 import { Context, contextId } from '@sevenpico/cdk-context';
 import { aws_lambda as lambda, aws_logs as logs, aws_s3 as s3, aws_ecr as ecr } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { LambdaFunctionProps } from './lambda-function-types';
 
 export const functionName = (ctx: Context, props: LambdaFunctionProps): string =>

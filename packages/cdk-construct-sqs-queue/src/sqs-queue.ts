@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, aws_sqs as sqs, aws_kms as kms } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { SqsQueueProps } from './sqs-queue-types';
+import { Tags, aws_sqs as sqs, aws_kms as kms } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { sqsQueueProps, sqsDlqProps, buildPolicyStatement } from './sqs-queue-fns';
+import { SqsQueueProps } from './sqs-queue-types';
 
 export class SqsQueue extends Construct {
   public readonly queue?: sqs.Queue;

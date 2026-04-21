@@ -1,5 +1,5 @@
-import { aws_cloudwatch as cloudwatch } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_cloudwatch as cloudwatch } from 'aws-cdk-lib';
 import { alarmDefinitions, alarmProps } from '../src/cloudtrail-cloudwatch-alarms-fns';
 
 describe('CloudtrailCloudwatchAlarms pure functions', () => {

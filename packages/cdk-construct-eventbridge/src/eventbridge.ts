@@ -1,11 +1,11 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   aws_events as events,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { EventbridgeProps } from './eventbridge-types';
+import { Construct } from 'constructs';
 import { eventBusProps } from './eventbridge-fns';
+import { EventbridgeProps } from './eventbridge-types';
 
 export class Eventbridge extends Construct {
   public readonly eventBus?: events.EventBus;

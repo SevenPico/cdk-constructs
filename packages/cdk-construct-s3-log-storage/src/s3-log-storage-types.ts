@@ -1,5 +1,5 @@
-import { Context } from '@sevenpico/cdk-context';
 import { S3LifecycleRule } from '@sevenpico/cdk-construct-s3-bucket';
+import { Context } from '@sevenpico/cdk-context';
 
 export interface S3LogStorageProps {
   readonly context: Context;

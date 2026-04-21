@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   RemovalPolicy,
@@ -11,14 +11,14 @@ import {
   aws_pipes as pipes,
   aws_sns as sns,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { LambdaErrorNotificationProps } from './lambda-error-notification-types';
+import { Construct } from 'constructs';
 import {
   dlqProps,
   rateAlarmProps,
   volumeAlarmProps,
   pipeName,
 } from './lambda-error-notification-fns';
+import { LambdaErrorNotificationProps } from './lambda-error-notification-types';
 
 export class LambdaErrorNotification extends Construct {
   public readonly deadLetterQueue?: sqs.Queue;

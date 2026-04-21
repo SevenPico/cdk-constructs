@@ -1,3 +1,4 @@
+import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   aws_ec2 as ec2,
   aws_logs as logs,
@@ -5,7 +6,6 @@ import {
   RemovalPolicy,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Context, contextId } from '@sevenpico/cdk-context';
 import { CloudwatchFlowLogsProps } from './cloudwatch-flow-logs-types';
 
 export const logGroupName = (ctx: Context): string =>

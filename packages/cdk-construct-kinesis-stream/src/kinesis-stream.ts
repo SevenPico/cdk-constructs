@@ -1,18 +1,18 @@
-import { Construct } from 'constructs';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   RemovalPolicy,
   aws_kinesis as kinesis,
   aws_kms as kms,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { KinesisStreamProps } from './kinesis-stream-types';
+import { Construct } from 'constructs';
 import {
   kinesisStreamProps,
   consumerName,
   mapShardLevelMetrics,
   enforceConsumerDeletion,
 } from './kinesis-stream-fns';
+import { KinesisStreamProps } from './kinesis-stream-types';
 
 export class KinesisStream extends Construct {
   public readonly stream?: kinesis.Stream;

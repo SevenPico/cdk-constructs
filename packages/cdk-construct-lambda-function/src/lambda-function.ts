@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   Duration,
@@ -10,7 +10,7 @@ import {
   aws_ec2 as ec2,
   aws_efs as efs,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import {
   functionName,
   logGroupName,

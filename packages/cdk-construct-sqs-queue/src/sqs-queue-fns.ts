@@ -1,5 +1,5 @@
-import { aws_sqs as sqs, aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { Context, contextId, extendContext } from '@sevenpico/cdk-context';
+import { aws_sqs as sqs, aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { SqsQueueProps, SqsIamPolicyStatement } from './sqs-queue-types';
 
 export const queueName = (ctx: Context, props: SqsQueueProps): string =>

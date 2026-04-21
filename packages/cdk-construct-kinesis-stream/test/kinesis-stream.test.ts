@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { KinesisStream } from '../src/kinesis-stream';
 import { KinesisStreamProps } from '../src/kinesis-stream-types';
 
@@ -139,7 +139,9 @@ describe('KinesisStream construct', () => {
   describe('Tags', () => {
     test('context tags are applied', () => {
       const taggedCtx = makeContext({
-        namespace: '7p', stage: 'prod', name: 'events',
+        namespace: '7p',
+        stage: 'prod',
+        name: 'events',
         tags: { Team: 'platform' },
       });
       const template = synthTemplate({ context: taggedCtx });

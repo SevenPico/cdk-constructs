@@ -1,19 +1,19 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
+  Tags,
   aws_ec2 as ec2,
   aws_logs as logs,
   aws_iam as iam,
   aws_kms as kms,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { CloudwatchFlowLogsProps } from './cloudwatch-flow-logs-types';
+import { Construct } from 'constructs';
 import {
   logGroupProps,
   flowLogRoleName,
   flowLogsPolicyStatement,
   flowLogProps,
 } from './cloudwatch-flow-logs-fns';
+import { CloudwatchFlowLogsProps } from './cloudwatch-flow-logs-types';
 
 export class CloudwatchFlowLogs extends Construct {
   public readonly logGroup?: logs.LogGroup;

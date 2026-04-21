@@ -1,5 +1,5 @@
-import { aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { IamRoleProps } from './iam-role-types';
 
 export const roleName = (ctx: Context, props: IamRoleProps): string =>
@@ -7,10 +7,10 @@ export const roleName = (ctx: Context, props: IamRoleProps): string =>
 
 export const buildIamPrincipal = (type: string, identifier: string): iam.IPrincipal => {
   switch (type) {
-    case 'Service':   return new iam.ServicePrincipal(identifier);
-    case 'AWS':       return new iam.ArnPrincipal(identifier);
+    case 'Service': return new iam.ServicePrincipal(identifier);
+    case 'AWS': return new iam.ArnPrincipal(identifier);
     case 'Federated': return new iam.FederatedPrincipal(identifier, {});
-    default:          return new iam.ArnPrincipal(identifier);
+    default: return new iam.ArnPrincipal(identifier);
   }
 };
 

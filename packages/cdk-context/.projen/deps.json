@@ -37,6 +37,10 @@
       "type": "build"
     },
     {
+      "name": "jest-cucumber",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^15",
       "type": "build"

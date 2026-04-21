@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, Duration, aws_iam as iam } from 'aws-cdk-lib';
 import { contextTags, contextId, isEnabled } from '@sevenpico/cdk-context';
-import { IamRoleProps } from './iam-role-types';
+import { Tags, Duration, aws_iam as iam } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { roleName, buildTrustPolicy, mergePolicyDocuments } from './iam-role-fns';
+import { IamRoleProps } from './iam-role-types';
 
 export class IamRole extends Construct {
   public readonly role?: iam.Role;

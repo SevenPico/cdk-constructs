@@ -1,9 +1,9 @@
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_s3 as s3, RemovalPolicy, Duration } from 'aws-cdk-lib';
 import {
   s3BucketProps, s3BucketName, s3EncryptionConfig, mapObjectOwnership,
   mapLifecycleRule, mapCorsRule, mapObjectLock, mapStorageClass,
 } from '../src/s3-bucket-fns';
-import { aws_s3 as s3, RemovalPolicy, Duration } from 'aws-cdk-lib';
 
 describe('s3BucketName', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'assets' });

@@ -67,6 +67,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
         types: ['jest', 'node'],
       },
     },
+    devDeps: ['jest-cucumber'],
     ...jsiiTargets(name),
     ...opts,
   });

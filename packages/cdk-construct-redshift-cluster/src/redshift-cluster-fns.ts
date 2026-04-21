@@ -1,5 +1,5 @@
-import { aws_redshift as redshift } from 'aws-cdk-lib';
 import { Context, contextId, contextTags } from '@sevenpico/cdk-context';
+import { aws_redshift as redshift } from 'aws-cdk-lib';
 import { RedshiftClusterProps } from './redshift-cluster-types';
 
 export const clusterIdentifier = (ctx: Context, props: RedshiftClusterProps): string =>

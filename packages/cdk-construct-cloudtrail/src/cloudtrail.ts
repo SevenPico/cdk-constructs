@@ -1,12 +1,12 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
+  Tags,
   aws_cloudtrail as cloudtrail,
   aws_logs as logs,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { CloudtrailProps } from './cloudtrail-types';
+import { Construct } from 'constructs';
 import { cloudTrailProps, logGroupProps } from './cloudtrail-fns';
+import { CloudtrailProps } from './cloudtrail-types';
 
 export class CloudTrail extends Construct {
   public readonly trail?: cloudtrail.Trail;

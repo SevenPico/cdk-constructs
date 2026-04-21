@@ -1,9 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
-import { aws_redshift as redshift } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { RedshiftClusterProps } from './redshift-cluster-types';
+import { Tags, aws_redshift as redshift } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { cfnClusterProps, subnetGroupName, parameterGroupName } from './redshift-cluster-fns';
+import { RedshiftClusterProps } from './redshift-cluster-types';
 
 export class RedshiftCluster extends Construct {
   public readonly cluster?: redshift.CfnCluster;

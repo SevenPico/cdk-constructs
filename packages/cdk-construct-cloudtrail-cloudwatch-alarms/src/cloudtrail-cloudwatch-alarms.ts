@@ -1,18 +1,18 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
+  Tags,
   aws_cloudwatch as cloudwatch,
   aws_cloudwatch_actions as cw_actions,
   aws_logs as logs,
   aws_sns as sns,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { CloudtrailCloudwatchAlarmsProps } from './cloudtrail-cloudwatch-alarms-types';
+import { Construct } from 'constructs';
 import {
   alarmDefinitions,
   alarmProps,
   AlarmDefinition,
 } from './cloudtrail-cloudwatch-alarms-fns';
+import { CloudtrailCloudwatchAlarmsProps } from './cloudtrail-cloudwatch-alarms-types';
 
 export class CloudtrailCloudwatchAlarms extends Construct {
   public readonly alarms?: cloudwatch.Alarm[];

@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { LambdaErrorNotification } from '../src/lambda-error-notification';
 
 // Fixture values matching examples/*/cdk.json
@@ -89,7 +89,9 @@ describe('Example: minimal', () => {
 
   test('context Owner tag applied to DLQ', () => {
     const ctx = makeContext({
-      namespace: 'acme', environment: 'dev', stage: 'app',
+      namespace: 'acme',
+      environment: 'dev',
+      stage: 'app',
       tags: { Owner: 'platform-team' },
     });
     const stack = makeStack();

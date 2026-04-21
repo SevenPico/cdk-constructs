@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { IamRole } from '../src/iam-role';
 
 const makeStack = (): Stack => {

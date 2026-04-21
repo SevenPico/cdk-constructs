@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { ExpressSfnErrorNotification } from '../src/express-sfn-error-notification';
 import { ExpressSfnErrorNotificationProps } from '../src/express-sfn-error-notification-types';
 

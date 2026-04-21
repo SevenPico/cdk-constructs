@@ -1,3 +1,4 @@
+import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   aws_cloudtrail as cloudtrail,
   aws_s3 as s3,
@@ -7,7 +8,6 @@ import {
   RemovalPolicy,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Context, contextId } from '@sevenpico/cdk-context';
 import { CloudtrailProps } from './cloudtrail-types';
 
 export const trailName = (ctx: Context): string => contextId(ctx);

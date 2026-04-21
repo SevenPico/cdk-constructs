@@ -1,8 +1,8 @@
+import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   aws_cloudwatch as cloudwatch,
   Duration,
 } from 'aws-cdk-lib';
-import { Context, contextId } from '@sevenpico/cdk-context';
 
 export interface AlarmDefinition {
   readonly id: string;

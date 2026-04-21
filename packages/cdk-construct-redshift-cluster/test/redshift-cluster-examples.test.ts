@@ -1,6 +1,6 @@
-import { App, Stack } from 'aws-cdk-lib';
-import { Template } from 'aws-cdk-lib/assertions';
 import { makeContext } from '@sevenpico/cdk-context';
+import { App, Stack } from 'aws-cdk-lib';
+import { Template, Match } from 'aws-cdk-lib/assertions';
 import { RedshiftCluster } from '../src';
 
 describe('redshift-cluster examples', () => {
@@ -15,10 +15,10 @@ describe('redshift-cluster examples', () => {
     });
     const template = Template.fromStack(stack);
     template.hasResourceProperties('AWS::Redshift::Cluster', {
-      Tags: expect.arrayContaining([
-        { Key: 'namespace', Value: 'acme' },
-        { Key: 'environment', Value: 'dev' },
-        { Key: 'stage', Value: 'app' },
+      Tags: Match.arrayWith([
+        { Key: 'Environment', Value: 'dev' },
+        { Key: 'Namespace', Value: 'acme' },
+        { Key: 'Stage', Value: 'app' },
       ]),
     });
   });

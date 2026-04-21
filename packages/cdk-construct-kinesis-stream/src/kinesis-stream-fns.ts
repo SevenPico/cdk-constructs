@@ -1,5 +1,5 @@
-import { aws_kinesis as kinesis, Duration } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_kinesis as kinesis, Duration } from 'aws-cdk-lib';
 import { KinesisStreamProps } from './kinesis-stream-types';
 
 export const streamMode = (props: KinesisStreamProps): kinesis.StreamMode =>

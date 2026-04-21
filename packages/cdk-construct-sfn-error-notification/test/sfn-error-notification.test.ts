@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { SfnErrorNotification } from '../src/sfn-error-notification';
 import { SfnErrorNotificationProps } from '../src/sfn-error-notification-types';
 
@@ -61,9 +61,9 @@ describe('SfnErrorNotification construct', () => {
       const template = Template.fromStack(stack);
       template.hasResourceProperties('AWS::Events::Rule', {
         EventPattern: Match.objectLike({
-          source: ['aws.states'],
+          'source': ['aws.states'],
           'detail-type': ['Step Functions Execution Status Change'],
-          detail: {
+          'detail': {
             status: ['FAILED', 'TIMED_OUT', 'ABORTED'],
             stateMachineArn: ['arn:aws:states:us-east-1:123456789012:stateMachine:my-sfn'],
           },
