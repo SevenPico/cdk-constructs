@@ -10,6 +10,7 @@ const context = makeContext({
   environment: 'dev',
   stage: 'app',
   enabled: false,
+  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
 });
 
 new Dynamodb(stack, 'Table', {
