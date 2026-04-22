@@ -9,6 +9,7 @@
     "eslint": "npx projen eslint",
     "graph": "npx projen graph",
     "package": "npx projen package",
+    "package-all": "npx projen package-all",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",

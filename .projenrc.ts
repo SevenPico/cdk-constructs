@@ -6,7 +6,7 @@ const monorepo = new MonorepoTsProject({
   name: "sevenpico-cdk-constructs",
   packageManager: NodePackageManager.NPM,
   defaultReleaseBranch: "main",
-  devDeps: ["@aws/pdk", "projen@^0.99.27"],
+  devDeps: ["@aws/pdk", "projen@^0.99.27", "jsii-rosetta@~5.9.0"],
   gitIgnoreOptions: { ignorePatterns: [".env", "*.js.map", ".claude"] },
   tsconfigDev: {
     compilerOptions: {

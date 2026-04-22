@@ -6,8 +6,8 @@
   "dependencies": {
     "aws-cdk-lib": "^2.0.0",
     "constructs": "^10.0.0",
-    "@sevenpico/cdk-context": "*",
-    "@sevenpico/cdk-construct-dynamodb": "*"
+    "@sevenpico/cdk-context": "file:../../../../../cdk-context",
+    "@sevenpico/cdk-construct-dynamodb": "file:../../.."
   },
   "devDependencies": {
     "ts-node": "^10.0.0",
