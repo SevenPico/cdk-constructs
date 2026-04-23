@@ -1,18 +1,14 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { SfnErrorNotification } from '@sevenpico/cdk-construct-sfn-error-notification';
 
 const app = new App();
 const stack = new Stack(app, 'SfnErrorNotificationMinimalStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
-});
-const stateMachineArn = 'arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor';
-const alarmsSnsTopicArn = 'arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms';
+// Load context and platform references from CDK Bridge JSON.
+const context = CdkBridge.context(stack);
+const stateMachineArn = CdkBridge.string(stack, 'stateMachineArn');
+const alarmsSnsTopicArn = CdkBridge.string(stack, 'alarmsSnsTopicArn');
 
 new SfnErrorNotification(stack, 'SfnMonitor', {
   context,
