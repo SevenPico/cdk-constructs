@@ -1,12 +1,16 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { CdkBridge } from '@sevenpico/cdk-bridge';
+import { makeContext } from '@sevenpico/cdk-context';
 import { S3LogStorage } from '@sevenpico/cdk-construct-s3-log-storage';
 
 const app = new App();
 const stack = new Stack(app, 'S3LogStorageMinimalStack');
 
-// Load context from CDK Bridge JSON (sevenpico key in cdk.json context).
-const context = CdkBridge.context(stack);
+const context = makeContext({
+  namespace: 'acme',
+  environment: 'dev',
+  stage: 'app',
+  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
+});
 
 new S3LogStorage(stack, 'LogStorage', {
   context,

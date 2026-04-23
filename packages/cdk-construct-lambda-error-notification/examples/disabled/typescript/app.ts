@@ -1,17 +1,21 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { CdkBridge } from '@sevenpico/cdk-bridge';
+import { makeContext } from '@sevenpico/cdk-context';
 import { LambdaErrorNotification } from '@sevenpico/cdk-construct-lambda-error-notification';
 
 const app = new App();
 const stack = new Stack(app, 'LambdaErrorNotificationDisabledStack');
 
-// Load context from CDK Bridge JSON. The cdk.json sets enabled: false,
-// so the construct will create no resources.
-const context = CdkBridge.context(stack);
-const lambdaArn = CdkBridge.string(stack, 'lambdaArn');
-const lambdaFunctionName = CdkBridge.string(stack, 'lambdaFunctionName');
-const lambdaRoleName = CdkBridge.string(stack, 'lambdaRoleName');
-const alarmsSnsTopicArn = CdkBridge.string(stack, 'alarmsSnsTopicArn');
+// enabled: false — the construct will create no resources.
+const context = makeContext({
+  namespace: 'acme',
+  environment: 'dev',
+  stage: 'app',
+  enabled: false,
+});
+const lambdaArn = 'arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor';
+const lambdaFunctionName = 'acme-dev-app-processor';
+const lambdaRoleName = 'acme-dev-app-processor-role';
+const alarmsSnsTopicArn = 'arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms';
 
 new LambdaErrorNotification(stack, 'LambdaMonitor', {
   context,
