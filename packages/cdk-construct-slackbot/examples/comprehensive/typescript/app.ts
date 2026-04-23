@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { App, Stack } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
 import { Slackbot } from '@sevenpico/cdk-construct-slackbot';
@@ -28,7 +29,7 @@ new Slackbot(stack, 'SlackbotConstruct', {
   slackTokenSecretKmsKeyArn: secretsKmsKeyArn,
 
   // Custom Lambda deployment package
-  lambdaCodePath: './lambda',
+  lambdaCodePath: path.join(__dirname, 'lambda'),
   lambdaRuntime: 'python3.11',
 
   // Custom CloudWatch log retention (30 days instead of default 90)
