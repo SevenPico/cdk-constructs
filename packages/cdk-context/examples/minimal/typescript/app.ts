@@ -2,7 +2,7 @@ import { App, Stack } from 'aws-cdk-lib';
 import { ContextFns } from '@sevenpico/cdk-context';
 
 const app = new App();
-const stack = new Stack(app, 'MinimalContextExample');
+new Stack(app, 'MinimalContextExample');
 
 // Build a context with required props only: namespace, environment, stage.
 // The computed ID follows the default label order: namespace-environment-stage.

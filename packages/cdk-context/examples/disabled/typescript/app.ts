@@ -2,7 +2,7 @@ import { App, Stack } from 'aws-cdk-lib';
 import { ContextFns } from '@sevenpico/cdk-context';
 
 const app = new App();
-const stack = new Stack(app, 'DisabledContextExample');
+new Stack(app, 'DisabledContextExample');
 
 // Build a disabled context. All constructs that receive this context will skip
 // resource creation — mirroring Terraform's `count = 0` pattern.
