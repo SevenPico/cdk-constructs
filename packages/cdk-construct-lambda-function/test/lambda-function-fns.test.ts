@@ -1,5 +1,5 @@
 import { makeContext } from '@sevenpico/cdk-context';
-import { App, Stack, aws_lambda as lambda } from 'aws-cdk-lib';
+import { aws_lambda as lambda } from 'aws-cdk-lib';
 import {
   functionName,
   logGroupName,
@@ -9,7 +9,6 @@ import {
   logRetention,
   parseEcrImageUri,
   resolveCodeSource,
-  resolveCode,
 } from '../src/lambda-function-fns';
 import { LambdaFunctionProps } from '../src/lambda-function-types';
 
@@ -129,38 +128,5 @@ describe('LambdaFunction pure functions', () => {
     });
   });
 
-  describe('resolveCode', () => {
-    let stack: Stack;
-    beforeEach(() => {
-      const app = new App();
-      stack = new Stack(app, 'Test');
-    });
 
-    test('returns ECR image code for valid imageUri with tag', () => {
-      const code = resolveCode(stack, {
-        ...baseProps,
-        imageUri: '123456789012.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest',
-      });
-      expect(code).toBeDefined();
-    });
-
-    test('returns ECR image code for valid imageUri without tag', () => {
-      const code = resolveCode(stack, {
-        ...baseProps,
-        imageUri: '123456789012.dkr.ecr.us-east-1.amazonaws.com/my-repo',
-      });
-      expect(code).toBeDefined();
-    });
-
-    test('throws for invalid ECR imageUri', () => {
-      expect(() =>
-        resolveCode(stack, { ...baseProps, imageUri: 'not-a-valid-ecr-uri' }),
-      ).toThrow('LambdaFunction: invalid ECR image URI: not-a-valid-ecr-uri');
-    });
-
-    test('returns asset code for filename', () => {
-      const code = resolveCode(stack, { context: ctx, filename: '/tmp/code.zip' });
-      expect(code).toBeDefined();
-    });
-  });
 });

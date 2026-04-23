@@ -5,7 +5,6 @@ import {
   aws_iam as iam,
   RemovalPolicy,
 } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 import { CloudwatchFlowLogsProps } from './cloudwatch-flow-logs-types';
 
 export const logGroupName = (ctx: Context): string =>
@@ -46,15 +45,12 @@ export const mapTrafficType = (trafficType?: string): ec2.FlowLogTrafficType => 
 };
 
 export const flowLogProps = (
-  scope: Construct,
-  _ctx: Context,
   props: CloudwatchFlowLogsProps,
   logGroup: logs.LogGroup,
   role: iam.Role,
+  vpc: ec2.IVpc,
 ): ec2.FlowLogProps => ({
-  resourceType: ec2.FlowLogResourceType.fromVpc(
-    ec2.Vpc.fromLookup(scope, 'Vpc', { vpcId: props.vpcId }),
-  ),
+  resourceType: ec2.FlowLogResourceType.fromVpc(vpc),
   trafficType: mapTrafficType(props.trafficType),
   destination: ec2.FlowLogDestination.toCloudWatchLogs(logGroup, role),
 });

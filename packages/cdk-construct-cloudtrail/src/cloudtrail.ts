@@ -3,6 +3,9 @@ import {
   Tags,
   aws_cloudtrail as cloudtrail,
   aws_logs as logs,
+  aws_s3 as s3,
+  aws_sns as sns,
+  aws_kms as kms,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { cloudTrailProps, logGroupProps } from './cloudtrail-fns';
@@ -24,10 +27,18 @@ export class CloudTrail extends Construct {
       );
     }
 
+    const bucket = s3.Bucket.fromBucketName(this, 'LogBucket', props.s3BucketName);
+    const snsTopic = props.snsTopicArn
+      ? sns.Topic.fromTopicArn(this, 'SnsTopic', props.snsTopicArn)
+      : undefined;
+    const encryptionKey = props.kmsKeyArn
+      ? kms.Key.fromKeyArn(this, 'KmsKey', props.kmsKeyArn)
+      : undefined;
+
     this.trail = new cloudtrail.Trail(
       this,
       'Trail',
-      cloudTrailProps(this, props.context, props, this.logGroup),
+      cloudTrailProps(props.context, props, this.logGroup, bucket, snsTopic, encryptionKey),
     );
 
     (props.dataEvents ?? []).forEach((sel) => {

@@ -1,5 +1,5 @@
 import { Context, contextId } from '@sevenpico/cdk-context';
-import { aws_iam as iam, Duration } from 'aws-cdk-lib';
+import { aws_iam as iam } from 'aws-cdk-lib';
 import { IamRoleProps } from './iam-role-types';
 
 export const roleName = (ctx: Context, props: IamRoleProps): string =>
@@ -48,10 +48,3 @@ export const mergePolicyDocuments = (docs: string[]): iam.PolicyDocument | undef
   return new iam.PolicyDocument({ statements: allStatements });
 };
 
-export const iamRoleProps = (ctx: Context, props: IamRoleProps): iam.RoleProps => ({
-  roleName: roleName(ctx, props),
-  description: props.roleDescription,
-  assumedBy: new iam.AccountRootPrincipal(),
-  maxSessionDuration: Duration.seconds(props.maxSessionDuration ?? 3600),
-  path: props.path ?? '/',
-});

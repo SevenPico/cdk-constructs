@@ -39,7 +39,8 @@ export class CloudwatchFlowLogs extends Construct {
     });
     this.role.addToPolicy(flowLogsPolicyStatement());
 
-    this.flowLog = new ec2.FlowLog(this, 'FlowLog', flowLogProps(this, props.context, props, this.logGroup, this.role));
+    const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { vpcId: props.vpcId });
+    this.flowLog = new ec2.FlowLog(this, 'FlowLog', flowLogProps(props, this.logGroup, this.role, vpc));
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) =>
       Tags.of(this).add(k, v),

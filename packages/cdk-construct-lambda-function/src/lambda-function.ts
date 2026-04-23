@@ -7,6 +7,8 @@ import {
   aws_iam as iam,
   aws_logs as logs,
   aws_kms as kms,
+  aws_ecr as ecr,
+  aws_s3 as s3,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import {
@@ -16,7 +18,8 @@ import {
   lambdaArchitecture,
   lambdaTracingConfig,
   logRetention,
-  resolveCode,
+  resolveCodeSource,
+  parseEcrImageUri,
 } from './lambda-function-fns';
 import { LambdaFunctionProps } from './lambda-function-types';
 
@@ -93,7 +96,30 @@ export class LambdaFunction extends Construct {
     }
 
     // Resolve code
-    const code = resolveCode(this, props);
+    const codeSource = resolveCodeSource(props);
+    let code: lambda.Code;
+    switch (codeSource) {
+      case 'ecr': {
+        const parts = parseEcrImageUri(props.imageUri!);
+        if (!parts) throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
+        const repo = ecr.Repository.fromRepositoryAttributes(this, 'EcrRepo', {
+          repositoryArn: `arn:aws:ecr:${parts.region}:${parts.account}:repository/${parts.repoName}`,
+          repositoryName: parts.repoName,
+        });
+        code = lambda.Code.fromEcrImage(repo, parts.tag ? { tagOrDigest: parts.tag } : undefined);
+        break;
+      }
+      case 's3':
+        code = lambda.Code.fromBucket(
+          s3.Bucket.fromBucketName(this, 'CodeBucket', props.s3Bucket!),
+          props.s3Key!,
+          props.s3ObjectVersion,
+        );
+        break;
+      case 'asset':
+        code = lambda.Code.fromAsset(props.filename!);
+        break;
+    }
 
     // Environment encryption key
     const environmentEncryption = props.kmsKeyArn

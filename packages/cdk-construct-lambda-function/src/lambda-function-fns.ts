@@ -1,6 +1,5 @@
 import { Context, contextId } from '@sevenpico/cdk-context';
-import { aws_lambda as lambda, aws_logs as logs, aws_s3 as s3, aws_ecr as ecr } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import { aws_lambda as lambda, aws_logs as logs } from 'aws-cdk-lib';
 import { LambdaFunctionProps } from './lambda-function-types';
 
 export const functionName = (ctx: Context, props: LambdaFunctionProps): string =>
@@ -53,28 +52,3 @@ export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'a
   throw new Error('LambdaFunction: one of filename, s3Bucket/s3Key, or imageUri must be provided');
 };
 
-/** Resolve Lambda code from props. Requires a scope for CDK resource lookups. */
-export const resolveCode = (scope: Construct, props: LambdaFunctionProps): lambda.Code => {
-  const source = resolveCodeSource(props);
-  switch (source) {
-    case 'ecr': {
-      const parts = parseEcrImageUri(props.imageUri!);
-      if (!parts) {
-        throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
-      }
-      const repo = ecr.Repository.fromRepositoryAttributes(scope, 'EcrRepo', {
-        repositoryArn: `arn:aws:ecr:${parts.region}:${parts.account}:repository/${parts.repoName}`,
-        repositoryName: parts.repoName,
-      });
-      return lambda.Code.fromEcrImage(repo, parts.tag ? { tagOrDigest: parts.tag } : undefined);
-    }
-    case 's3':
-      return lambda.Code.fromBucket(
-        s3.Bucket.fromBucketName(scope, 'CodeBucket', props.s3Bucket!),
-        props.s3Key!,
-        props.s3ObjectVersion,
-      );
-    case 'asset':
-      return lambda.Code.fromAsset(props.filename!);
-  }
-};
