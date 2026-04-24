@@ -33,6 +33,9 @@ export const sqsQueueProps = (
   fifo: props.fifo ?? false,
   contentBasedDeduplication: props.contentBasedDeduplication ?? false,
   encryption: queueEncryption(props),
+  dataKeyReuse: props.kmsMasterKeyId
+    ? Duration.seconds(props.kmsDataKeyReusePeriodSeconds ?? 300)
+    : undefined,
   deadLetterQueue: deadLetterQueue ? {
     queue: deadLetterQueue,
     maxReceiveCount: props.dlqMaxReceiveCount ?? 5,

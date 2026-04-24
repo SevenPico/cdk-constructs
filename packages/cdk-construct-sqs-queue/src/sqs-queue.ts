@@ -1,5 +1,5 @@
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { Tags, aws_sqs as sqs, aws_kms as kms } from 'aws-cdk-lib';
+import { Tags, aws_sqs as sqs, aws_kms as kms, aws_iam as iam, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { sqsQueueProps, sqsDlqProps, buildPolicyStatement } from './sqs-queue-fns';
 import { SqsQueueProps } from './sqs-queue-types';
@@ -42,6 +42,20 @@ export class SqsQueue extends Construct {
     (props.iamPolicyStatements ?? []).forEach(stmt => {
       this.queue!.addToResourcePolicy(buildPolicyStatement(stmt));
     });
+
+    if (props.iamPolicyLimitToCurrentAccount !== false) {
+      this.queue!.addToResourcePolicy(new iam.PolicyStatement({
+        effect: iam.Effect.DENY,
+        principals: [new iam.AnyPrincipal()],
+        actions: ['sqs:*'],
+        resources: [this.queue!.queueArn],
+        conditions: {
+          StringNotEquals: {
+            'aws:SourceAccount': Stack.of(this).account,
+          },
+        },
+      }));
+    }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));
   }

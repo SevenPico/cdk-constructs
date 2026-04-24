@@ -203,9 +203,9 @@ cd packages/cdk-construct-sqs-queue && npx jest --watch
 
 Tests are written with **Jest** for pure function unit tests and **jest-cucumber** for BDD construct integration tests. Each construct has:
 
-- `src/{name}-fns.test.ts` — pure function tests (no CDK stack required)
-- `src/{name}.test.ts` — BDD scenarios using `Template.fromStack()` CDK assertions
-- `src/{name}.feature` — Gherkin feature file consumed by jest-cucumber
+- `test/{name}-fns.test.ts` — pure function tests (no CDK stack required)
+- `test/{name}.test.ts` — BDD scenarios using `Template.fromStack()` CDK assertions
+- `test/{name}.feature` — Gherkin feature file consumed by jest-cucumber
 
 ### Architecture
 
@@ -213,7 +213,7 @@ All constructs follow a strict functional architecture:
 
 - **`src/{name}-fns.ts`** — pure functions, all logic, fully unit-testable
 - **`src/{name}.ts`** — thin CDK `Construct` class, no logic, only imperative CDK calls
-- **`src/{name}-types.ts`** — JSII-compatible interfaces for all public props
+- **`src/{name}-types.ts`** — JSII-compatible interfaces for all public props (most constructs; some inline props directly in the construct file)
 - **`src/index.ts`** — JSII public surface, re-exports only
 
 ### Running a single construct end-to-end
