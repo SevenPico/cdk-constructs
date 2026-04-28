@@ -7,7 +7,9 @@ const monorepo = new MonorepoTsProject({
   packageManager: NodePackageManager.NPM,
   defaultReleaseBranch: "main",
   devDeps: ["@aws/pdk", "projen@^0.99.27", "jsii-rosetta@~5.9.0"],
-  gitIgnoreOptions: { ignorePatterns: [".env", "*.js.map", ".claude"] },
+  gitIgnoreOptions: {
+    ignorePatterns: [".env", "*.js.map", ".claude", ".vscode", "cdk.out"],
+  },
   tsconfigDev: {
     compilerOptions: {
       types: ["jest", "node"],
@@ -184,6 +186,17 @@ pkg(
 // jumps (v3→v9, v1→v2) breaks packages that depend on older APIs (e.g. aws-cdk-lib
 // uses minimatch v3 internals). These are fixed by upgrading aws-cdk-lib instead.
 // lodash in @aws/pdk has no upstream fix available.
+monorepo.addTask("package-all", {
+  description:
+    "Packages artifacts for all target languages across all projects",
+  steps: [
+    {
+      exec: "npx nx run-many --target=package-all --output-style=stream --nx-bail",
+      receiveArgs: true,
+    },
+  ],
+});
+
 monorepo.package.addField("overrides", {
   "@types/babel__traverse": "7.18.2", // PDK-managed, keep
   "wrap-ansi": "^7.0.0", // PDK-managed, keep

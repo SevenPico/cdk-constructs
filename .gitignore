@@ -2,6 +2,8 @@
 .env
 *.js.map
 .claude
+.vscode
+cdk.out
 !/.gitattributes
 !/.projen/tasks.json
 !/.projen/deps.json
@@ -48,4 +50,3 @@ jspm_packages/
 !/.syncpackrc.json
 !/.projenrc.ts
 !/LICENSE
-cdk.out

@@ -125,6 +125,16 @@
         }
       ]
     },
+    "package-all": {
+      "name": "package-all",
+      "description": "Packages artifacts for all target languages across all projects",
+      "steps": [
+        {
+          "exec": "npx nx run-many --target=package-all --output-style=stream --nx-bail",
+          "receiveArgs": true
+        }
+      ]
+    },
     "post-compile": {
       "name": "post-compile",
       "description": "Runs after successful compilation for all affected projects",
