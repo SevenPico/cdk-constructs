@@ -97,4 +97,17 @@ export interface LambdaFunctionProps {
 
   /** Existing IAM role name to use instead of creating one */
   readonly roleName?: string;
+
+  /**
+   * Path to the TypeScript or JavaScript entry file to bundle with esbuild.
+   * When provided, the construct bundles the source at synth time — no pre-build step needed.
+   * Mutually exclusive with filename, s3Bucket/s3Key, and imageUri.
+   */
+  readonly entryPoint?: string;
+
+  /** Modules to exclude from the bundle (available in the Lambda runtime). Default: ['@aws-sdk/*'] */
+  readonly bundlingExternalModules?: string[];
+
+  /** Node.js target for esbuild. Default: 'node20' */
+  readonly bundlingNodeTarget?: string;
 }

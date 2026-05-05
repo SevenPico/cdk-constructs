@@ -1,3 +1,5 @@
+import { execSync } from 'child_process';
+import * as path from 'path';
 import { Context, contextId } from '@sevenpico/cdk-context';
 import { aws_lambda as lambda, aws_logs as logs } from 'aws-cdk-lib';
 import { LambdaFunctionProps } from './lambda-function-types';
@@ -45,10 +47,43 @@ export const parseEcrImageUri = (uri: string): EcrImageParts | undefined => {
 };
 
 /** Determine which code source type to use based on props. */
-export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'asset' => {
+export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'asset' | 'bundle' => {
   if (props.imageUri) return 'ecr';
   if (props.s3Bucket && props.s3Key) return 's3';
+  if (props.entryPoint) return 'bundle';
   if (props.filename) return 'asset';
-  throw new Error('LambdaFunction: one of filename, s3Bucket/s3Key, or imageUri must be provided');
+  throw new Error('LambdaFunction: one of entryPoint, filename, s3Bucket/s3Key, or imageUri must be provided');
+};
+
+/** Bundle a TypeScript/JavaScript entry point with esbuild at synth time. */
+export const bundleEntryPoint = (props: LambdaFunctionProps): lambda.Code => {
+  const entry = path.resolve(props.entryPoint!);
+  const external = (props.bundlingExternalModules ?? ['@aws-sdk/*'])
+    .map(m => `--external:${m}`)
+    .join(' ');
+  const target = props.bundlingNodeTarget ?? 'node20';
+
+  return lambda.Code.fromAsset(path.dirname(entry), {
+    bundling: {
+      image: lambdaRuntime(props.runtime).bundlingImage,
+      local: {
+        tryBundle(outputDir: string): boolean {
+          try {
+            execSync(
+              `npx esbuild ${entry} --bundle --platform=node --target=${target} ${external} --outfile=${outputDir}/index.js`,
+              { stdio: 'inherit' },
+            );
+            return true;
+          } catch {
+            return false;
+          }
+        },
+      },
+      command: [
+        'bash', '-c',
+        `npx esbuild /asset-input/${path.basename(entry)} --bundle --platform=node --target=${target} ${external} --outfile=/asset-output/index.js`,
+      ],
+    },
+  });
 };
 

@@ -19,6 +19,7 @@ import {
   lambdaTracingConfig,
   logRetention,
   resolveCodeSource,
+  bundleEntryPoint,
   parseEcrImageUri,
 } from './lambda-function-fns';
 import { LambdaFunctionProps } from './lambda-function-types';
@@ -115,6 +116,9 @@ export class LambdaFunction extends Construct {
           props.s3Key!,
           props.s3ObjectVersion,
         );
+        break;
+      case 'bundle':
+        code = bundleEntryPoint(props);
         break;
       case 'asset':
         code = lambda.Code.fromAsset(props.filename!);
