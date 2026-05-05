@@ -72,7 +72,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
     author: "SevenPico",
     authorAddress: "https://sevenpico.com",
     repositoryUrl: "https://github.com/SevenPico/cdk-constructs",
-    cdkVersion: "2.246.0",
+    cdkVersion: "2.251.0",
     constructsVersion: "10.6.0",
     defaultReleaseBranch: "main",
     jsiiVersion: "~5.9.0",
@@ -93,7 +93,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
 // symlink the workspace-hoisted aws-cdk-lib before every compile so docgen can
 // find it.  The symlink target is relative to packages/cdk-context/node_modules/.
 const cdkContext = pkg("cdk-context", "cdk-context", {
-  cdkVersion: "2.246.0",
+  cdkVersion: "2.251.0",
   deps: [],
 });
 cdkContext.preCompileTask.exec(
