@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { KmsKey } from '@sevenpico/cdk-construct-kms-key';
 
 const app = new App();
 const stack = new Stack(app, 'KmsKeySymmetricHmacStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
-});
+const context = CdkBridge.context(stack);
 
 // HMAC_256 + GENERATE_VERIFY_MAC creates an HMAC key for MAC generation/verification.
 // Key rotation is not supported for HMAC keys.

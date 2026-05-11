@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { SqsQueue } from '@sevenpico/cdk-construct-sqs-queue';
 
 const app = new App();
 const stack = new Stack(app, 'SqsQueueDisabledStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  enabled: false,
-});
+const context = CdkBridge.context(stack);
 
 new SqsQueue(stack, 'Queue', { context });
 

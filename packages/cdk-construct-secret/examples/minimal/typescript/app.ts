@@ -1,11 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { Secret } from '@sevenpico/cdk-construct-secret';
 
 const app = new App();
 const stack = new Stack(app, 'SecretMinimalStack');
 
-const context = makeContext({ namespace: 'acme', environment: 'dev', stage: 'app' });
+const context = CdkBridge.context(stack);
 
 // Minimal Secret — all defaults: KMS key auto-created, no SNS
 new Secret(stack, 'Secret', { context });

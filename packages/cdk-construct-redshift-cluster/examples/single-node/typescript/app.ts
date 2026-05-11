@@ -1,15 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { RedshiftCluster } from '@sevenpico/cdk-construct-redshift-cluster';
 
 const app = new App();
 const stack = new Stack(app, 'RedshiftClusterSingleNodeStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-});
+const context = CdkBridge.context(stack);
 
 new RedshiftCluster(stack, 'Cluster', {
   context,

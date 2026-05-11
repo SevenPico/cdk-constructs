@@ -1,15 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { KinesisStream } from '@sevenpico/cdk-construct-kinesis-stream';
 
 const app = new App();
 const stack = new Stack(app, 'KinesisStreamComprehensiveStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-});
+const context = CdkBridge.context(stack);
 
 new KinesisStream(stack, 'Stream', {
   context,

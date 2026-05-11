@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { SfnErrorNotification } from '@sevenpico/cdk-construct-sfn-error-notification';
 
 const app = new App();
 const stack = new Stack(app, 'SfnErrorNotificationComprehensiveStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
-});
+const context = CdkBridge.context(stack);
 const stateMachineArn = 'arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor';
 const alarmsSnsTopicArn = 'arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms';
 const kmsKeyArn = 'arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';

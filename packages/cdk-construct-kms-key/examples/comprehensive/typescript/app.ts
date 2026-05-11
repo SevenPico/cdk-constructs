@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { KmsKey } from '@sevenpico/cdk-construct-kms-key';
 
 const app = new App();
 const stack = new Stack(app, 'KmsKeyComprehensiveStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
-});
+const context = CdkBridge.context(stack);
 
 const policy = JSON.stringify({
   Version: '2012-10-17',

@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { LambdaErrorNotification } from '@sevenpico/cdk-construct-lambda-error-notification';
 
 const app = new App();
 const stack = new Stack(app, 'LambdaErrorNotificationComprehensiveStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  tags: { Owner: 'platform-team', CostCenter: 'engineering' },
-});
+const context = CdkBridge.context(stack);
 const lambdaArn = 'arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor';
 const lambdaFunctionName = 'acme-dev-app-processor';
 const lambdaRoleName = 'acme-dev-app-processor-role';
