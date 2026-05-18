@@ -57,6 +57,20 @@ export class HttpApiGateway extends Construct {
       } : undefined,
     });
 
+    // Additional named stages
+    (props.stages ?? []).forEach((stageCfg) => {
+      new apigwv2.CfnStage(this, `Stage-${stageCfg.stageName}`, {
+        apiId: this.api!.ref,
+        stageName: stageCfg.stageName,
+        autoDeploy: stageCfg.autoDeploy ?? false,
+        stageVariables: props.stageVariables,
+        accessLogSettings: logGroup ? {
+          destinationArn: logGroup.logGroupArn,
+          format: props.accessLogFormat ?? defaultAccessLogFormat(),
+        } : undefined,
+      });
+    });
+
     // VPC links (created regardless of openApiBody — VPC link IDs are referenced inside the spec)
     const vpcLinkMap: Record<string, apigwv2.CfnVpcLink> = {};
     Object.entries(props.vpcLinks ?? {}).forEach(([key, vlCfg]) => {
