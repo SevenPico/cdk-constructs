@@ -55,4 +55,7 @@ export interface HttpApiGatewayProps {
   readonly accessLoggingEnabled?: boolean;
   readonly accessLogFormat?: string;
   readonly cloudwatchLogsRetentionDays?: number;
+  /** Pre-parsed OpenAPI 3.x spec object. When provided, routes and integrations
+   *  are sourced from the spec; the `routes` and `integrations` props are ignored. */
+  readonly openApiBody?: object;
 }

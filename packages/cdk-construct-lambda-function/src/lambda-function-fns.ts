@@ -63,7 +63,10 @@ export const bundleEntryPoint = (props: LambdaFunctionProps): lambda.Code => {
     .join(' ');
   const target = props.bundlingNodeTarget ?? 'node20';
 
-  return lambda.Code.fromAsset(path.dirname(entry), {
+  const assetDir = props.bundlingAssetDir ? path.resolve(props.bundlingAssetDir) : path.dirname(entry);
+  const relEntry = path.relative(assetDir, entry);
+
+  return lambda.Code.fromAsset(assetDir, {
     bundling: {
       image: lambdaRuntime(props.runtime).bundlingImage,
       local: {
@@ -81,7 +84,7 @@ export const bundleEntryPoint = (props: LambdaFunctionProps): lambda.Code => {
       },
       command: [
         'bash', '-c',
-        `npx esbuild /asset-input/${path.basename(entry)} --bundle --platform=node --target=${target} ${external} --outfile=/asset-output/index.js`,
+        `npx esbuild /asset-input/${relEntry} --bundle --platform=node --target=${target} ${external} --outfile=/asset-output/index.js`,
       ],
     },
   });

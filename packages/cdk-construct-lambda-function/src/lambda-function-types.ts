@@ -110,4 +110,12 @@ export interface LambdaFunctionProps {
 
   /** Node.js target for esbuild. Default: 'node20' */
   readonly bundlingNodeTarget?: string;
+
+  /**
+   * Root directory to use for CDK asset fingerprinting.
+   * Defaults to the directory containing entryPoint.
+   * Override when shared source files live in a parent directory — CDK hashes
+   * this entire directory, so changes to shared files trigger a redeployment.
+   */
+  readonly bundlingAssetDir?: string;
 }

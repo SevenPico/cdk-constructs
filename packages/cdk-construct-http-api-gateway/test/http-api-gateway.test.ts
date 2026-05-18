@@ -237,6 +237,36 @@ describe('HttpApiGateway construct', () => {
     });
   });
 
+  test('passes openApiBody as Body on CfnApi', () => {
+    const app = new App();
+    const stack = new Stack(app, 'Test');
+    const spec = {
+      openapi: '3.0.1',
+      info: { title: 'Test API', version: '1.0' },
+      paths: {
+        '/orders': {
+          post: {
+            'operationId': 'CreateOrder',
+            'x-amazon-apigateway-integration': {
+              type: 'aws_proxy',
+              httpMethod: 'POST',
+              uri: 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:123:function:fn/invocations',
+              payloadFormatVersion: '2.0',
+            },
+            'responses': { 200: { description: 'OK' } },
+          },
+        },
+      },
+    };
+    new HttpApiGateway(stack, 'SUT', { context, openApiBody: spec });
+    const template = Template.fromStack(stack);
+    template.hasResourceProperties('AWS::ApiGatewayV2::Api', {
+      Body: Match.objectLike({ openapi: '3.0.1' }),
+    });
+    expect(template.findResources('AWS::ApiGatewayV2::Integration')).toEqual({});
+    expect(template.findResources('AWS::ApiGatewayV2::Route')).toEqual({});
+  });
+
   test('skips routes with missing integration key', () => {
     const app = new App();
     const stack = new Stack(app, 'Test');

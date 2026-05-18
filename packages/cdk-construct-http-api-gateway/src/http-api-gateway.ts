@@ -31,15 +31,19 @@ export class HttpApiGateway extends Construct {
       this.logGroup = logGroup;
     }
 
-    // HTTP API
-    this.api = new apigwv2.CfnApi(this, 'Api', {
-      name: contextId(props.context),
-      protocolType: 'HTTP',
-      description: props.description,
-      disableExecuteApiEndpoint: props.disableExecuteApiEndpoint ?? true,
-      version: props.apiVersion,
-      corsConfiguration: corsConfigProperty(props.corsConfiguration),
-    });
+    // HTTP API — when openApiBody is provided, AWS rejects top-level fields that must be defined
+    // inside the spec (name, protocolType, corsConfiguration, etc.)
+    this.api = new apigwv2.CfnApi(this, 'Api', props.openApiBody
+      ? { body: props.openApiBody }
+      : {
+          name: contextId(props.context),
+          protocolType: 'HTTP',
+          description: props.description,
+          disableExecuteApiEndpoint: props.disableExecuteApiEndpoint ?? true,
+          version: props.apiVersion,
+          corsConfiguration: corsConfigProperty(props.corsConfiguration),
+        },
+    );
 
     // Default stage
     const stage = new apigwv2.CfnStage(this, 'DefaultStage', {
@@ -53,7 +57,7 @@ export class HttpApiGateway extends Construct {
       } : undefined,
     });
 
-    // VPC links
+    // VPC links (created regardless of openApiBody — VPC link IDs are referenced inside the spec)
     const vpcLinkMap: Record<string, apigwv2.CfnVpcLink> = {};
     Object.entries(props.vpcLinks ?? {}).forEach(([key, vlCfg]) => {
       vpcLinkMap[key] = new apigwv2.CfnVpcLink(this, `VpcLink-${key}`, {
@@ -63,31 +67,32 @@ export class HttpApiGateway extends Construct {
       });
     });
 
-    // Integrations
-    const integrationMap: Record<string, apigwv2.CfnIntegration> = {};
-    Object.entries(props.integrations ?? {}).forEach(([key, intCfg]) => {
-      const integrationProps: apigwv2.CfnIntegrationProps = {
-        apiId: this.api!.ref,
-        integrationType: intCfg.type,
-        integrationUri: intCfg.uri,
-        credentialsArn: intCfg.credentialsArn,
-        integrationMethod: intCfg.method,
-        payloadFormatVersion: intCfg.payloadFormatVersion ?? '2.0',
-      };
-      integrationMap[key] = new apigwv2.CfnIntegration(this, `Integration-${key}`, integrationProps);
-    });
-
-    // Routes
-    Object.entries(props.routes ?? {}).forEach(([key, routeCfg]) => {
-      const integration = integrationMap[routeCfg.integrationKey];
-      if (!integration) return;
-      new apigwv2.CfnRoute(this, `Route-${key}`, {
-        apiId: this.api!.ref,
-        routeKey: routeCfg.routeKey,
-        target: Fn.join('', ['integrations/', integration.ref]),
-        operationName: routeCfg.operationName,
+    // Integrations and routes — skipped when openApiBody is provided (spec defines them)
+    if (!props.openApiBody) {
+      const integrationMap: Record<string, apigwv2.CfnIntegration> = {};
+      Object.entries(props.integrations ?? {}).forEach(([key, intCfg]) => {
+        const integrationProps: apigwv2.CfnIntegrationProps = {
+          apiId: this.api!.ref,
+          integrationType: intCfg.type,
+          integrationUri: intCfg.uri,
+          credentialsArn: intCfg.credentialsArn,
+          integrationMethod: intCfg.method,
+          payloadFormatVersion: intCfg.payloadFormatVersion ?? '2.0',
+        };
+        integrationMap[key] = new apigwv2.CfnIntegration(this, `Integration-${key}`, integrationProps);
       });
-    });
+
+      Object.entries(props.routes ?? {}).forEach(([key, routeCfg]) => {
+        const integration = integrationMap[routeCfg.integrationKey];
+        if (!integration) return;
+        new apigwv2.CfnRoute(this, `Route-${key}`, {
+          apiId: this.api!.ref,
+          routeKey: routeCfg.routeKey,
+          target: Fn.join('', ['integrations/', integration.ref]),
+          operationName: routeCfg.operationName,
+        });
+      });
+    }
 
     // Custom domain
     if (props.dnsName && props.acmCertificateArn) {
@@ -120,6 +125,10 @@ export class HttpApiGateway extends Construct {
       });
     }
 
-    Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));
+    Object.entries(contextTags(props.context)).forEach(([k, v]) => {
+      Tags.of(this).add(k, v);
+      // AWS rejects tags on CfnApi when Body is provided — tags must live inside the spec
+      if (props.openApiBody && this.api) Tags.of(this.api).remove(k);
+    });
   }
 }
