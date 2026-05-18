@@ -24,7 +24,7 @@ const FIXTURE = {
 };
 
 function appWithFixture(): App {
-  return new App({ context: { sevenpico: FIXTURE } });
+  return new App({ context: { ...FIXTURE } });
 }
 
 // ---------------------------------------------------------------------------
@@ -131,7 +131,7 @@ describe('Example: disabled', () => {
   const DISABLED_FIXTURE = { ...FIXTURE, enabled: false };
 
   function appWithDisabledFixture(): App {
-    return new App({ context: { sevenpico: DISABLED_FIXTURE } });
+    return new App({ context: { ...DISABLED_FIXTURE } });
   }
 
   test('context is not enabled', () => {

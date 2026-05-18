@@ -3,7 +3,7 @@ import { App } from 'aws-cdk-lib';
 import { bridgeContext, bridgeString } from '../src/bridge-fns';
 
 function appWithContext(ctx: Record<string, unknown>): App {
-  return new App({ context: { sevenpico: ctx } });
+  return new App({ context: ctx });
 }
 
 describe('bridgeContext', () => {
@@ -13,9 +13,9 @@ describe('bridgeContext', () => {
     expect(contextId(ctx)).toBe('7p-prod-app');
   });
 
-  it('throws when the sevenpico context key is missing', () => {
+  it('throws when required context keys are missing', () => {
     const app = new App();
-    expect(() => bridgeContext(app)).toThrow(/context key 'sevenpico' not found/);
+    expect(() => bridgeContext(app)).toThrow(/required context keys 'namespace', 'environment', 'stage' not found/);
   });
 
   it('returns a disabled Context when enabled is false', () => {
@@ -43,5 +43,13 @@ describe('bridgeString', () => {
   it('returns the default value when the key is absent', () => {
     const app = appWithContext({ namespace: '7p', environment: 'prod', stage: 'app' });
     expect(bridgeString(app, 'missingKey', 'fallback')).toBe('fallback');
+  });
+
+  it('supports dot-notation for nested values', () => {
+    const app = appWithContext({
+      namespace: '7p', environment: 'prod', stage: 'app',
+      clusterArns: { main: 'arn:aws:dsql:us-east-1:123456789012:cluster/abc123' },
+    });
+    expect(bridgeString(app, 'clusterArns.main')).toBe('arn:aws:dsql:us-east-1:123456789012:cluster/abc123');
   });
 });
