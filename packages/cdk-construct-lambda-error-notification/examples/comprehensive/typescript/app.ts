@@ -5,14 +5,13 @@ import { LambdaErrorNotification } from '@sevenpico/cdk-construct-lambda-error-n
 const app = new App();
 const stack = new Stack(app, 'LambdaErrorNotificationComprehensiveStack');
 
-// Load context and platform references from CDK Bridge JSON.
 const context = CdkBridge.context(stack);
-const lambdaArn = CdkBridge.string(stack, 'lambdaArn');
-const lambdaFunctionName = CdkBridge.string(stack, 'lambdaFunctionName');
-const lambdaRoleName = CdkBridge.string(stack, 'lambdaRoleName');
-const alarmsSnsTopicArn = CdkBridge.string(stack, 'alarmsSnsTopicArn');
-const kmsKeyArn = CdkBridge.string(stack, 'kmsKeyArn');
-const kmsKeyId = CdkBridge.string(stack, 'kmsKeyId');
+const lambdaArn = 'arn:aws:lambda:us-east-1:123456789012:function:acme-dev-app-processor';
+const lambdaFunctionName = 'acme-dev-app-processor';
+const lambdaRoleName = 'acme-dev-app-processor-role';
+const alarmsSnsTopicArn = 'arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms';
+const kmsKeyArn = 'arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+const kmsKeyId = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
 
 new LambdaErrorNotification(stack, 'LambdaMonitor', {
   context,

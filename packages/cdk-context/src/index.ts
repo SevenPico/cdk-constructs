@@ -2,8 +2,8 @@ export { Context, ContextProps } from './context-types';
 export { CONTEXT_DEFAULTS } from './context-defaults';
 export { makeContext, extendContext, contextId, contextTags, isEnabled } from './context-fns';
 
-import { Context, ContextProps } from './context-types';
 import { extendContext, isEnabled, makeContext } from './context-fns';
+import { Context, ContextProps } from './context-types';
 
 // JSII surface: standalone exported functions are not allowed in JSII.
 // Wrap them in a static-method class for multi-language consumers.

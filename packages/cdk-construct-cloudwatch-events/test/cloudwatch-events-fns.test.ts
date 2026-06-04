@@ -1,5 +1,7 @@
 import { makeContext } from '@sevenpico/cdk-context';
-import { ruleName, ruleProps } from '../src/cloudwatch-events-fns';
+import { App, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { ruleName, ruleProps, buildTarget } from '../src/cloudwatch-events-fns';
 import { CloudwatchEventRule } from '../src/cloudwatch-events-types';
 
 describe('CloudwatchEvents pure functions', () => {
@@ -41,5 +43,60 @@ describe('CloudwatchEvents pure functions', () => {
     const rule: CloudwatchEventRule = { ...baseRule, description: 'Monitors EC2 state changes' };
     const props = ruleProps(ctx, rule);
     expect(props.description).toBe('Monitors EC2 state changes');
+  });
+});
+
+describe('buildTarget', () => {
+  let scope: Construct;
+
+  beforeEach(() => {
+    const app = new App();
+    const stack = new Stack(app, 'TestStack');
+    scope = stack;
+  });
+
+  test('throws for unsupported target type', () => {
+    expect(() => {
+      buildTarget(scope, 'bad-target', {
+        type: 'kinesis',
+        arn: 'arn:aws:kinesis:us-east-1:123456789012:stream/my-stream',
+      });
+    }).toThrow('Unsupported CloudwatchEventTarget type: kinesis');
+  });
+
+  test('sns target with inputTransformer returns SnsTopic target', () => {
+    const target = buildTarget(scope, 'sns-t', {
+      type: 'sns',
+      arn: 'arn:aws:sns:us-east-1:123456789012:my-topic',
+      inputTransformer: {
+        inputPathsMap: { instance: '$.detail.instance-id' },
+        inputTemplate: 'Instance <instance> changed state',
+      },
+    });
+    expect(target).toBeDefined();
+  });
+
+  test('lambda target with inputTransformer returns LambdaFunction target', () => {
+    const target = buildTarget(scope, 'lambda-t', {
+      type: 'lambda',
+      arn: 'arn:aws:lambda:us-east-1:123456789012:function:my-fn',
+      inputTransformer: {
+        inputPathsMap: {},
+        inputTemplate: '{"key":"value"}',
+      },
+    });
+    expect(target).toBeDefined();
+  });
+
+  test('sqs target with inputTransformer returns SqsQueue target', () => {
+    const target = buildTarget(scope, 'sqs-t', {
+      type: 'sqs',
+      arn: 'arn:aws:sqs:us-east-1:123456789012:my-queue',
+      inputTransformer: {
+        inputPathsMap: {},
+        inputTemplate: '{"key":"value"}',
+      },
+    });
+    expect(target).toBeDefined();
   });
 });

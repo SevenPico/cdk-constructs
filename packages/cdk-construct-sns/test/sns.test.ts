@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { Sns } from '../src/sns';
 
 const makeStack = (): Stack => {
@@ -243,6 +243,216 @@ describe('Sns construct', () => {
           Match.objectLike({ Key: 'Env', Value: 'production' }),
         ]),
       });
+    });
+  });
+
+  describe('Feature: Delivery Policy', () => {
+    test('delivery policy set via CfnTopic override', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      const deliveryPolicy = JSON.stringify({
+        http: {
+          defaultHealthyRetryPolicy: {
+            minDelayTarget: 20,
+            maxDelayTarget: 20,
+            numRetries: 3,
+            numMaxDelayRetries: 0,
+            backoffFunction: 'linear',
+          },
+        },
+      });
+      new Sns(stack, 'SUT', { context, deliveryPolicy });
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SNS::Topic', 1);
+    });
+  });
+
+  describe('Feature: SMS Subscription', () => {
+    test('SMS subscription wired to topic', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        subscribers: {
+          mobile: {
+            protocol: 'sms',
+            endpoint: '+15555550123',
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SNS::Subscription', {
+        Protocol: 'sms',
+        Endpoint: '+15555550123',
+      });
+    });
+
+    test('unsupported protocol throws error', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const app = new App();
+      const stack = new Stack(app, 'TestStack');
+      expect(() => {
+        new Sns(stack, 'SUT', {
+          context,
+          subscribers: {
+            bad: {
+              protocol: 'ftp',
+              endpoint: 'ftp://example.com',
+            },
+          },
+        });
+      }).toThrow('Unsupported SNS protocol: ftp');
+    });
+  });
+
+  describe('Feature: DLQ with Subscriptions (Redrive)', () => {
+    test('redrive policy applied to SQS subscriptions when DLQ enabled', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        sqsDlqEnabled: true,
+        subscribers: {
+          queue1: {
+            protocol: 'sqs',
+            endpoint: 'arn:aws:sqs:us-east-1:123456789:my-queue',
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
+      template.hasResourceProperties('AWS::SNS::Subscription', {
+        Protocol: 'sqs',
+      });
+    });
+
+    test('DLQ created with KMS encryption when sqsQueueKmsMasterKeyId provided', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        sqsDlqEnabled: true,
+        sqsQueueKmsMasterKeyId: 'arn:aws:kms:us-east-1:123456789012:key/test-key',
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SQS::Queue', {
+        KmsMasterKeyId: Match.anyValue(),
+      });
+    });
+  });
+
+  describe('Feature: HTTP Subscription', () => {
+    test('HTTP subscription wired to topic', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        subscribers: {
+          webhook: {
+            protocol: 'http',
+            endpoint: 'http://example.com/webhook',
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SNS::Subscription', {
+        Protocol: 'http',
+        Endpoint: 'http://example.com/webhook',
+      });
+    });
+
+    test('raw message delivery enabled for SQS subscription', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        subscribers: {
+          queue1: {
+            protocol: 'sqs',
+            endpoint: 'arn:aws:sqs:us-east-1:123456789:my-queue',
+            rawMessageDelivery: true,
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SNS::Subscription', {
+        RawMessageDelivery: true,
+      });
+    });
+
+    test('raw message delivery enabled for HTTPS URL subscription', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        subscribers: {
+          webhook: {
+            protocol: 'https',
+            endpoint: 'https://example.com/webhook',
+            rawMessageDelivery: true,
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::SNS::Subscription', {
+        Protocol: 'https',
+        RawMessageDelivery: true,
+      });
+    });
+  });
+
+  describe('Feature: Access Policy (no-Statement fallback)', () => {
+    test('snsTopicPolicyJson without Statement field does not throw', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        snsTopicPolicyJson: JSON.stringify({ Version: '2012-10-17' }),
+      });
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SNS::Topic', 1);
+    });
+  });
+
+  describe('Feature: Explicit Redrive Policy', () => {
+    test('explicit redrivePolicy JSON is applied to subscriptions', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      const customRedrive = JSON.stringify({
+        deadLetterTargetArn: 'arn:aws:sqs:us-east-1:123456789012:my-dlq',
+        maxReceiveCount: 10,
+      });
+      new Sns(stack, 'SUT', {
+        context,
+        sqsDlqEnabled: true,
+        redrivePolicy: customRedrive,
+        subscribers: {
+          queue1: {
+            protocol: 'sqs',
+            endpoint: 'arn:aws:sqs:us-east-1:123456789:my-queue',
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
+    });
+
+    test('custom redriveMaxReceiverCount used in default redrive object', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'alerts' });
+      const stack = makeStack();
+      new Sns(stack, 'SUT', {
+        context,
+        sqsDlqEnabled: true,
+        redriveMaxReceiverCount: 3,
+        subscribers: {
+          queue1: {
+            protocol: 'sqs',
+            endpoint: 'arn:aws:sqs:us-east-1:123456789:my-queue',
+          },
+        },
+      });
+      const template = Template.fromStack(stack);
+      template.resourceCountIs('AWS::SQS::Queue', 1);
     });
   });
 

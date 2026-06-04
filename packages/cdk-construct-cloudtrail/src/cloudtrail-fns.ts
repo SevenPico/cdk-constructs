@@ -1,3 +1,4 @@
+import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   aws_cloudtrail as cloudtrail,
   aws_s3 as s3,
@@ -6,8 +7,6 @@ import {
   aws_kms as kms,
   RemovalPolicy,
 } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import { Context, contextId } from '@sevenpico/cdk-context';
 import { CloudtrailProps } from './cloudtrail-types';
 
 export const trailName = (ctx: Context): string => contextId(ctx);
@@ -37,25 +36,23 @@ export const logGroupProps = (
 });
 
 export const cloudTrailProps = (
-  scope: Construct,
   ctx: Context,
   props: CloudtrailProps,
-  logGroup?: logs.LogGroup,
+  logGroup: logs.LogGroup | undefined,
+  bucket: s3.IBucket,
+  snsTopic?: sns.ITopic,
+  encryptionKey?: kms.IKey,
 ): cloudtrail.TrailProps => ({
   trailName: trailName(ctx),
-  bucket: s3.Bucket.fromBucketName(scope, 'LogBucket', props.s3BucketName),
+  bucket,
   s3KeyPrefix: props.s3KeyPrefix ?? '',
   includeGlobalServiceEvents: props.includeGlobalServiceEvents ?? true,
   isMultiRegionTrail: props.isMultiRegionTrail ?? true,
   enableFileValidation: props.enableLogFileValidation ?? true,
   cloudWatchLogGroup: logGroup,
   sendToCloudWatchLogs: logGroup !== undefined,
-  snsTopic: props.snsTopicArn
-    ? sns.Topic.fromTopicArn(scope, 'SnsTopic', props.snsTopicArn)
-    : undefined,
-  encryptionKey: props.kmsKeyArn
-    ? kms.Key.fromKeyArn(scope, 'KmsKey', props.kmsKeyArn)
-    : undefined,
+  snsTopic,
+  encryptionKey,
   insightTypes: props.enableInsights
     ? [cloudtrail.InsightType.API_CALL_RATE, cloudtrail.InsightType.API_ERROR_RATE]
     : undefined,

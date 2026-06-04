@@ -6,9 +6,9 @@
  * resources are produced. They serve as runnable validation for every language
  * example (all language examples express the same intent as the TypeScript app).
  */
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { S3LogStorage } from '../src/s3-log-storage';
 
 // Fixture values matching examples/fixtures/bridge.cdk.json

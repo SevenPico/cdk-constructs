@@ -2,7 +2,7 @@ import { App, Stack } from 'aws-cdk-lib';
 import { ContextFns } from '@sevenpico/cdk-context';
 
 const app = new App();
-const stack = new Stack(app, 'ComprehensiveContextExample');
+new Stack(app, 'ComprehensiveContextExample');
 
 // Build a context with all available props exercised.
 const ctx = ContextFns.make({

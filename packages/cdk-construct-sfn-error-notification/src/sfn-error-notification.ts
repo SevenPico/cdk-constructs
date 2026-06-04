@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   RemovalPolicy,
@@ -13,8 +13,7 @@ import {
   aws_pipes as pipes,
   aws_sns as sns,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { SfnErrorNotificationProps } from './sfn-error-notification-types';
+import { Construct } from 'constructs';
 import {
   dlqProps,
   rateAlarmProps,
@@ -23,6 +22,7 @@ import {
   eventbridgeRuleName,
   failedExecutionPattern,
 } from './sfn-error-notification-fns';
+import { SfnErrorNotificationProps } from './sfn-error-notification-types';
 
 export class SfnErrorNotification extends Construct {
   public readonly deadLetterQueue?: sqs.Queue;

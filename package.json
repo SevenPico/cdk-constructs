@@ -9,6 +9,7 @@
     "eslint": "npx projen eslint",
     "graph": "npx projen graph",
     "package": "npx projen package",
+    "package-all": "npx projen package-all",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
@@ -31,6 +32,7 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
+    "jsii-rosetta": "~5.9.0",
     "npm-check-updates": "^19.6.6",
     "nx": "19.0.0",
     "prettier": "^3.8.1",
@@ -44,7 +46,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-cognito-identitypool-alpha": "latest",
-    "aws-cdk-lib": "2.246.0",
+    "aws-cdk-lib": "^2.246.0",
     "cdk-nag": "^2.37.55"
   },
   "overrides": {

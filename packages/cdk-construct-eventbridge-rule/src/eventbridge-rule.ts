@@ -1,12 +1,12 @@
-import { Construct } from 'constructs';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   aws_events as events,
   aws_events_targets as targets,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { EventbridgeRuleProps } from './eventbridge-rule-types';
+import { Construct } from 'constructs';
 import { eventbridgeRuleProps, targetId } from './eventbridge-rule-fns';
+import { EventbridgeRuleProps } from './eventbridge-rule-types';
 
 export class EventbridgeRule extends Construct {
   public readonly rule?: events.Rule;

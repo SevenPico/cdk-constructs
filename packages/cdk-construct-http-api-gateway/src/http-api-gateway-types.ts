@@ -37,6 +37,11 @@ export interface HttpApiCorsConfig {
   readonly allowCredentials?: boolean;
 }
 
+export interface HttpApiStageConfig {
+  readonly stageName: string;
+  readonly autoDeploy?: boolean;
+}
+
 export interface HttpApiGatewayProps {
   readonly context: Context;
   readonly description?: string;
@@ -55,4 +60,9 @@ export interface HttpApiGatewayProps {
   readonly accessLoggingEnabled?: boolean;
   readonly accessLogFormat?: string;
   readonly cloudwatchLogsRetentionDays?: number;
+  /** Pre-parsed OpenAPI 3.x spec object. When provided, routes and integrations
+   *  are sourced from the spec; the `routes` and `integrations` props are ignored. */
+  readonly openApiBody?: object;
+  /** Additional stages to create (e.g., prod, staging). $default stage is always created. */
+  readonly stages?: HttpApiStageConfig[];
 }

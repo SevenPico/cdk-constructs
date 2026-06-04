@@ -1,7 +1,7 @@
 import * as path from 'path';
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { Slackbot } from '../src/slackbot';
 
 // Fixture values matching examples/*/cdk.json
@@ -106,7 +106,9 @@ describe('Example: minimal', () => {
 
   test('context tags applied to SNS topic', () => {
     const ctx = makeContext({
-      namespace: 'acme', environment: 'dev', stage: 'app',
+      namespace: 'acme',
+      environment: 'dev',
+      stage: 'app',
       tags: { Owner: 'platform-team' },
     });
     const stack = makeStack();

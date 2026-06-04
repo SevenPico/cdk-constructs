@@ -1,15 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { IamPolicy } from '@sevenpico/cdk-construct-iam-policy';
 
 const app = new App();
 const stack = new Stack(app, 'IamPolicyMinimalStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-});
+const context = CdkBridge.context(stack);
 
 new IamPolicy(stack, 'Policy', {
   context,

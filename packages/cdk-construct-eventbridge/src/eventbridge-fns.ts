@@ -1,5 +1,5 @@
-import { aws_events as events } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_events as events } from 'aws-cdk-lib';
 import { EventbridgeProps } from './eventbridge-types';
 
 export const eventBusName = (ctx: Context, props: EventbridgeProps): string =>

@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { Eventbridge } from '../src/eventbridge';
 import { EventbridgeProps } from '../src/eventbridge-types';
 
@@ -77,7 +77,9 @@ describe('Eventbridge construct', () => {
       // EventBus does not render Tags in CloudFormation in this CDK version,
       // but Tags.of(this).add() is applied for any child resources that support tags.
       const taggedCtx = makeContext({
-        namespace: '7p', stage: 'prod', name: 'platform',
+        namespace: '7p',
+        stage: 'prod',
+        name: 'platform',
         tags: { Team: 'platform' },
       });
       const template = synthTemplate({ context: taggedCtx });

@@ -1,5 +1,5 @@
-import { Construct } from 'constructs';
 import { Context } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import { bridgeContext, bridgeValue, bridgeString, readBridgeConfig } from './bridge-fns';
 import { BridgeConfig } from './bridge-types';
 

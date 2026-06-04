@@ -1,6 +1,5 @@
-import { RemovalPolicy } from 'aws-cdk-lib';
-import { aws_kms as kms } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { RemovalPolicy, aws_kms as kms } from 'aws-cdk-lib';
 import { kmsKeyProps, kmsAliasName } from '../src/kms-key-fns';
 
 describe('kmsKeyProps', () => {

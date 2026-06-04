@@ -1,7 +1,7 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import { loadFeature, defineFeature } from 'jest-cucumber';
-import { makeContext } from '@sevenpico/cdk-context';
 import { LambdaFunction } from '../src/lambda-function';
 import { LambdaFunctionProps } from '../src/lambda-function-types';
 

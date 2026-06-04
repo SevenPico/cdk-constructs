@@ -1,9 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
-import { aws_events as events } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { CloudwatchEventsProps } from './cloudwatch-events-types';
+import { Tags, aws_events as events } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { ruleProps, buildTarget } from './cloudwatch-events-fns';
+import { CloudwatchEventsProps } from './cloudwatch-events-types';
 
 export class CloudwatchEvents extends Construct {
   public readonly rules?: events.Rule[];

@@ -1,3 +1,4 @@
+import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   aws_events as events,
   aws_events_targets as targets,
@@ -6,7 +7,6 @@ import {
   aws_sqs as sqs,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Context, contextId } from '@sevenpico/cdk-context';
 import {
   CloudwatchEventRule,
   CloudwatchEventTarget,

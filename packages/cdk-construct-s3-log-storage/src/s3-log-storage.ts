@@ -1,14 +1,14 @@
-import { Construct } from 'constructs';
+import { S3Bucket } from '@sevenpico/cdk-construct-s3-bucket';
+import { contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   aws_s3 as s3,
   aws_sqs as sqs,
   aws_s3_notifications as s3n,
 } from 'aws-cdk-lib';
-import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { S3Bucket } from '@sevenpico/cdk-construct-s3-bucket';
-import { S3LogStorageProps } from './s3-log-storage-types';
+import { Construct } from 'constructs';
 import { toS3BucketProps, notificationQueueProps } from './s3-log-storage-fns';
+import { S3LogStorageProps } from './s3-log-storage-types';
 
 export class S3LogStorage extends Construct {
   public readonly bucket?: s3.Bucket;

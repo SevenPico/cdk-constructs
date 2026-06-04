@@ -1,5 +1,5 @@
-import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import {
   mapAttrType, mapBillingMode, mapStreamViewType, mapTableClass,
   mapProjectionType, tableProps,
@@ -139,7 +139,10 @@ describe('tableProps', () => {
   });
 
   test('point-in-time recovery enabled by default', () => {
-    expect(tableProps(ctx, baseProps).pointInTimeRecovery).toBe(true);
+    expect(tableProps(ctx, baseProps).pointInTimeRecoverySpecification).toEqual({
+      pointInTimeRecoveryEnabled: true,
+      recoveryPeriodInDays: undefined,
+    });
   });
 
   test('TTL defaults to Expires attribute', () => {

@@ -50,12 +50,15 @@ See the [examples](./examples) directory for complete usage examples.
 | `fifoThroughputLimit` | FIFO throughput limit (`perQueue` or `perMessageGroupId`) | `string` | — | |
 | `contentBasedDeduplication` | Enable content-based deduplication (FIFO) | `boolean` | `false` | |
 | `kmsMasterKeyId` | KMS key ID for encryption | `string` | — | |
+| `kmsDataKeyReusePeriodSeconds` | KMS data key reuse period in seconds | `number` | `300` | |
 | `sqsManagedSseEnabled` | Enable SQS-managed SSE | `boolean` | `true` | |
 | `dlqEnabled` | Enable dead-letter queue | `boolean` | `false` | |
 | `dlqNameSuffix` | DLQ name suffix | `string` | `dlq` | |
 | `dlqMaxReceiveCount` | Max receive count before DLQ | `number` | `5` | |
 | `dlqKmsMasterKeyId` | KMS key ID for DLQ | `string` | — | |
+| `dlqSqsManagedSseEnabled` | Enable SQS-managed SSE on DLQ | `boolean` | `true` | |
 | `iamPolicyStatements` | Additional IAM policy statements | `SqsIamPolicyStatement[]` | `[]` | |
+| `iamPolicyLimitToCurrentAccount` | Limit queue policy to current AWS account | `boolean` | `true` | |
 
 ## Outputs
 

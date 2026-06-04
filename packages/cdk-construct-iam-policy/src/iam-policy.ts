@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, aws_iam as iam } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { IamPolicyProps } from './iam-policy-types';
+import { Tags, aws_iam as iam } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { buildPolicyDocument, managedPolicyProps } from './iam-policy-fns';
+import { IamPolicyProps } from './iam-policy-types';
 
 export class IamPolicy extends Construct {
   public readonly json: string;

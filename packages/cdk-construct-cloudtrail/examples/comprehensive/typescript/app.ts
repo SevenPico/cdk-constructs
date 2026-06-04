@@ -1,15 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { CloudTrail } from '@sevenpico/cdk-construct-cloudtrail';
 
 const app = new App();
 const stack = new Stack(app, 'CloudtrailComprehensiveStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-});
+const context = CdkBridge.context(stack);
 
 new CloudTrail(stack, 'Trail', {
   context,

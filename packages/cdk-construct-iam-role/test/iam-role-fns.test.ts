@@ -1,6 +1,6 @@
 import { makeContext } from '@sevenpico/cdk-context';
 import { aws_iam as iam } from 'aws-cdk-lib';
-import { roleName, buildIamPrincipal, buildTrustPolicy, mergePolicyDocuments, iamRoleProps } from '../src/iam-role-fns';
+import { roleName, buildIamPrincipal, buildTrustPolicy, mergePolicyDocuments } from '../src/iam-role-fns';
 
 describe('roleName', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'lambda' });
@@ -116,38 +116,11 @@ describe('mergePolicyDocuments', () => {
     const json = merged!.toJSON();
     expect(json.Statement).toHaveLength(2);
   });
-});
 
-describe('iamRoleProps', () => {
-  const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'lambda' });
-
-  test('sets role name from context', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'My role' });
-    expect(props.roleName).toBe('7p-prod-lambda');
-  });
-
-  test('sets description from prop', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'My role' });
-    expect(props.description).toBe('My role');
-  });
-
-  test('defaults path to /', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test' });
-    expect(props.path).toBe('/');
-  });
-
-  test('uses custom path', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test', path: '/custom/' });
-    expect(props.path).toBe('/custom/');
-  });
-
-  test('defaults max session duration to 3600', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test' });
-    expect(props.maxSessionDuration?.toSeconds()).toBe(3600);
-  });
-
-  test('uses custom max session duration', () => {
-    const props = iamRoleProps(ctx, { context: ctx, roleDescription: 'test', maxSessionDuration: 7200 });
-    expect(props.maxSessionDuration?.toSeconds()).toBe(7200);
+  test('handles policy document with no Statement field', () => {
+    const docWithNoStatement = JSON.stringify({ Version: '2012-10-17' });
+    const merged = mergePolicyDocuments([docWithNoStatement]);
+    expect(merged).toBeDefined();
   });
 });
+

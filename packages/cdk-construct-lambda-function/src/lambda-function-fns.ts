@@ -1,6 +1,7 @@
-import { Construct } from 'constructs';
+import { execSync } from 'child_process';
+import * as path from 'path';
 import { Context, contextId } from '@sevenpico/cdk-context';
-import { aws_lambda as lambda, aws_logs as logs, aws_s3 as s3, aws_ecr as ecr } from 'aws-cdk-lib';
+import { aws_lambda as lambda, aws_logs as logs } from 'aws-cdk-lib';
 import { LambdaFunctionProps } from './lambda-function-types';
 
 export const functionName = (ctx: Context, props: LambdaFunctionProps): string =>
@@ -46,35 +47,46 @@ export const parseEcrImageUri = (uri: string): EcrImageParts | undefined => {
 };
 
 /** Determine which code source type to use based on props. */
-export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'asset' => {
+export const resolveCodeSource = (props: LambdaFunctionProps): 'ecr' | 's3' | 'asset' | 'bundle' => {
   if (props.imageUri) return 'ecr';
   if (props.s3Bucket && props.s3Key) return 's3';
+  if (props.entryPoint) return 'bundle';
   if (props.filename) return 'asset';
-  throw new Error('LambdaFunction: one of filename, s3Bucket/s3Key, or imageUri must be provided');
+  throw new Error('LambdaFunction: one of entryPoint, filename, s3Bucket/s3Key, or imageUri must be provided');
 };
 
-/** Resolve Lambda code from props. Requires a scope for CDK resource lookups. */
-export const resolveCode = (scope: Construct, props: LambdaFunctionProps): lambda.Code => {
-  const source = resolveCodeSource(props);
-  switch (source) {
-    case 'ecr': {
-      const parts = parseEcrImageUri(props.imageUri!);
-      if (!parts) {
-        throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
-      }
-      const repo = ecr.Repository.fromRepositoryAttributes(scope, 'EcrRepo', {
-        repositoryArn: `arn:aws:ecr:${parts.region}:${parts.account}:repository/${parts.repoName}`,
-        repositoryName: parts.repoName,
-      });
-      return lambda.Code.fromEcrImage(repo, parts.tag ? { tagOrDigest: parts.tag } : undefined);
-    }
-    case 's3':
-      return lambda.Code.fromBucket(
-        s3.Bucket.fromBucketName(scope, 'CodeBucket', props.s3Bucket!),
-        props.s3Key!,
-        props.s3ObjectVersion,
-      );
-    case 'asset':
-      return lambda.Code.fromAsset(props.filename!);
-  }
+/** Bundle a TypeScript/JavaScript entry point with esbuild at synth time. */
+export const bundleEntryPoint = (props: LambdaFunctionProps): lambda.Code => {
+  const entry = path.resolve(props.entryPoint!);
+  const external = (props.bundlingExternalModules ?? ['@aws-sdk/*'])
+    .map(m => `--external:${m}`)
+    .join(' ');
+  const target = props.bundlingNodeTarget ?? 'node20';
+
+  const assetDir = props.bundlingAssetDir ? path.resolve(props.bundlingAssetDir) : path.dirname(entry);
+  const relEntry = path.relative(assetDir, entry);
+
+  return lambda.Code.fromAsset(assetDir, {
+    bundling: {
+      image: lambdaRuntime(props.runtime).bundlingImage,
+      local: {
+        tryBundle(outputDir: string): boolean {
+          try {
+            execSync(
+              `npx esbuild ${entry} --bundle --platform=node --target=${target} ${external} --outfile=${outputDir}/index.js`,
+              { stdio: 'inherit' },
+            );
+            return true;
+          } catch {
+            return false;
+          }
+        },
+      },
+      command: [
+        'bash', '-c',
+        `npx esbuild /asset-input/${relEntry} --bundle --platform=node --target=${target} ${external} --outfile=/asset-output/index.js`,
+      ],
+    },
+  });
 };
+

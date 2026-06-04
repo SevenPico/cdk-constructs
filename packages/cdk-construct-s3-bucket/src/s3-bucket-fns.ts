@@ -1,5 +1,5 @@
-import { aws_s3 as s3, Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_s3 as s3, Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { S3BucketProps, S3CorsRule, S3LifecycleRule } from './s3-bucket-types';
 
 export const s3BucketName = (ctx: Context, props: S3BucketProps): string =>

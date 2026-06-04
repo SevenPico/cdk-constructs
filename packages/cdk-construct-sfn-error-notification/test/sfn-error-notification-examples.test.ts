@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { SfnErrorNotification } from '../src/sfn-error-notification';
 
 // Fixture values matching examples/*/cdk.json
@@ -76,9 +76,9 @@ describe('Example: minimal', () => {
   test('EventBridge rule captures FAILED, TIMED_OUT, and ABORTED executions', () => {
     template.hasResourceProperties('AWS::Events::Rule', {
       EventPattern: Match.objectLike({
-        source: ['aws.states'],
+        'source': ['aws.states'],
         'detail-type': ['Step Functions Execution Status Change'],
-        detail: {
+        'detail': {
           status: ['FAILED', 'TIMED_OUT', 'ABORTED'],
           stateMachineArn: [FIXTURE.stateMachineArn],
         },
@@ -104,7 +104,9 @@ describe('Example: minimal', () => {
 
   test('context Owner tag applied to DLQ', () => {
     const ctx = makeContext({
-      namespace: 'acme', environment: 'dev', stage: 'app',
+      namespace: 'acme',
+      environment: 'dev',
+      stage: 'app',
       tags: { Owner: 'platform-team' },
     });
     const stack = makeStack();

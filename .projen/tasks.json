@@ -125,6 +125,16 @@
         }
       ]
     },
+    "package-all": {
+      "name": "package-all",
+      "description": "Packages artifacts for all target languages across all projects",
+      "steps": [
+        {
+          "exec": "npx nx run-many --target=package-all --output-style=stream --nx-bail",
+          "receiveArgs": true
+        }
+      ]
+    },
     "post-compile": {
       "name": "post-compile",
       "description": "Runs after successful compilation for all affected projects",
@@ -183,7 +193,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @aws/pdk @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint npm-check-updates nx prettier projen syncpack ts-node typescript @aws-cdk/aws-cognito-identitypool-alpha aws-cdk-lib cdk-nag"
+          "exec": "npm update @aws/pdk @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jsii-rosetta npm-check-updates nx prettier projen syncpack ts-node typescript @aws-cdk/aws-cognito-identitypool-alpha aws-cdk-lib cdk-nag"
         },
         {
           "exec": "npx projen"

@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, aws_iam as iam } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { IamUserProps } from './iam-user-types';
+import { Tags, aws_iam as iam } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { iamUserProps, loginProfileProps } from './iam-user-fns';
+import { IamUserProps } from './iam-user-types';
 
 export class IamUser extends Construct {
   public readonly user?: iam.User;

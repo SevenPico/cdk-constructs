@@ -5,7 +5,6 @@ import { S3LogStorage } from '@sevenpico/cdk-construct-s3-log-storage';
 const app = new App();
 const stack = new Stack(app, 'S3LogStorageMinimalStack');
 
-// Load context from CDK Bridge JSON (sevenpico key in cdk.json context).
 const context = CdkBridge.context(stack);
 
 new S3LogStorage(stack, 'LogStorage', {

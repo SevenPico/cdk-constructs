@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { EventbridgeRule } from '../src/eventbridge-rule';
 
 function makeStack(): Stack {
@@ -35,7 +35,7 @@ describe('Example: comprehensive', () => {
       context: CONTEXT,
       description: 'Route acme.app order events to processing queue',
       eventPattern: {
-        source: ['acme.app'],
+        'source': ['acme.app'],
         'detail-type': ['OrderPlaced'],
       },
       targetArn: 'arn:aws:sqs:us-east-1:123456789012:acme-dev-app-orders',
@@ -54,7 +54,7 @@ describe('Example: comprehensive', () => {
   test('event pattern source is set', () => {
     template.hasResourceProperties('AWS::Events::Rule', {
       EventPattern: {
-        source: ['acme.app'],
+        'source': ['acme.app'],
         'detail-type': ['OrderPlaced'],
       },
     });

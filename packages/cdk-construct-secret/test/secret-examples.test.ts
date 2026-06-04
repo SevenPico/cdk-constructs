@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { Secret } from '../src/secret';
 
 const CONTEXT = makeContext({ namespace: 'acme', environment: 'dev', stage: 'app' });

@@ -2,6 +2,8 @@
 .env
 *.js.map
 .claude
+.vscode
+cdk.out
 !/.gitattributes
 !/.projen/tasks.json
 !/.projen/deps.json

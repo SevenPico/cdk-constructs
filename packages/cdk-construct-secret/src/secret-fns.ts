@@ -1,6 +1,5 @@
-import { Duration, RemovalPolicy, SecretValue } from 'aws-cdk-lib';
-import { aws_kms as kms, aws_secretsmanager as sm, aws_iam as iam } from 'aws-cdk-lib';
 import { Context, contextId, extendContext } from '@sevenpico/cdk-context';
+import { Duration, RemovalPolicy, SecretValue, aws_kms as kms, aws_secretsmanager as sm, aws_iam as iam } from 'aws-cdk-lib';
 import { SecretProps, SecretReadPrincipal } from './secret-types';
 
 /** Compute the context for the secret resource, optionally overriding attributes. */

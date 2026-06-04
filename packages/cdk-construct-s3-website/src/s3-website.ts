@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   aws_s3 as s3,
@@ -10,7 +10,7 @@ import {
   aws_wafv2 as wafv2,
   aws_iam as iam,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import {
   originBucketProps,
   defaultCustomErrorResponses,

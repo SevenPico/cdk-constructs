@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { IamRole } from '../src/iam-role';
 
 const makeStack = (): Stack => {
@@ -201,6 +201,45 @@ describe('IamRole construct', () => {
       expect(roleResource.Properties.Tags ?? []).not.toEqual(
         expect.arrayContaining([expect.objectContaining({ Key: 'Env' })]),
       );
+    });
+  });
+
+  describe('Feature: Policy Description', () => {
+    test('policyDescription adds metadata to inline policy', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'reader' });
+      const stack = makeStack();
+      const policyDoc = JSON.stringify({
+        Version: '2012-10-17',
+        Statement: [{ Effect: 'Allow', Action: 's3:GetObject', Resource: '*' }],
+      });
+      new IamRole(stack, 'SUT', {
+        context,
+        roleDescription: 'Read-only role',
+        principals: { Service: ['lambda.amazonaws.com'] },
+        policyDocuments: [policyDoc],
+        policyDescription: 'Grants S3 read access',
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::IAM::Policy', {
+        PolicyName: '7p-prod-reader-policy',
+      });
+    });
+  });
+
+  describe('Feature: Permissions Boundary', () => {
+    test('permissions boundary is set when provided', () => {
+      const context = makeContext({ namespace: '7p', stage: 'prod', name: 'bounded' });
+      const stack = makeStack();
+      new IamRole(stack, 'SUT', {
+        context,
+        roleDescription: 'Bounded role',
+        principals: { Service: ['lambda.amazonaws.com'] },
+        permissionsBoundary: 'arn:aws:iam::aws:policy/PowerUserAccess',
+      });
+      const template = Template.fromStack(stack);
+      template.hasResourceProperties('AWS::IAM::Role', {
+        PermissionsBoundary: 'arn:aws:iam::aws:policy/PowerUserAccess',
+      });
     });
   });
 

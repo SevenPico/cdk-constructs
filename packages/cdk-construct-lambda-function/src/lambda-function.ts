@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   Duration,
@@ -7,10 +7,10 @@ import {
   aws_iam as iam,
   aws_logs as logs,
   aws_kms as kms,
-  aws_ec2 as ec2,
-  aws_efs as efs,
+  aws_ecr as ecr,
+  aws_s3 as s3,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import {
   functionName,
   logGroupName,
@@ -18,7 +18,9 @@ import {
   lambdaArchitecture,
   lambdaTracingConfig,
   logRetention,
-  resolveCode,
+  resolveCodeSource,
+  bundleEntryPoint,
+  parseEcrImageUri,
 } from './lambda-function-fns';
 import { LambdaFunctionProps } from './lambda-function-types';
 
@@ -94,29 +96,34 @@ export class LambdaFunction extends Construct {
       executionRole = this.role;
     }
 
-    // VPC config
-    let securityGroups: ec2.ISecurityGroup[] | undefined;
-    if (props.vpcConfig) {
-      securityGroups = props.vpcConfig.securityGroupIds.map((sgId, i) =>
-        ec2.SecurityGroup.fromSecurityGroupId(this, `Sg${i}`, sgId),
-      );
-    }
-
-    // EFS access point
-    let filesystem: lambda.FileSystem | undefined;
-    if (props.fileSystemConfig) {
-      const ap = efs.AccessPoint.fromAccessPointAttributes(this, 'EfsAp', {
-        accessPointArn: props.fileSystemConfig.arn,
-        fileSystem: efs.FileSystem.fromFileSystemAttributes(this, 'Efs', {
-          fileSystemId: 'placeholder',
-          securityGroup: securityGroups?.[0]!,
-        }),
-      });
-      filesystem = lambda.FileSystem.fromEfsAccessPoint(ap, props.fileSystemConfig.localMountPath);
-    }
-
     // Resolve code
-    const code = resolveCode(this, props);
+    const codeSource = resolveCodeSource(props);
+    let code: lambda.Code;
+    switch (codeSource) {
+      case 'ecr': {
+        const parts = parseEcrImageUri(props.imageUri!);
+        if (!parts) throw new Error(`LambdaFunction: invalid ECR image URI: ${props.imageUri}`);
+        const repo = ecr.Repository.fromRepositoryAttributes(this, 'EcrRepo', {
+          repositoryArn: `arn:aws:ecr:${parts.region}:${parts.account}:repository/${parts.repoName}`,
+          repositoryName: parts.repoName,
+        });
+        code = lambda.Code.fromEcrImage(repo, parts.tag ? { tagOrDigest: parts.tag } : undefined);
+        break;
+      }
+      case 's3':
+        code = lambda.Code.fromBucket(
+          s3.Bucket.fromBucketName(this, 'CodeBucket', props.s3Bucket!),
+          props.s3Key!,
+          props.s3ObjectVersion,
+        );
+        break;
+      case 'bundle':
+        code = bundleEntryPoint(props);
+        break;
+      case 'asset':
+        code = lambda.Code.fromAsset(props.filename!);
+        break;
+    }
 
     // Environment encryption key
     const environmentEncryption = props.kmsKeyArn
@@ -144,7 +151,6 @@ export class LambdaFunction extends Construct {
       ),
       tracing: lambdaTracingConfig(props.tracingMode),
       logGroup: this.logGroup,
-      filesystem,
       currentVersionOptions: props.publish ? {} : undefined,
     });
 
@@ -153,13 +159,19 @@ export class LambdaFunction extends Construct {
       this.fn.currentVersion;
     }
 
-    // Apply VPC config via CfnFunction escape hatch
+    // Apply VPC config and EFS via CfnFunction escape hatch to avoid L2 VPC lookup requirements
+    const cfnFn = this.fn.node.defaultChild as lambda.CfnFunction;
     if (props.vpcConfig) {
-      const cfnFn = this.fn.node.defaultChild as lambda.CfnFunction;
       cfnFn.vpcConfig = {
         securityGroupIds: props.vpcConfig.securityGroupIds,
         subnetIds: props.vpcConfig.subnetIds,
       };
+    }
+    if (props.fileSystemConfig) {
+      cfnFn.fileSystemConfigs = [{
+        arn: props.fileSystemConfig.arn,
+        localMountPath: props.fileSystemConfig.localMountPath,
+      }];
     }
 
     Object.entries(contextTags(props.context)).forEach(([k, v]) => Tags.of(this).add(k, v));

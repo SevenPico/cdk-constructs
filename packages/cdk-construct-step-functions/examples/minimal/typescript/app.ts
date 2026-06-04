@@ -1,15 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { StepFunctions } from '@sevenpico/cdk-construct-step-functions';
 
 const app = new App();
 const stack = new Stack(app, 'StepFunctionsMinimalStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-});
+const context = CdkBridge.context(stack);
 
 new StepFunctions(stack, 'StateMachine', {
   context,

@@ -5,10 +5,9 @@ import { S3LogStorage } from '@sevenpico/cdk-construct-s3-log-storage';
 const app = new App();
 const stack = new Stack(app, 'S3LogStorageComprehensiveStack');
 
-// Load context and platform references from CDK Bridge JSON.
 const context = CdkBridge.context(stack);
-const logKmsKeyArn = CdkBridge.string(stack, 'logKmsKeyArn');
-const logsBucketName = CdkBridge.string(stack, 'logsBucketName');
+const logKmsKeyArn = 'arn:aws:kms:us-east-1:123456789012:key/bbbbbbbb-cccc-dddd-eeee-ffffffffffff';
+const logsBucketName = 'acme-dev-app-logs-123456789012';
 
 new S3LogStorage(stack, 'LogStorage', {
   context,

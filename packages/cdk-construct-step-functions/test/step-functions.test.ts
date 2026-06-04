@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { StepFunctions } from '../src/step-functions';
 import { StepFunctionsProps } from '../src/step-functions-types';
 
@@ -136,11 +136,10 @@ describe('StepFunctions construct', () => {
   });
 
   describe('Tracing', () => {
-    test('X-Ray tracing not configured by default', () => {
+    test('X-Ray tracing disabled by default', () => {
       const template = synthTemplate(baseProps);
-      // CDK omits TracingConfiguration when tracingEnabled is false
       template.hasResourceProperties('AWS::StepFunctions::StateMachine', {
-        TracingConfiguration: Match.absent(),
+        TracingConfiguration: { Enabled: false },
       });
     });
 
@@ -157,7 +156,9 @@ describe('StepFunctions construct', () => {
   describe('Tags', () => {
     test('context tags are applied', () => {
       const taggedCtx = makeContext({
-        namespace: '7p', stage: 'prod', name: 'workflow',
+        namespace: '7p',
+        stage: 'prod',
+        name: 'workflow',
         tags: { Team: 'platform' },
       });
       const template = synthTemplate({ ...baseProps, context: taggedCtx });

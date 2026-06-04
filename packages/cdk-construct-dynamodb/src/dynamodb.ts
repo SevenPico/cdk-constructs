@@ -1,9 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags } from 'aws-cdk-lib';
-import { aws_dynamodb as dynamodb, aws_kms as kms } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { DynamodbProps } from './dynamodb-types';
+import { Tags, aws_dynamodb as dynamodb, aws_kms as kms } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { tableProps, mapAttrType, mapBillingMode, mapProjectionType } from './dynamodb-fns';
+import { DynamodbProps } from './dynamodb-types';
 
 export class Dynamodb extends Construct {
   public readonly table?: dynamodb.Table;

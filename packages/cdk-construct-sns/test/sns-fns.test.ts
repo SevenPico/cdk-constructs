@@ -1,5 +1,5 @@
-import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { topicName, dlqContext, snsTopicProps, dlqProps } from '../src/sns-fns';
 
 describe('topicName', () => {
@@ -83,6 +83,11 @@ describe('dlqProps', () => {
   test('defaults retention to 1209600 seconds', () => {
     const props = dlqProps(ctx, { context: ctx });
     expect(props.retentionPeriod).toEqual(Duration.seconds(1209600));
+  });
+
+  test('uses custom retention period', () => {
+    const props = dlqProps(ctx, { context: ctx, sqsDlqMessageRetentionSeconds: 3600 });
+    expect(props.retentionPeriod).toEqual(Duration.seconds(3600));
   });
 
   test('uses KMS encryption when key provided', () => {

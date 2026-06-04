@@ -1,5 +1,5 @@
-import { aws_sqs as sqs, aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { Context, contextId, extendContext } from '@sevenpico/cdk-context';
+import { aws_sqs as sqs, aws_iam as iam, Duration } from 'aws-cdk-lib';
 import { SqsQueueProps, SqsIamPolicyStatement } from './sqs-queue-types';
 
 export const queueName = (ctx: Context, props: SqsQueueProps): string =>
@@ -33,6 +33,9 @@ export const sqsQueueProps = (
   fifo: props.fifo ?? false,
   contentBasedDeduplication: props.contentBasedDeduplication ?? false,
   encryption: queueEncryption(props),
+  dataKeyReuse: props.kmsMasterKeyId
+    ? Duration.seconds(props.kmsDataKeyReusePeriodSeconds ?? 300)
+    : undefined,
   deadLetterQueue: deadLetterQueue ? {
     queue: deadLetterQueue,
     maxReceiveCount: props.dlqMaxReceiveCount ?? 5,

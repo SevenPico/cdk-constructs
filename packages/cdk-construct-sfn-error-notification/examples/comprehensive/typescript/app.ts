@@ -5,11 +5,10 @@ import { SfnErrorNotification } from '@sevenpico/cdk-construct-sfn-error-notific
 const app = new App();
 const stack = new Stack(app, 'SfnErrorNotificationComprehensiveStack');
 
-// Load context and platform references from CDK Bridge JSON.
 const context = CdkBridge.context(stack);
-const stateMachineArn = CdkBridge.string(stack, 'stateMachineArn');
-const alarmsSnsTopicArn = CdkBridge.string(stack, 'alarmsSnsTopicArn');
-const kmsKeyArn = CdkBridge.string(stack, 'kmsKeyArn');
+const stateMachineArn = 'arn:aws:states:us-east-1:123456789012:stateMachine:acme-dev-app-processor';
+const alarmsSnsTopicArn = 'arn:aws:sns:us-east-1:123456789012:acme-dev-app-alarms';
+const kmsKeyArn = 'arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
 
 new SfnErrorNotification(stack, 'SfnMonitor', {
   context,

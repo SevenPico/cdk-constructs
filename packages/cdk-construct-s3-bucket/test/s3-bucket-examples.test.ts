@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { S3Bucket } from '../src/s3-bucket';
 
 // Shared context matching examples/*/cdk.json
@@ -274,6 +274,187 @@ describe('Example: s3-managed-encrypted', () => {
 
   test('no KMS-related resources created', () => {
     template.resourceCountIs('AWS::KMS::Grant', 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: mfa-delete
+// ---------------------------------------------------------------------------
+
+describe('Example: mfa-delete', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: CONTEXT,
+      mfaDeleteEnabled: true,
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('creates exactly 1 S3 bucket', () => {
+    template.resourceCountIs('AWS::S3::Bucket', 1);
+  });
+
+  test('versioning is enabled with MFA delete', () => {
+    template.hasResourceProperties('AWS::S3::Bucket', {
+      VersioningConfiguration: {
+        Status: 'Enabled',
+        MfaDelete: 'Enabled',
+      },
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: source-policy-documents
+// ---------------------------------------------------------------------------
+
+describe('Example: source-policy-documents', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: CONTEXT,
+      sourcePolicyDocuments: [
+        JSON.stringify({
+          Statement: [{
+            Effect: 'Allow',
+            Principal: { AWS: 'arn:aws:iam::123456789012:role/reader' },
+            Action: 's3:GetObject',
+            Resource: 'arn:aws:s3:::acme-dev-app/*',
+          }],
+        }),
+        // policy document with no Statement field — exercises the `?? []` fallback
+        JSON.stringify({ Version: '2012-10-17' }),
+      ],
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('bucket policy is attached from source policy documents', () => {
+    template.hasResourceProperties('AWS::S3::BucketPolicy', {
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Effect: 'Allow',
+            Action: 's3:GetObject',
+          }),
+        ]),
+      }),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: replication
+// ---------------------------------------------------------------------------
+
+describe('Example: replication', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: CONTEXT,
+      replicationRoleArn: 'arn:aws:iam::123456789012:role/s3-replication-role',
+      replicationRules: [
+        {
+          destinationBucketArn: 'arn:aws:s3:::acme-dev-app-replica',
+          destinationStorageClass: 'STANDARD_IA',
+          prefix: 'data/',
+          status: 'Enabled',
+        },
+      ],
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('creates exactly 1 S3 bucket', () => {
+    template.resourceCountIs('AWS::S3::Bucket', 1);
+  });
+
+  test('replication configuration is set', () => {
+    template.hasResourceProperties('AWS::S3::Bucket', {
+      ReplicationConfiguration: Match.objectLike({
+        Role: 'arn:aws:iam::123456789012:role/s3-replication-role',
+        Rules: Match.arrayWith([
+          Match.objectLike({
+            Status: 'Enabled',
+            Prefix: 'data/',
+            Destination: Match.objectLike({
+              Bucket: 'arn:aws:s3:::acme-dev-app-replica',
+              StorageClass: 'STANDARD_IA',
+            }),
+          }),
+        ]),
+      }),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: replication-defaults
+// ---------------------------------------------------------------------------
+
+describe('Example: replication-defaults', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: CONTEXT,
+      replicationRoleArn: 'arn:aws:iam::123456789012:role/s3-replication-role',
+      replicationRules: [
+        {
+          // no status or prefix — exercises the `?? 'Enabled'` and `?? ''` defaults
+          destinationBucketArn: 'arn:aws:s3:::acme-dev-app-replica',
+        },
+      ],
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('replication rule defaults status to Enabled', () => {
+    template.hasResourceProperties('AWS::S3::Bucket', {
+      ReplicationConfiguration: Match.objectLike({
+        Rules: Match.arrayWith([
+          Match.objectLike({ Status: 'Enabled', Prefix: '' }),
+        ]),
+      }),
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Example scenario: logging
+// ---------------------------------------------------------------------------
+
+describe('Example: logging', () => {
+  let template: Template;
+
+  beforeAll(() => {
+    const stack = makeStack();
+    new S3Bucket(stack, 'Bucket', {
+      context: CONTEXT,
+      loggingBucketName: 'acme-dev-app-access-logs',
+      loggingPrefix: 'acme-dev-app/',
+    });
+    template = Template.fromStack(stack);
+  });
+
+  test('creates exactly 1 S3 bucket', () => {
+    template.resourceCountIs('AWS::S3::Bucket', 1);
+  });
+
+  test('access logs configuration is set', () => {
+    template.hasResourceProperties('AWS::S3::Bucket', {
+      LoggingConfiguration: Match.objectLike({
+        LogFilePrefix: 'acme-dev-app/',
+      }),
+    });
   });
 });
 

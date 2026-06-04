@@ -1,5 +1,5 @@
-import { aws_iam as iam } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_iam as iam } from 'aws-cdk-lib';
 import { SesProps } from './ses-types';
 
 export const sesIdentityName = (ctx: Context): string => contextId(ctx);

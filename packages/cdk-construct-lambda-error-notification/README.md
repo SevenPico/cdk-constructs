@@ -28,12 +28,12 @@ Configure the construct by providing the Lambda function ARN, function name, exe
 
 ## Deployed Resources
 
-- **SQS Queue** - Dead-letter queue that captures failed Lambda invocations
-- **CloudWatch Alarm (Rate)** - Monitors the rate of growth of messages in the DLQ
-- **CloudWatch Alarm (Volume)** - Monitors the total number of visible messages in the DLQ
-- **EventBridge Pipe** - Reads messages from the DLQ and re-invokes the Lambda function
-- **CloudWatch Log Group** - Captures EventBridge Pipe execution logs
-- **IAM Role** - Execution role for the EventBridge Pipe
+- **AWS::SQS::Queue** - Dead-letter queue that captures failed Lambda invocations
+- **AWS::CloudWatch::Alarm** - Monitors the rate of growth of messages in the DLQ
+- **AWS::CloudWatch::Alarm** - Monitors the total number of visible messages in the DLQ
+- **AWS::Pipes::Pipe** - Reads messages from the DLQ and re-invokes the Lambda function
+- **AWS::Logs::LogGroup** - Captures EventBridge Pipe execution logs
+- **AWS::IAM::Role** - Execution role for the EventBridge Pipe
 
 ## Usage
 

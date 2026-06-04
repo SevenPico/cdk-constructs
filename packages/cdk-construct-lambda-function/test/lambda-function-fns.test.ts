@@ -1,5 +1,5 @@
-import { aws_lambda as lambda } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_lambda as lambda } from 'aws-cdk-lib';
 import {
   functionName,
   logGroupName,
@@ -127,4 +127,6 @@ describe('LambdaFunction pure functions', () => {
       );
     });
   });
+
+
 });

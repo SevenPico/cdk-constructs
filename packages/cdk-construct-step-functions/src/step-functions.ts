@@ -1,4 +1,4 @@
-import { Construct } from 'constructs';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
   Tags,
   RemovalPolicy,
@@ -8,8 +8,7 @@ import {
   aws_logs as logs,
   aws_kms as kms,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { StepFunctionsProps } from './step-functions-types';
+import { Construct } from 'constructs';
 import {
   stateMachineName,
   logGroupName,
@@ -18,6 +17,7 @@ import {
   buildTrustDocument,
   mergePolicyDocuments,
 } from './step-functions-fns';
+import { StepFunctionsProps } from './step-functions-types';
 
 export class StepFunctions extends Construct {
   public readonly stateMachine?: sfn.StateMachine;

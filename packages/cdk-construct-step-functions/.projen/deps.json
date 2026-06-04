@@ -37,6 +37,10 @@
       "type": "build"
     },
     {
+      "name": "jest-cucumber",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^15",
       "type": "build"
@@ -55,12 +59,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.4.0",
+      "version": "~5.9.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.4.0",
+      "version": "~5.9.0",
       "type": "build"
     },
     {
@@ -72,21 +76,21 @@
       "type": "build"
     },
     {
+      "name": "@sevenpico/cdk-context",
+      "type": "peer"
+    },
+    {
       "name": "aws-cdk-lib",
-      "version": "^2.246.0",
+      "version": "^2.251.0",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "^10.5.0",
+      "version": "^10.6.0",
       "type": "peer"
     },
     {
       "name": "@sevenpico/cdk-construct-iam-role",
-      "type": "runtime"
-    },
-    {
-      "name": "@sevenpico/cdk-context",
       "type": "runtime"
     }
   ],

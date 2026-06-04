@@ -1,5 +1,5 @@
-import { aws_events as events } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_events as events } from 'aws-cdk-lib';
 import { EventbridgeRuleProps } from './eventbridge-rule-types';
 
 export const ruleName = (ctx: Context): string => contextId(ctx);

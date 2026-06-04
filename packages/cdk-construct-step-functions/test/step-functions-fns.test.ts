@@ -1,5 +1,5 @@
 import { makeContext } from '@sevenpico/cdk-context';
-import { App, Stack, aws_logs as logs } from 'aws-cdk-lib';
+import { App, Stack, aws_logs as logs, aws_stepfunctions as sfn } from 'aws-cdk-lib';
 import {
   stateMachineName,
   logGroupName,
@@ -10,7 +10,6 @@ import {
   mergePolicyDocuments,
 } from '../src/step-functions-fns';
 import { StepFunctionsProps } from '../src/step-functions-types';
-import { aws_stepfunctions as sfn } from 'aws-cdk-lib';
 
 const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'workflow' });
 

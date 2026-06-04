@@ -1,9 +1,9 @@
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_s3 as s3, RemovalPolicy, Duration } from 'aws-cdk-lib';
 import {
   s3BucketProps, s3BucketName, s3EncryptionConfig, mapObjectOwnership,
   mapLifecycleRule, mapCorsRule, mapObjectLock, mapStorageClass,
 } from '../src/s3-bucket-fns';
-import { aws_s3 as s3, RemovalPolicy, Duration } from 'aws-cdk-lib';
 
 describe('s3BucketName', () => {
   const ctx = makeContext({ namespace: '7p', stage: 'prod', name: 'assets' });
@@ -231,6 +231,21 @@ describe('s3BucketProps', () => {
     const props = s3BucketProps(ctx, { context: ctx, lifecycleRules: [{ id: 'rule1', expirationDays: 30 }] });
     expect(props.lifecycleRules).toHaveLength(1);
     expect(props.lifecycleRules![0].id).toBe('rule1');
+  });
+
+  test('allows disabling individual public access block settings', () => {
+    const props = s3BucketProps(ctx, {
+      context: ctx,
+      blockPublicAcls: false,
+      blockPublicPolicy: false,
+      ignorePublicAcls: false,
+      restrictPublicBuckets: false,
+    });
+    const block = props.blockPublicAccess as any;
+    expect(block.blockPublicAcls).toBe(false);
+    expect(block.blockPublicPolicy).toBe(false);
+    expect(block.ignorePublicAcls).toBe(false);
+    expect(block.restrictPublicBuckets).toBe(false);
   });
 
   test('maps cors rules', () => {

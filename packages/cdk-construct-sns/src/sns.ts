@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, aws_sns as sns, aws_sns_subscriptions as subs, aws_sqs as sqs, aws_kms as kms, aws_iam as iam, aws_lambda as lambda } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { SnsProps, SnsSubscriber } from './sns-types';
+import { Tags, aws_sns as sns, aws_sns_subscriptions as subs, aws_sqs as sqs, aws_kms as kms, aws_iam as iam, aws_lambda as lambda } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { snsTopicProps, dlqProps } from './sns-fns';
+import { SnsProps, SnsSubscriber } from './sns-types';
 
 export class Sns extends Construct {
   public readonly topic?: sns.Topic;

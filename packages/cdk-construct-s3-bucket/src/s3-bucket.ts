@@ -1,8 +1,8 @@
-import { Construct } from 'constructs';
-import { Tags, aws_s3 as s3, aws_kms as kms, aws_iam as iam } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { S3BucketProps } from './s3-bucket-types';
+import { Tags, aws_s3 as s3, aws_kms as kms, aws_iam as iam } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { s3BucketProps } from './s3-bucket-fns';
+import { S3BucketProps } from './s3-bucket-types';
 
 export class S3Bucket extends Construct {
   public readonly bucket?: s3.Bucket;

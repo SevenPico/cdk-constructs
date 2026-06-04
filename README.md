@@ -205,6 +205,7 @@ Tests are written with **Jest** for pure function unit tests and **jest-cucumber
 
 - `test/{name}-fns.test.ts` — pure function tests (no CDK stack required)
 - `test/{name}.test.ts` — BDD scenarios using `Template.fromStack()` CDK assertions
+- `test/{name}.feature` — Gherkin feature file consumed by jest-cucumber
 
 ### Architecture
 
@@ -212,7 +213,66 @@ All constructs follow a strict functional architecture:
 
 - **`src/{name}-fns.ts`** — pure functions, all logic, fully unit-testable
 - **`src/{name}.ts`** — thin CDK `Construct` class, no logic, only imperative CDK calls
+- **`src/{name}-types.ts`** — JSII-compatible interfaces for all public props (most constructs; some inline props directly in the construct file)
 - **`src/index.ts`** — JSII public surface, re-exports only
+
+### Running a single construct end-to-end
+
+```bash
+# TypeScript compile check
+cd packages/cdk-construct-sqs-queue
+../../node_modules/.bin/tsc -p tsconfig.dev.json --noEmit
+
+# Run tests for one package
+npx nx test @sevenpico/cdk-construct-sqs-queue
+
+# Or directly with jest in watch mode
+cd packages/cdk-construct-sqs-queue
+npx jest --watch
+```
+
+### Adding a new construct
+
+1. **Create the package directory** under `packages/cdk-construct-{name}/`.
+
+2. **Create the three source files** in `src/`:
+   - `{name}-types.ts` — JSII-compatible props interface. All props must be `readonly`. No union types, generic types, or function types in public interfaces (JSII constraint).
+   - `{name}-fns.ts` — Pure functions with all logic. Zero CDK side effects. Fully unit-testable without a CDK stack.
+   - `{name}.ts` — Thin `Construct` subclass. The constructor calls `isEnabled(props.context)` and returns early if disabled. All CDK resource creation goes here; no logic beyond CDK wiring.
+
+3. **Create `src/index.ts`** — re-export everything from the three source files.
+
+4. **Write tests** in `src/`:
+   - `{name}-fns.test.ts` — pure function unit tests
+   - `{name}.feature` — Gherkin feature file with BDD scenarios
+   - `{name}.test.ts` — jest-cucumber integration tests using `Template.fromStack()`
+
+5. **Register in `package.json`** — copy an existing package's `package.json`, update `name`, JSII targets, and peer dependencies.
+
+6. **Register in `nx.json`** — add the package to the nx workspace by running `npx projen` from the repo root after updating `.projenrc.ts`.
+
+### Project conventions
+
+**JSII constraints (public interfaces only):**
+- All props must be `readonly`
+- No union types (`string | number`), generic types (`Array<T>`), or function types in public interfaces
+- Use `string[]` not `Array<string>`, `Record<string, string>` not `{ [key: string]: string }`
+- All public types must be re-exported from `src/index.ts`
+
+**Functional architecture rule:**
+- `*-fns.ts` files must have zero CDK imports and zero side effects — they are pure TypeScript
+- Construct files must have zero logic — only `if (!isEnabled(...)) return;` and CDK resource instantiation
+
+**Context system:**
+- Every construct accepts a `context: Context` prop for deterministic naming (`context.id`) and tagging (`contextTags(context)`)
+- `isEnabled(context)` returns `false` when `context.enabled` is `false`; constructs return early and leave all public properties `undefined`
+- Resource names are derived from context labels joined by `context.delimiter` (default `-`)
+
+### Contributing workflow
+
+- **Branch naming:** `feat/{package-name}` for new constructs, `fix/{package-name}` for bug fixes
+- **Commit messages:** conventional commits format — `feat:`, `fix:`, `docs:`, `refactor:`
+- **PR title emoji convention:** 🟠 needs code revision | 🟣 ready for QA | 🔴 needs QA revision | 🟢 ready to merge
 
 ## License
 

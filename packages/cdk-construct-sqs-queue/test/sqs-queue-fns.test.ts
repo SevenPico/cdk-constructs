@@ -1,5 +1,5 @@
-import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { queueName, dlqName, queueEncryption, sqsQueueProps, sqsDlqProps, buildPolicyStatement } from '../src/sqs-queue-fns';
 
 describe('queueName', () => {

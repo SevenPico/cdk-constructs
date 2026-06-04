@@ -1,5 +1,5 @@
-import { aws_cloudtrail as cloudtrail } from 'aws-cdk-lib';
 import { makeContext } from '@sevenpico/cdk-context';
+import { aws_cloudtrail as cloudtrail } from 'aws-cdk-lib';
 import { trailName, logGroupName, mapReadWriteType, logGroupProps } from '../src/cloudtrail-fns';
 import { CloudtrailProps } from '../src/cloudtrail-types';
 

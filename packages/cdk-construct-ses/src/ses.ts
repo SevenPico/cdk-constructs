@@ -1,9 +1,8 @@
-import { Construct } from 'constructs';
-import { Arn, ArnFormat, Stack, Tags } from 'aws-cdk-lib';
-import { aws_ses as ses, aws_route53 as route53, aws_iam as iam } from 'aws-cdk-lib';
 import { contextTags, isEnabled } from '@sevenpico/cdk-context';
-import { SesProps } from './ses-types';
+import { Arn, ArnFormat, Stack, Tags, aws_ses as ses, aws_route53 as route53, aws_iam as iam } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { sesIdentityName, sesGroupName, sesUserName, sesPolicyStatement } from './ses-fns';
+import { SesProps } from './ses-types';
 
 export class Ses extends Construct {
   public readonly emailIdentity?: ses.CfnEmailIdentity;

@@ -1,16 +1,11 @@
 import { App, Stack } from 'aws-cdk-lib';
-import { makeContext } from '@sevenpico/cdk-context';
+import { CdkBridge } from '@sevenpico/cdk-bridge';
 import { CloudwatchFlowLogs } from '@sevenpico/cdk-construct-cloudwatch-flow-logs';
 
 const app = new App();
 const stack = new Stack(app, 'CloudwatchFlowLogsDisabledStack');
 
-const context = makeContext({
-  namespace: 'acme',
-  environment: 'dev',
-  stage: 'app',
-  enabled: false,
-});
+const context = CdkBridge.context(stack);
 
 new CloudwatchFlowLogs(stack, 'FlowLogs', {
   context,

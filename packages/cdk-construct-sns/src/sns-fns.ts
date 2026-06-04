@@ -1,5 +1,5 @@
-import { aws_sns as sns, aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { Context, contextId, extendContext } from '@sevenpico/cdk-context';
+import { aws_sns as sns, aws_sqs as sqs, Duration } from 'aws-cdk-lib';
 import { SnsProps } from './sns-types';
 
 export const topicName = (ctx: Context, props: SnsProps): string =>

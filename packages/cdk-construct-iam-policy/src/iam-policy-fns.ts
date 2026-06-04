@@ -1,5 +1,5 @@
-import { aws_iam as iam } from 'aws-cdk-lib';
 import { Context, contextId } from '@sevenpico/cdk-context';
+import { aws_iam as iam } from 'aws-cdk-lib';
 import { IamPolicyProps, IamPolicyStatement } from './iam-policy-types';
 
 export const buildPolicyStatement = (sid: string, stmt: IamPolicyStatement): iam.PolicyStatement => {

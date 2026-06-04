@@ -48,6 +48,7 @@ export interface DynamodbProps {
   readonly enableEncryption?: boolean;
   readonly kmsKeyArn?: string;
   readonly enablePointInTimeRecovery?: boolean;
+  readonly pointInTimeRecoveryPeriodInDays?: number;
   readonly enableStreams?: boolean;
   readonly streamViewType?: string;
   readonly ttlEnabled?: boolean;

@@ -1,11 +1,11 @@
-import { Construct } from 'constructs';
-import { CfnResource, Tags } from 'aws-cdk-lib';
+import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
 import {
+  CfnResource, Tags,
   aws_kms as kms,
   aws_secretsmanager as sm,
   aws_sns as sns,
 } from 'aws-cdk-lib';
-import { contextId, contextTags, isEnabled } from '@sevenpico/cdk-context';
+import { Construct } from 'constructs';
 import {
   secretContext,
   kmsKeyContext,
@@ -18,7 +18,7 @@ import {
 import { SecretProps } from './secret-types';
 
 export class Secret extends Construct {
-  public readonly secret?: sm.Secret;
+  public readonly smSecret?: sm.Secret;
   public readonly kmsKey?: kms.Key;
   public readonly kmsAlias?: kms.Alias;
   public readonly snsTopic?: sns.Topic;
@@ -51,11 +51,11 @@ export class Secret extends Construct {
     }
 
     // Secret
-    this.secret = new sm.Secret(this, 'Secret', smSecretProps(sCtx, props, encryptionKey));
+    this.smSecret = new sm.Secret(this, 'Secret', smSecretProps(sCtx, props, encryptionKey));
 
     // Ignore changes to secret value after initial creation
     if (props.secretIgnoreChanges) {
-      const cfnSecret = this.secret.node.defaultChild as CfnResource;
+      const cfnSecret = this.smSecret.node.defaultChild as CfnResource;
       cfnSecret.cfnOptions.metadata = {
         ...cfnSecret.cfnOptions.metadata,
         'aws:cdk:ignore-secret-value': true,
@@ -65,10 +65,10 @@ export class Secret extends Construct {
     // Resource policy: read principals
     if (props.secretReadPrincipals?.length) {
       secretReadPolicyStatements(
-        this.secret.secretArn,
+        this.smSecret.secretArn,
         this.kmsKey?.keyArn,
         props.secretReadPrincipals,
-      ).forEach(stmt => this.secret!.addToResourcePolicy(stmt));
+      ).forEach(stmt => this.smSecret!.addToResourcePolicy(stmt));
     }
 
     // SNS topic for notifications

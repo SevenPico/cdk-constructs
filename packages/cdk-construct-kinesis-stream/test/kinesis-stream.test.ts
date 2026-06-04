@@ -1,6 +1,6 @@
+import { makeContext } from '@sevenpico/cdk-context';
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { makeContext } from '@sevenpico/cdk-context';
 import { KinesisStream } from '../src/kinesis-stream';
 import { KinesisStreamProps } from '../src/kinesis-stream-types';
 
@@ -119,6 +119,35 @@ describe('KinesisStream construct', () => {
     });
   });
 
+  describe('Alias-based Custom KMS Key', () => {
+    test('alias-based custom KMS key sets encryption override via escape hatch', () => {
+      const template = synthTemplate({
+        ...baseProps,
+        kmsKeyId: 'alias/my-custom-key',
+      });
+      template.hasResourceProperties('AWS::Kinesis::Stream', {
+        StreamEncryption: Match.objectLike({
+          EncryptionType: 'KMS',
+          KeyId: 'alias/my-custom-key',
+        }),
+      });
+    });
+  });
+
+  describe('ARN-based Custom KMS Key', () => {
+    test('ARN-based KMS key uses fromKeyArn and wires encryption key', () => {
+      const template = synthTemplate({
+        ...baseProps,
+        kmsKeyId: 'arn:aws:kms:us-east-1:123456789012:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+      });
+      template.hasResourceProperties('AWS::Kinesis::Stream', {
+        StreamEncryption: Match.objectLike({
+          EncryptionType: 'KMS',
+        }),
+      });
+    });
+  });
+
   describe('Enforce Consumer Deletion', () => {
     test('stream uses Delete policy by default (enforceConsumerDeletion true)', () => {
       const template = synthTemplate(baseProps);
@@ -139,7 +168,9 @@ describe('KinesisStream construct', () => {
   describe('Tags', () => {
     test('context tags are applied', () => {
       const taggedCtx = makeContext({
-        namespace: '7p', stage: 'prod', name: 'events',
+        namespace: '7p',
+        stage: 'prod',
+        name: 'events',
         tags: { Team: 'platform' },
       });
       const template = synthTemplate({ context: taggedCtx });
