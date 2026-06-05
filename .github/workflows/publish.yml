@@ -55,11 +55,12 @@ jobs:
         run: |
           if [ "$BUILD_TARGET" = "js" ]; then
             # JS only — fast path, just npm pack each workspace package
-            mkdir -p dist
+            DIST="$(pwd)/dist"
+            mkdir -p "$DIST"
             for pkg_dir in packages/*/; do
               pkg_name=$(node -p "require('./${pkg_dir}package.json').name.replace('@sevenpico/','sevenpico-')")
-              (cd "$pkg_dir" && npm pack --pack-destination "$(pwd)/../../dist")
-              mv "dist/${pkg_name}-"*.tgz "dist/${pkg_name}.tgz"
+              (cd "$pkg_dir" && npm pack --pack-destination "$DIST")
+              mv "$DIST/${pkg_name}-"*.tgz "$DIST/${pkg_name}.tgz"
             done
           elif [ "$BUILD_TARGET" = "all" ]; then
             npm run package-all
