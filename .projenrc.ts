@@ -6,6 +6,7 @@ const monorepo = new MonorepoTsProject({
   name: "sevenpico-cdk-constructs",
   packageManager: NodePackageManager.NPM,
   defaultReleaseBranch: "main",
+  minNodeVersion: "22.0.0",
   devDeps: ["@aws/pdk", "projen@^0.99.27", "jsii-rosetta@~5.9.0"],
   gitIgnoreOptions: {
     ignorePatterns: [".env", "*.js.map", ".claude", ".vscode", "cdk.out"],
@@ -15,6 +16,13 @@ const monorepo = new MonorepoTsProject({
       types: ["jest", "node"],
     },
   },
+});
+
+// Ensure workspace packages compile in dependency order — without this, nx
+// runs all compile targets in parallel and packages that import
+// @sevenpico/cdk-context fail because lib/index.js doesn't exist yet.
+monorepo.nx.file.addOverride("targetDefaults.compile", {
+  dependsOn: ["^compile"],
 });
 
 // VS Code discovers tsconfig.json (not tsconfig.dev.json) for type checking.
@@ -76,6 +84,7 @@ const pkg = (name: string, outdir: string, opts: any = {}) => {
     constructsVersion: "10.6.0",
     defaultReleaseBranch: "main",
     jsiiVersion: "~5.9.0",
+    minNodeVersion: "22.0.0",
     packageManager: NodePackageManager.NPM,
     tsconfigDev: {
       compilerOptions: {
