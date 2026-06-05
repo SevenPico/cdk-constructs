@@ -1,0 +1,88 @@
+name: Publish Release Artifacts
+
+# Packages are jsii-based and can target multiple languages:
+#   js (default) — JavaScript/TypeScript npm tarballs (.tgz)
+#   java          — Maven artifacts (.jar) via jsii-pacmak
+#   python        — PyPI wheels (.whl) via jsii-pacmak
+#   dotnet        — NuGet packages (.nupkg) via jsii-pacmak
+#   go            — Go modules via jsii-pacmak
+#   all           — All of the above
+#
+# Default (js) is what amplify-cdk-cloud-services consumes.
+# Other targets are for consumers in different language ecosystems.
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      build_target:
+        description: "Language target to build and publish"
+        required: false
+        default: "js"
+        type: choice
+        options:
+          - js
+          - java
+          - python
+          - dotnet
+          - go
+          - all
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      BUILD_TARGET: ${{ inputs.build_target || 'js' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile TypeScript
+        run: npm run compile
+
+      - name: Package artifacts
+        run: |
+          if [ "$BUILD_TARGET" = "js" ]; then
+            # JS only — fast path, just npm pack each workspace package
+            mkdir -p dist
+            for pkg_dir in packages/*/; do
+              pkg_name=$(node -p "require('./${pkg_dir}package.json').name.replace('@sevenpico/','sevenpico-')")
+              (cd "$pkg_dir" && npm pack --pack-destination "$(pwd)/../../dist")
+              mv "dist/${pkg_name}-"*.tgz "dist/${pkg_name}.tgz"
+            done
+          elif [ "$BUILD_TARGET" = "all" ]; then
+            npm run package-all
+          else
+            # Single non-JS target: java | python | dotnet | go
+            npx nx run-many --target="package:${BUILD_TARGET}" --output-style=stream
+          fi
+          echo "Artifacts produced:"
+          find dist -type f | sort
+
+      - name: Delete existing develop-latest release
+        run: |
+          gh release delete develop-latest --yes || true
+          git push origin :refs/tags/develop-latest || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create develop-latest release
+        run: |
+          gh release create develop-latest $(find dist -type f | tr '\n' ' ') \
+            --title "develop-latest (${BUILD_TARGET})" \
+            --notes "Latest build from develop — commit \`${GITHUB_SHA}\` — target: \`${BUILD_TARGET}\`" \
+            --prerelease \
+            --target develop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
