@@ -107,7 +107,7 @@
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
-          "exec": "npm ci --legacy-peer-deps"
+          "exec": "npm install"
         },
         {
           "exec": "npx nx run-many --target=install:ci --output-style=stream --nx-bail",

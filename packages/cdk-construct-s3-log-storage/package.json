@@ -38,7 +38,7 @@
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
-    "aws-cdk-lib": "2.251.0",
+    "aws-cdk-lib": "2.258.0",
     "constructs": "10.6.0",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -57,7 +57,7 @@
   "peerDependencies": {
     "@sevenpico/cdk-construct-s3-bucket": "^0.0.0",
     "@sevenpico/cdk-context": "^0.0.0",
-    "aws-cdk-lib": "^2.251.0",
+    "aws-cdk-lib": "^2.258.0",
     "constructs": "^10.6.0"
   },
   "keywords": [

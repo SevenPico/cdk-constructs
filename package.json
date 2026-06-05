@@ -46,14 +46,22 @@
   },
   "dependencies": {
     "@aws-cdk/aws-cognito-identitypool-alpha": "latest",
-    "aws-cdk-lib": "^2.246.0",
+    "aws-cdk-lib": "^2.258.0",
     "cdk-nag": "^2.37.55"
   },
   "overrides": {
     "@types/babel__traverse": "7.18.2",
     "wrap-ansi": "^7.0.0",
-    "brace-expansion": "^2.0.1",
-    "js-yaml": "^4.1.1"
+    "brace-expansion": "^2.0.3",
+    "js-yaml": "^4.1.1",
+    "diff": "^4.0.4",
+    "flatted": "^3.4.2",
+    "nx": {
+      "minimatch": "^9.0.7"
+    },
+    "syncpack": {
+      "minimatch": "^9.0.7"
+    }
   },
   "engines": {
     "node": ">=16"

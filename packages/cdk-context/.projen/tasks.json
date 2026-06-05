@@ -76,7 +76,7 @@
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
-          "exec": "npm ci"
+          "exec": "npm install"
         }
       ]
     },
@@ -172,6 +172,9 @@
       "name": "pre-compile",
       "description": "Prepare the project for compilation",
       "steps": [
+        {
+          "exec": "mkdir -p node_modules"
+        },
         {
           "exec": "ln -sf ../../../node_modules/aws-cdk-lib node_modules/aws-cdk-lib 2>/dev/null || true"
         },
