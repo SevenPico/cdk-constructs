@@ -37,10 +37,12 @@ jobs:
 
     env:
       BUILD_TARGET: ${{ inputs.build_target || 'js' }}
-      RELEASE_TAG: ${{ format('{0}-latest', replace(github.ref_name, '/', '-')) }}
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set release tag
+        run: echo "RELEASE_TAG=${GITHUB_REF_NAME//\//-}-latest" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
