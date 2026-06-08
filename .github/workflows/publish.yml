@@ -37,6 +37,7 @@ jobs:
 
     env:
       BUILD_TARGET: ${{ inputs.build_target || 'js' }}
+      RELEASE_TAG: ${{ format('{0}-latest', replace(github.ref_name, '/', '-')) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -72,19 +73,19 @@ jobs:
           echo "Artifacts produced:"
           find dist -type f | sort
 
-      - name: Delete existing develop-latest release
+      - name: Delete existing release for this branch
         run: |
-          gh release delete develop-latest --yes || true
-          git push origin :refs/tags/develop-latest || true
+          gh release delete "${RELEASE_TAG}" --yes || true
+          git push origin ":refs/tags/${RELEASE_TAG}" || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create develop-latest release
+      - name: Create release
         run: |
-          gh release create develop-latest $(find dist -type f | tr '\n' ' ') \
-            --title "develop-latest (${BUILD_TARGET})" \
-            --notes "Latest build from develop — commit \`${GITHUB_SHA}\` — target: \`${BUILD_TARGET}\`" \
+          gh release create "${RELEASE_TAG}" $(find dist -type f | tr '\n' ' ') \
+            --title "${RELEASE_TAG} (${BUILD_TARGET})" \
+            --notes "Latest build from \`${{ github.ref_name }}\` — commit \`${GITHUB_SHA}\` — target: \`${BUILD_TARGET}\`" \
             --prerelease \
-            --target develop
+            --target "${{ github.ref_name }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
