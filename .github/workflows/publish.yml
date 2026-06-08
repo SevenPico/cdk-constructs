@@ -59,8 +59,9 @@ jobs:
             mkdir -p "$DIST"
             for pkg_dir in packages/*/; do
               pkg_name=$(node -p "require('./${pkg_dir}package.json').name.replace('@sevenpico/','sevenpico-')")
+              pkg_ver=$(node -p "require('./${pkg_dir}package.json').version")
               (cd "$pkg_dir" && npm pack --pack-destination "$DIST")
-              mv "$DIST/${pkg_name}-"*.tgz "$DIST/${pkg_name}.tgz"
+              mv "$DIST/${pkg_name}-${pkg_ver}.tgz" "$DIST/${pkg_name}.tgz"
             done
           elif [ "$BUILD_TARGET" = "all" ]; then
             npm run package-all
