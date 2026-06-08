@@ -6,6 +6,7 @@ const monorepo = new MonorepoTsProject({
   name: "sevenpico-cdk-constructs",
   packageManager: NodePackageManager.NPM,
   defaultReleaseBranch: "main",
+  minNodeVersion: "22.0.0",
   devDeps: ["@aws/pdk", "projen@^0.99.27", "jsii-rosetta@~5.9.0"],
   gitIgnoreOptions: {
     ignorePatterns: [".env", "*.js.map", ".claude", ".vscode", "cdk.out"],
@@ -15,6 +16,13 @@ const monorepo = new MonorepoTsProject({
       types: ["jest", "node"],
     },
   },
+});
+
+// Ensure workspace packages compile in dependency order — without this, nx
+// runs all compile targets in parallel and packages that import
+// @sevenpico/cdk-context fail because lib/index.js doesn't exist yet.
+monorepo.nx.file.addOverride("targetDefaults.compile", {
+  dependsOn: ["^compile"],
 });
 
 // VS Code discovers tsconfig.json (not tsconfig.dev.json) for type checking.
@@ -64,18 +72,19 @@ const jsiiTargets = (slug: string) => {
 };
 
 // ── Shared helper ─────────────────────────────────────────────────────────────
-const pkg = (name: string, outdir: string, opts: any = {}) =>
-  new AwsCdkConstructLibrary({
+const pkg = (name: string, outdir: string, opts: any = {}) => {
+  const p = new AwsCdkConstructLibrary({
     parent: monorepo,
     name: `@sevenpico/${name}`,
     outdir: `packages/${outdir ?? name}`,
     author: "SevenPico",
     authorAddress: "https://sevenpico.com",
     repositoryUrl: "https://github.com/SevenPico/cdk-constructs",
-    cdkVersion: "2.251.0",
+    cdkVersion: "2.258.0",
     constructsVersion: "10.6.0",
     defaultReleaseBranch: "main",
     jsiiVersion: "~5.9.0",
+    minNodeVersion: "22.0.0",
     packageManager: NodePackageManager.NPM,
     tsconfigDev: {
       compilerOptions: {
@@ -86,6 +95,10 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
     ...jsiiTargets(name),
     ...opts,
   });
+  // Workaround for aws/aws-pdk#902: replace npm ci with npm install
+  p.tasks.tryFind("install:ci")?.reset("npm install");
+  return p;
+};
 
 // ── Foundation packages ───────────────────────────────────────────────────────
 // cdk-context is a pure TypeScript library; aws-cdk-lib is a peer dep only.
@@ -93,9 +106,10 @@ const pkg = (name: string, outdir: string, opts: any = {}) =>
 // symlink the workspace-hoisted aws-cdk-lib before every compile so docgen can
 // find it.  The symlink target is relative to packages/cdk-context/node_modules/.
 const cdkContext = pkg("cdk-context", "cdk-context", {
-  cdkVersion: "2.251.0",
+  cdkVersion: "2.258.0",
   deps: [],
 });
+cdkContext.preCompileTask.exec("mkdir -p node_modules");
 cdkContext.preCompileTask.exec(
   "ln -sf ../../../node_modules/aws-cdk-lib node_modules/aws-cdk-lib 2>/dev/null || true",
 );
@@ -180,12 +194,23 @@ pkg(
   { peerDeps: ctx },
 );
 
+// ── Workaround: replace npm ci with npm install (aws/aws-pdk#902) ────────────
+// @aws/pdk bundles @pnpm/git-utils which uses npm aliases for deps. npm ci
+// requires those aliased bundled entries in the lock file, but npm install
+// doesn't write them. Revert to npm install until @aws/pdk ships the fix.
+const ciTask = monorepo.tasks.tryFind("install:ci");
+if (ciTask) {
+  ciTask.reset("npm install");
+  ciTask.exec("npx nx run-many --target=install:ci --output-style=stream --nx-bail", { receiveArgs: true });
+}
+
 // ── Security overrides for vulnerable transitive dependencies ─────────────────
 // PDK-managed overrides are preserved here so they survive re-synths.
-// minimatch and yaml overrides are intentionally omitted — forcing major version
-// jumps (v3→v9, v1→v2) breaks packages that depend on older APIs (e.g. aws-cdk-lib
-// uses minimatch v3 internals). These are fixed by upgrading aws-cdk-lib instead.
+// Scoped minimatch overrides target each consumer's major version to avoid
+// forcing cross-major API breaks. fast-uri/brace-expansion in aws-cdk-lib and
+// yaml in projen are bundled — only fixable by upgrading those packages.
 // lodash in @aws/pdk has no upstream fix available.
+// uuid (<11.1.1) is left unfixed — forcing v11 breaks jest-cucumber's API.
 monorepo.addTask("package-all", {
   description:
     "Packages artifacts for all target languages across all projects",
@@ -200,8 +225,17 @@ monorepo.addTask("package-all", {
 monorepo.package.addField("overrides", {
   "@types/babel__traverse": "7.18.2", // PDK-managed, keep
   "wrap-ansi": "^7.0.0", // PDK-managed, keep
-  "brace-expansion": "^2.0.1", // safe: v2 is API-compatible with v1
+  "brace-expansion": "^2.0.3", // v2.0.0–2.0.2 also vulnerable; non-bundled instances
   "js-yaml": "^4.1.1", // safe: targets packages already on v4
+  "diff": "^4.0.4", // GHSA-73rr-hh4g-fpgx DoS; safe same-major bump
+  "flatted": "^3.4.2", // GHSA-25h7-pfq9-p65f, GHSA-rf6f-7fwh-wjgh
+  "nx": {
+    "minimatch": "^9.0.7", // nx@19 uses minimatch@9; 9.0.0–9.0.6 vulnerable
+  },
+  "syncpack": {
+    "minimatch": "^9.0.7", // syncpack ships minimatch@9; same fix
+  },
+  // Note: @aws/pdk minimatch@10.0.1 is bundled (inBundle:true) — override has no effect
 });
 
 monorepo.synth();

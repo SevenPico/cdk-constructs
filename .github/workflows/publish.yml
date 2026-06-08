@@ -41,12 +41,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set release tag
+        run: echo "RELEASE_TAG=${GITHUB_REF_NAME//\//-}-latest" >> "$GITHUB_ENV"
+
       - uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "22"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Compile TypeScript
         run: npm run compile
@@ -55,11 +58,13 @@ jobs:
         run: |
           if [ "$BUILD_TARGET" = "js" ]; then
             # JS only — fast path, just npm pack each workspace package
-            mkdir -p dist
+            DIST="$(pwd)/dist"
+            mkdir -p "$DIST"
             for pkg_dir in packages/*/; do
               pkg_name=$(node -p "require('./${pkg_dir}package.json').name.replace('@sevenpico/','sevenpico-')")
-              (cd "$pkg_dir" && npm pack --pack-destination "$(pwd)/../../dist")
-              mv "dist/${pkg_name}-"*.tgz "dist/${pkg_name}.tgz"
+              pkg_ver=$(node -p "require('./${pkg_dir}package.json').version")
+              (cd "$pkg_dir" && npm pack --pack-destination "$DIST")
+              mv "$DIST/${pkg_name}-${pkg_ver}.tgz" "$DIST/${pkg_name}.tgz"
             done
           elif [ "$BUILD_TARGET" = "all" ]; then
             npm run package-all
@@ -70,19 +75,19 @@ jobs:
           echo "Artifacts produced:"
           find dist -type f | sort
 
-      - name: Delete existing develop-latest release
+      - name: Delete existing release for this branch
         run: |
-          gh release delete develop-latest --yes || true
-          git push origin :refs/tags/develop-latest || true
+          gh release delete "${RELEASE_TAG}" --yes || true
+          git push origin ":refs/tags/${RELEASE_TAG}" || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create develop-latest release
+      - name: Create release
         run: |
-          gh release create develop-latest $(find dist -type f | tr '\n' ' ') \
-            --title "develop-latest (${BUILD_TARGET})" \
-            --notes "Latest build from develop — commit \`${GITHUB_SHA}\` — target: \`${BUILD_TARGET}\`" \
+          gh release create "${RELEASE_TAG}" $(find dist -type f | tr '\n' ' ') \
+            --title "${RELEASE_TAG} (${BUILD_TARGET})" \
+            --notes "Latest build from \`${{ github.ref_name }}\` — commit \`${GITHUB_SHA}\` — target: \`${BUILD_TARGET}\`" \
             --prerelease \
-            --target develop
+            --target "${{ github.ref_name }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

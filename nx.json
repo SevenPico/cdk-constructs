@@ -10,6 +10,11 @@
     ]
   },
   "targetDefaults": {
+    "compile": {
+      "dependsOn": [
+        "^compile"
+      ]
+    },
     "build": {
       "inputs": [
         "default",

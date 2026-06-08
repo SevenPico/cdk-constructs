@@ -76,7 +76,7 @@
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
-          "exec": "npm ci"
+          "exec": "npm install"
         }
       ]
     },
